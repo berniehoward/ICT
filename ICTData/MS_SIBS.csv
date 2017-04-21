@@ -1,4 +1,4 @@
-sex,familyN,indexN,birthDate,measureDate,Weight,Height,HeadCirc,age
+sex,familyN,indexN,birthDate,measureDate,Weight,Height,HeadCirc,Age
 F,1,1,30/01/1985,30/01/1985,3660,55,35,0
 F,1,1,30/01/1985,10/02/1985,3850,52,,0.36
 F,1,1,30/01/1985,17/02/1985,4050,54,36,0.59

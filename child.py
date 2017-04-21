@@ -1,6 +1,6 @@
-from math import min, max
 
 NA = -100  # value representing we are not able to determine the ICT
+BMI = lambda w,h: w/h**2
 
 class Child:
 
@@ -14,8 +14,10 @@ class Child:
         self.gestationalAge = gestationalAge
 
         # ICT info:
-        if ICT_A == NA or ICT_Z == NA:
+        if ICT_A == NA and ICT_Z == NA:
             self.ICT_AVG = NA
+        elif ICT_A == NA or ICT_Z == NA:
+            ICT_AVG = ICT_Z if ICT_A == NA else ICT_A
         else:
             self.ICT_AVG = (ICT_A + ICT_Z)/2
         self.ICT_MIN = min(ICT_A, ICT_Z)
@@ -39,3 +41,4 @@ class Child:
 
     def calculateSlops(self):
         pass
+

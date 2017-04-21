@@ -1,4 +1,4 @@
-familyN,FMN,indexN,ICT,Sex,ageMother,ageFather,WeightMother,heightMother,monthBirth,GestationalAge,BirthWeight,BirthHeight ,HeadCirc
+familyN,FMN,indexN,ICT,Sex,ageMother,ageFather,WeightMother,heightMother,monthBirth,GestationalAge,BirthWeight,BirthHeight,HeadCirc
 1,336,1,10.5,F,25,31,95,170,1,41,3660,55,35
 1,336,2,16.0,M,26,32,95,170,2,40,3900,53,36
 3,338,2,10.0,M,23,23,52,165,11,38,2820,47,34

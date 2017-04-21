@@ -1,4 +1,4 @@
-seq,famdid,id,bdate,Age,GA.BirthWeek,Date,Weight,Height,HeadCirc,SEX
+seq,famdid,id,birthDate,Age,GestationalAge,Date,Weight,Height,HeadCirc,Sex
 25,3,3248,07/12/1996,66,39,11/02/1997,4.699999809,56,36.5,M
 25,3,3248,07/12/1996,150,39,06/05/1997,5.5,62,39.5,
 25,3,3248,07/12/1996,227,39,22/07/1997,6.599999905,64,41.79999924,

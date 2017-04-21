@@ -1,4 +1,4 @@
-patid,age,Weight,Height,Sex,ict A,ICT Z,BirthWeight,BirthHeight,GestationalAge
+Patid,Age,Weight,Height,Sex,ICT_A,ICT_Z,BirthWeight,BirthHeight,GestationalAge
 5,0,2.88,50,F,,,,,
 5,0.016427105,2.76,,F,,,2.88,50,39
 5,0.032854209,2.72,,F,,,2.88,50,39
