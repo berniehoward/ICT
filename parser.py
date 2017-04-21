@@ -8,13 +8,14 @@ from swedishChild import SwedishChild
 from operator import itemgetter
 
 getpath = lambda file: os.path.join(os.getcwd(),"ICTData",file)
+getGender = lambda g: 1 if g == 'M' else 2
 
 def formatDataset(samples):
     s = []
     for sample in samples:
         sample[5] = NA if sample[5] == 'NA' else sample[5]
         sample[6] = NA if sample[6] == 'NA' else sample[6]
-        sample[4] = 1 if sample[4] == 'M' else 2
+        sample[4] = getGender(sample[4])
         s.append([float(cell) if cell != '' else cell for cell in sample])
     return s
 
@@ -48,7 +49,7 @@ def parseSwedish():
                 break
     print(idsWithICT)
     swedishChildren = createChildrenAndSamples(swedishSamples,idsWithICT)
-    print(list(swedishChildren)[0].goodSamples)
+    print(list(swedishChildren)[0].goodSamples[0].BMI)
 
 
 if __name__ == '__main__':
