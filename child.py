@@ -1,6 +1,4 @@
-
-NA = -100  # value representing we are not able to determine the ICT
-BMI = lambda w,h: w/h**2
+from constants import *
 
 class Child:
 
@@ -34,10 +32,14 @@ class Child:
         self.bmiToAgeLevel2 = []
 
         # Samples:
-        self.samples = []
+        self.goodSamples = []
+        self.badSamples = []
 
-    def addSample(self):
-        pass
+    def addSample(self, sample, missing = False):
+        if missing == False:
+            self.goodSamples.append(sample)
+        else:
+            self.badSamples.append(sample)
 
     def calculateSlops(self):
         pass
