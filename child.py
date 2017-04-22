@@ -27,8 +27,8 @@ class Child:
         # Level2: (height1-height3 / age1-age3) : non-adjacent samples
         self.heightToAgeLevel1 = []
         self.heightToAgeLevel2 = []
-        self.wightToAgeLevel1 = []
-        self.wightToAgeLevel2 = []
+        self.weightToAgeLevel1 = []
+        self.weightToAgeLevel2 = []
         self.bmiToAgeLevel1 = []
         self.bmiToAgeLevel2 = []
 
@@ -44,5 +44,11 @@ class Child:
             self.badSamples.append(sample)
 
     def calculateSlops(self):
-        pass
-
+        for x, y in zip(self.goodSamples, self.goodSamples[1:]):
+            self.heightToAgeLevel1.append(y.height - x.height)
+            self.weightToAgeLevel1.append(y.weight - x.weight)
+            self.bmiToAgeLevel1.append(y.BMI - x.BMI)
+        for x, y in zip(self.goodSamples, self.goodSamples[2:]):
+            self.heightToAgeLevel2.append(y.height - x.height)
+            self.weightToAgeLevel2.append(y.weight - x.weight)
+            self.bmiToAgeLevel2.append(y.BMI - x.BMI)

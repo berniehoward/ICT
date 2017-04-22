@@ -21,7 +21,8 @@ def formatDataset(samples):
 
 BIRTH = 0
 checkMissing = lambda s: True if '' in s else False
-def createChildrenAndSamples(samples, ids):
+
+def createSwedishChildrenAndSamples(samples, ids):
     swedishChildren = set()
     for id in ids: #id = tup(id,ictA,ictZ,GA)
         (ictA,ictZ,GA) = (id[1],id[2],id[3])
@@ -33,6 +34,8 @@ def createChildrenAndSamples(samples, ids):
                 swedishChildren.add(swedishChild)
             s[5],s[6] = (ictA, ictZ)
             swedishChild.addSample(s, checkMissing(s))
+        swedishChild.calculateSlops()
+        print(swedishChild.id, swedishChild.heightToAgeLevel1)
     return swedishChildren
 
 def parseSwedish():
@@ -47,9 +50,8 @@ def parseSwedish():
             if (i[0] - j[0] < 0.01):
                 i.append(j[1])
                 break
-    print(idsWithICT)
-    swedishChildren = createChildrenAndSamples(swedishSamples,idsWithICT)
-    print(list(swedishChildren)[0].goodSamples[0].BMI)
+    #print(idsWithICT)
+    swedishChildren = createSwedishChildrenAndSamples(swedishSamples, idsWithICT)
 
 
 if __name__ == '__main__':

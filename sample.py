@@ -13,7 +13,7 @@ class Sample:
         else:
             self.height = height / METER
             self.BMI = BMI(self.weight, self.height)
-            print(self.weight, self.height, self.BMI)
+            #print(self.weight, self.height, self.BMI)
 
 class isreliSample(Sample):
     def __init__(self, age, weight, height, HC):
