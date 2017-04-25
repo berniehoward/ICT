@@ -1,4 +1,4 @@
-from constants import *
+from auxiliary import *
 from math import ceil
 
 BMI = lambda w,h: w/h**2

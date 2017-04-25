@@ -1,4 +1,4 @@
-from constants import *
+from auxiliary import *
 from sample import Sample
 
 class Child:
