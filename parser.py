@@ -6,5 +6,5 @@ from dictionary import childrenDictionary
 
 if __name__ == '__main__':
     dictionary = childrenDictionary()
-    dictionary.swedishChildren.add(parseSwedish())
+    dictionary.swedishChildren = parseSwedish()
     dictionary.israeliChildren.add(parseIsraeli())

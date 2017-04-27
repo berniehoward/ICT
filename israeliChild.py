@@ -1,18 +1,18 @@
 from child import Child
 from auxiliary import *
-season = [0,1,1,1,2,2,2,3,3,3,0,0] #winter, spring, summer, fall
+season = [NA,0,1,1,1,2,2,2,3,3,3,0,0] #winter, spring, summer, fall
 class IsraeliChild(Child):
 
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
                  birthPosition, fatherAge, motherAge, motherWeight, motherHeight, \
-                 birthMonth, birthYear):
+                 birthMonth):
 
         Child.__init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z)
 
         #family related information
         self.position = birthPosition
 
-        if self.fatherAge == '':
+        if fatherAge == '':
             self.fatherAge = NA
         else:
             self.fatherAge = fatherAge
@@ -27,9 +27,9 @@ class IsraeliChild(Child):
 
         self.brothers = set()
 
-        self.birthYear = birthYear
+        self.birthYear = NA
         self.birthMonth = birthMonth
-        self.season = season[birthMonth]
+        self.season = season[int(birthMonth)]
 
         self.HCToAgeLevel1 = []
         self.HCToAgeLevel2 = []
@@ -44,6 +44,9 @@ class IsraeliChild(Child):
 
     def addBrother(self, brother):
         self.brothers.add(brother)
+
+    def updateYear(self, year):
+        self.birthYear = year
 
     def calculateHeadSlops(self):
         for x, y in zip(self.goodSamples, self.goodSamples[1:]):

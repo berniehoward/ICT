@@ -28,7 +28,7 @@ def createSwedishChildrenAndSamples(samples, ids):
             s[5],s[6] = (ictA, ictZ)
             swedishChild.addSample(s, checkMissing(s))
         swedishChild.calculateSlops()
-        print(swedishChild.id, swedishChild.heightToAgeLevel1)
+        #print(swedishChild.id, swedishChild.heightToAgeLevel1)
     return swedishChildren
 
 def parseSwedish():
