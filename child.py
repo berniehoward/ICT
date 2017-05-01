@@ -36,12 +36,8 @@ class Child:
         self.goodSamples = []
         self.badSamples = []
 
-    def addSample(self, s, missing = False):
-        sample = Sample(s[1], s[2], s[3])
-        if missing == False:
-            self.goodSamples.append(sample)
-        else:
-            self.badSamples.append(sample)
+    def addSample(self, s, missing = False): #virtual function
+        pass
 
     def calculateSlops(self):
         for x, y in zip(self.goodSamples, self.goodSamples[1:]):

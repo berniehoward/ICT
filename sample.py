@@ -15,7 +15,11 @@ class Sample:
             self.BMI = BMI(self.weight, self.height)
             #print(self.weight, self.height, self.BMI)
 
-class isreliSample(Sample):
+class SwedishSample(Sample):
+    def __init__(self, age, weight, height):
+        Sample.__init__(self, age, weight, height)
+
+class IsreliSample(Sample):
     def __init__(self, age, weight, height, HC):
         Sample.__init__(self, age, weight, height)
 

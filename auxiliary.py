@@ -4,7 +4,7 @@ import os
 METER = 100
 NA = -100  # value representing we are not able to determine the ICT
 KILO = 1000
-FALSE_DATE = '1/1/-100'
+FALSE_DATE = '1/1/'+ str(NA)
 
 #Files
 SWEDISH_FILE = "Sweden_ICT.csv"
