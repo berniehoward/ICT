@@ -24,5 +24,5 @@ if __name__ == '__main__':
     print("Max number of missing sampls is : " + str(max_s))
     string_hist = ', '.join(str(i) for i in hist)
     print("Histogram: " + string_hist)
-    dictionary.israeliChildren.add(parseIsraeli())
+    dictionary.israeliChildren = parseIsraeli()
     print("Number of israeli children is: " + str(dictionary.getNumOfchildren("I")))
