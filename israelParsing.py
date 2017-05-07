@@ -4,7 +4,6 @@ from israeliChild import IsraeliChild
 from operator import itemgetter
 import sys,os, csv, math
 from auxiliary import *
-import dateutil.parser as dateParser
 
 #familyN    FMN	indexN	ICT	Sex	ageMother	ageFather	WeightMother	heightMother	monthBirth	GestationalAge	BirthWeight	BirthHeight	HeadCirc
 
@@ -43,4 +42,5 @@ def parseIsraeli():
             ci('motherWeight'),
             ci('motherHeight'),
             ci('birthMonth') if c[headers.index('birthMonth')] != '' else 0))
-    addAdditionalInfo(israeliChildren)
+    #addAdditionalInfo(israeliChildren)
+    return israeliChildren
