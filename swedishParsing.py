@@ -43,5 +43,4 @@ def parseSwedish():
             if (i[0] - j[0] < 0.01):
                 i.append(j[1])
                 break
-    #print(idsWithICT)
     return createSwedishChildrenAndSamples(swedishSamples, idsWithICT)

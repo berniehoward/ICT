@@ -12,8 +12,3 @@ class SwedishChild(Child):
             self.goodSamples.append(sample)
         else:
             self.badSamples.append(sample)
-
-    def getNumberOfSampls(self, missing=False):
-        if missing==False:
-            return len(self.goodSamples)
-        return len(self.badSamples)

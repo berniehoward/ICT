@@ -20,19 +20,23 @@ class childrenDictionary():
         lenBadI = len([c.badSamples for c in self.israeliChildren])
         return lenGoodS, lenGoodI, lenBadS, lenBadI
 
-    def getNumOfchildren(self, type):
-        if type == "S":
+    def getNumOfchildren(self, t):
+        if t == "S":
             return len(self.swedishChildren)
         return len(self.israeliChildren)
 
-    def getNumOfSwedishSampls(self, missing = False):
+    def getStatisticsOfSampls(self, t, missing=False):
         # return (avg, min, max, hist)
+        if t == "S":
+            collection = self.swedishChildren
+        else:
+            collection = self.israeliChildren
         max_s = 0
         sum_s = 0
         min_s = 400000
         hist = [0] * 45
-        numOfChildren = len(self.swedishChildren)
-        for c in self.swedishChildren:
+        numOfChildren = len(collection)
+        for c in collection:
             sampls = c.getNumberOfSampls(missing)
             if max_s < sampls:
                 max_s = sampls

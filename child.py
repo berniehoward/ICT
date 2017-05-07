@@ -48,3 +48,8 @@ class Child:
             self.heightToAgeLevel2.append(y.height - x.height)
             self.weightToAgeLevel2.append(y.weight - x.weight)
             self.bmiToAgeLevel2.append(y.BMI - x.BMI)
+
+    def getNumberOfSampls(self, missing=False):
+        if missing==False:
+            return len(self.goodSamples)
+        return len(self.badSamples)
