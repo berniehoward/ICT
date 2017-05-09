@@ -19,7 +19,7 @@ class SwedishSample(Sample):
     def __init__(self, age, weight, height):
         Sample.__init__(self, age, weight, height)
 
-class IsreliSample(Sample):
+class IsraeliSample(Sample):
     def __init__(self, age, weight, height, HC):
         Sample.__init__(self, age, weight, height)
 

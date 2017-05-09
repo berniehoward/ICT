@@ -1,15 +1,22 @@
-getpath = lambda file: os.path.join(os.getcwd(),"ICTData",file)
 from time import strptime
 from israeliChild import IsraeliChild
+from sample import IsraeliSample
 from operator import itemgetter
 import sys,os, csv, math
 from auxiliary import *
 
-#familyN    FMN	indexN	ICT	Sex	ageMother	ageFather	WeightMother	heightMother	monthBirth	GestationalAge	BirthWeight	BirthHeight	HeadCirc
+def checkMissing(s):
+    s = [s[8], s[5], s[6], s[7]]
+    if all(s):
+        print(s)
+        return ([float(i) for i in s],False)
+    return ([float(i) if i != '' else NA for i in s],True)
 
-"""self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
-                 birthPosition, fatherAge, motherAge, motherWeight, motherHeight, \
-                 birthMonth, birthYear"""
+def addSamplesToIsraeliChild(headers, sisb, c):
+    samples = [s for s in sisb if c.id == (int(s[1]),int(s[2]))]
+    for s in samples: #check valid samples
+        (s,bool) = checkMissing(s)
+        c.addSample(s,bool)
 
 def addAdditionalInfo(israeliChildren):
     with open(getpath(ISRAELI_ADDITIONAL_INFO_FILE), 'r') as f:
@@ -23,7 +30,7 @@ def addAdditionalInfo(israeliChildren):
             datelist = [date(x) for x in sisb if (ci(x,'familyN') == f and (ci(x,'indexN')==i))]
             birthDate = datelist[0] if len(datelist)>0 else FALSE_DATE
             c.updateYear(int(birthDate.split('/')[2]))
-    #TODO: add samples
+            addSamplesToIsraeliChild(headers, sisb,c)
 
 def parseIsraeli():
     israeliChildren = set()

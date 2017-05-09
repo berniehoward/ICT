@@ -29,7 +29,9 @@ def print_statistics(t):
 if __name__ == '__main__':
     dictionary = childrenDictionary()
     dictionary.swedishChildren = parseSwedish()
-    print_statistics("S")
-    print()
+    #print_statistics("S")
+    #print()
     dictionary.israeliChildren = parseIsraeli()
-    print_statistics("I")
+    #print_statistics("I")
+    for c in dictionary.israeliChildren:
+        print("goodSamples:",len(c.goodSamples))
