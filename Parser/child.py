@@ -44,7 +44,7 @@ class Child:
 
     def calculateBurst(self):
         for x, y, z in zip(self.goodSamples, self.goodSamples[1:],self.goodSamples[2:]):
-            self.heightToAgeBurst.append(y.age, ((z.height / y.height) - (y.height / x.height)))
+            self.heightToAgeBurst.append((y.age, (z.height / y.height) - (y.height / x.height)))
     def calculateSlops(self):
         for x, y in zip(self.goodSamples, self.goodSamples[1:]):
             self.heightToAgeLevel1.append(y.height - x.height)

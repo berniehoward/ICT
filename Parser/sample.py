@@ -5,10 +5,10 @@ BMI = lambda w,h: w/h**2
 
 class Sample:
     def __init__(self, age, weight, height):
-        self.age = ceil(age)
+        self.age = float(format(age, '.2f'))
         self.weight = weight
         if weight == '' or height == '':
-            self.height = -100
+            self.height = NA
             self.BMI = NA
         else:
             self.height = height / METER
