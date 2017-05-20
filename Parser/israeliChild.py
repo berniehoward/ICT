@@ -1,6 +1,8 @@
-from child import Child
-from sample import IsraeliSample
-from auxiliary import *
+from Parser.auxiliary import *
+from Parser.child import Child
+
+from Parser.sample import IsraeliSample
+
 season = [NA,0,1,1,1,2,2,2,3,3,3,0,0] #winter, spring, summer, fall
 class IsraeliChild(Child):
 
@@ -64,7 +66,7 @@ class IsraeliChild(Child):
             self.HCdivWeightSqLevel2.append(y.HCdivWeightSq - x.HCdivWeightSq)
 
     def addSample(self, s, missing = False):
-        print(s[0],s[1],s[2],s[3])
+        #print(s[0],s[1],s[2],s[3])
         sample = IsraeliSample(s[0],s[1],s[2],s[3])
         if missing == False:
             self.goodSamples.append(sample)

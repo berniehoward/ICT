@@ -1,11 +1,11 @@
-from auxiliary import *
 from math import ceil
+from Parser.auxiliary import *
 
 BMI = lambda w,h: w/h**2
 
 class Sample:
     def __init__(self, age, weight, height):
-        self.age = ceil(365*age)
+        self.age = ceil(age)
         self.weight = weight
         if weight == '' or height == '':
             self.height = -100

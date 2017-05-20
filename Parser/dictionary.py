@@ -1,6 +1,3 @@
-
-
-
 class childrenDictionary():
 
     def __init__(self):

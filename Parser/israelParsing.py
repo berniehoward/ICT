@@ -1,14 +1,11 @@
-from time import strptime
-from israeliChild import IsraeliChild
-from sample import IsraeliSample
-from operator import itemgetter
-import sys,os, csv, math
-from auxiliary import *
+from Parser.israeliChild import IsraeliChild
+import csv
+from Parser.auxiliary import *
 
 def checkMissing(s):
     s = [s[8], s[5], s[6], s[7]]
     if all(s):
-        print(s)
+        #print(s)
         return ([float(i) for i in s],False)
     return ([float(i) if i != '' else NA for i in s],True)
 

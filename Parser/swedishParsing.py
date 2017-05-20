@@ -1,7 +1,10 @@
-from swedishChild import SwedishChild
-from operator import itemgetter
 import csv
-from auxiliary import *
+from operator import itemgetter
+
+from Parser.swedishChild import SwedishChild
+
+from Parser.auxiliary import *
+
 
 def formatSwedishDataset(samples):
     s = []

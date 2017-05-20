@@ -1,5 +1,7 @@
-from child import Child
-from sample import SwedishSample
+from Parser.child import Child
+
+from Parser.sample import SwedishSample
+
 
 class SwedishChild(Child):
 

@@ -1,5 +1,5 @@
-from auxiliary import *
-from sample import Sample
+from Parser.auxiliary import *
+
 
 class Child:
 
@@ -32,6 +32,9 @@ class Child:
         self.bmiToAgeLevel1 = []
         self.bmiToAgeLevel2 = []
 
+        #Naive ICT check on swedish children - Step 1
+        self.heightToAgeBurst = []
+
         # Samples:
         self.goodSamples = []
         self.badSamples = []
@@ -39,6 +42,9 @@ class Child:
     def addSample(self, s, missing = False): #virtual function
         pass
 
+    def calculateBurst(self):
+        for x, y, z in zip(self.goodSamples, self.goodSamples[1:],self.goodSamples[2:]):
+            self.heightToAgeBurst.append(y.age, ((z.height / y.height) - (y.height / x.height)))
     def calculateSlops(self):
         for x, y in zip(self.goodSamples, self.goodSamples[1:]):
             self.heightToAgeLevel1.append(y.height - x.height)
