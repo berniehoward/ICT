@@ -34,7 +34,8 @@ class Child:
 
         #Naive ICT check on swedish children - Step 1
         self.heightToAgeBurst = []
-
+        self.heightToAgeBurstFormula1 = []
+        self.heightToAgeBurstFormula2 = []
         # Samples:
         self.goodSamples = []
         self.badSamples = []
@@ -45,6 +46,10 @@ class Child:
     def calculateBurst(self):
         for x, y, z in zip(self.goodSamples, self.goodSamples[1:],self.goodSamples[2:]):
             self.heightToAgeBurst.append((y.age, (z.height / y.height) - (y.height / x.height)))
+            self.heightToAgeBurstFormula1.append((y.age, (z.height - y.height) - (y.height - x.height)))
+        for x, y, z, w in zip(self.goodSamples, self.goodSamples[1:],self.goodSamples[2:],self.goodSamples[3:]):
+            self.heightToAgeBurstFormula1.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((w.height - x.height) / y.height)))
+
     def calculateSlops(self):
         for x, y in zip(self.goodSamples, self.goodSamples[1:]):
             self.heightToAgeLevel1.append(y.height - x.height)
