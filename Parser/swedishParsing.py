@@ -16,7 +16,7 @@ def formatSwedishDataset(samples):
     return s
 
 BIRTH = 0
-checkMissing = lambda s: True if '' in s else False
+checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True
 
 def createSwedishChildrenAndSamples(samples, ids):
     swedishChildren = set()
@@ -43,7 +43,10 @@ def parseSwedish():
     idandGA = [[sample[0],sample[9]] for sample in swedishSamples if sample[9] !='']
     for i in idsWithICT: #yuck
         for j in idandGA:
-            if (i[0] - j[0] < 0.01):
+            if (i[0] == j[0]):
                 i.append(j[1])
+                break
+            else:
+                i.append(NA)
                 break
     return createSwedishChildrenAndSamples(swedishSamples, idsWithICT)
