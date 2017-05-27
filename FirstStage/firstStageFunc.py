@@ -1,27 +1,59 @@
 from Utility import find_nearest
 from Parser.auxiliary import NA
+from scipy import stats
+from scipy import append as npappend
+from itertools import chain
 
-AGE = 6.5
-RANGE = 1.0
+FIRST_AGE = 0.5
+RANGE = 0.3
+
+cs = lambda c, idx, n,r : abs(c.goodSamples[idx].age - n) < r
+
+def calcScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7):
+    normalized_f6_heights = stats.zscore(f_6_heights)
+    normalized_f7_heights = stats.zscore(f_7_heights)
+    normalized_s6_heights = stats.zscore(s_6_heights)
+    normalized_s7_heights = stats.zscore(s_7_heights)
+    heights6 = normalized_s6_heights - normalized_f6_heights
+    heights7 = normalized_s7_heights - normalized_f7_heights
+    return list(chain(heights6, heights7)), list(chain(children6, children7))
 
 def findHeightAroundAge(listOfChildren):
-    heights = []
-    children = []
+    f_6_heights = []
+    f_7_heights = []
+    s_6_heights = []
+    s_7_heights = []
+    children6 = []
+    children7 = []
     for child in listOfChildren:
         child.calculateBurst() #on the fly
-        idx = find_nearest([a.age for a in child.goodSamples], AGE)
-        if abs(child.goodSamples[idx].age - AGE) < RANGE:
-            heights.append(child.goodSamples[idx].height)
-            children.append(child)
-    return heights, children
+        f_idx = find_nearest([a.age for a in child.goodSamples], FIRST_AGE)
+        s_6_idx = find_nearest([a.age for a in child.goodSamples], 6)
+        s_7_idx = find_nearest([a.age for a in child.goodSamples], 7)
+
+        if abs(child.goodSamples[f_idx].age - FIRST_AGE) < 0.1 and \
+            (abs(child.goodSamples[s_7_idx].age - 7) < RANGE):
+            print(child.goodSamples[f_idx].age, child.goodSamples[s_7_idx].age)
+            f_7_heights.append(child.goodSamples[f_idx].height)
+            s_7_heights.append(child.goodSamples[s_7_idx].height)
+            children7.append(child)
+        if abs(child.goodSamples[f_idx].age - FIRST_AGE) < RANGE/2 and \
+            (abs(child.goodSamples[s_6_idx].age - 6) < RANGE):
+            print(child.goodSamples[f_idx].age, child.goodSamples[s_6_idx].age)
+            f_6_heights.append(child.goodSamples[f_idx].height)
+            s_6_heights.append(child.goodSamples[s_6_idx].height)
+            children6.append(child)
+
+    return calcScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7)
+    #print("normalized_f_heights", stats.mstats.normaltest(f_heights))
+    #print("normalized_s_heights", stats.mstats.normaltest(s_heights))
 
 
-def divideToGroups(featureList, children, b1, b2, b3, b4):
+def divideToGroups(featureList, children, b1, b2, b3):
     g1 = []
     g2 = []
     g3 = []
     g4 = []
-    g5 = []
     g_na = []
     for f, c in zip(featureList, children):
         if f == NA:
@@ -32,11 +64,9 @@ def divideToGroups(featureList, children, b1, b2, b3, b4):
             g2.append(c)
         elif b2 <= f <= b3:
             g3.append(c)
-        elif b3 <= f <= b4:
-            g4.append(c)
         else:
-            g5.append(c)
-    return g1, g2, g3, g4, g5, g_na
+            g4.append(c)
+    return g1, g2, g3, g4, g_na
 
 
 def findICTByEpsilon(e,child):

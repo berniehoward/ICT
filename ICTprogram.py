@@ -24,5 +24,5 @@ from FirstStage.program import program as firstStage
 if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         dictionary = pkl.load(pklfile)
-    # firstStage(dictionary)
-    print_statistics(dictionary, "I")
+    firstStage(dictionary)
+    #print_statistics(dictionary, "I")
