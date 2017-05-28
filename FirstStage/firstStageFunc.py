@@ -9,7 +9,7 @@ RANGE = 0.3
 
 cs = lambda c, idx, n,r : abs(c.goodSamples[idx].age - n) < r
 
-def calcScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7):
+def normalizeZScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7):
     normalized_f6_heights = stats.zscore(f_6_heights)
     normalized_f7_heights = stats.zscore(f_7_heights)
     normalized_s6_heights = stats.zscore(s_6_heights)
@@ -44,7 +44,7 @@ def findHeightAroundAge(listOfChildren):
             s_6_heights.append(child.goodSamples[s_6_idx].height)
             children6.append(child)
 
-    return calcScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7)
+    return normalizeZScore(s_6_heights, f_6_heights, children6, s_7_heights, f_7_heights, children7)
     #print("normalized_f_heights", stats.mstats.normaltest(f_heights))
     #print("normalized_s_heights", stats.mstats.normaltest(s_heights))
 
@@ -58,7 +58,7 @@ def divideToGroups(featureList, children, b1, b2, b3):
     for f, c in zip(featureList, children):
         if f == NA:
             g_na.append(c)
-        if f < b1:
+        elif f < b1:
             g1.append(c)
         elif b1 <= f <= b2:
             g2.append(c)
