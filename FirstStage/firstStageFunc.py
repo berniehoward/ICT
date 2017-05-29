@@ -69,9 +69,22 @@ def divideToGroups(featureList, children, b1, b2, b3):
     return g1, g2, g3, g4, g_na
 
 
-def findICTByEpsilon(e,child):
+def findICTWithEpsilonByBurst(e, child):
     for midAge, slope in child.heightToAgeBurst:
         if slope > e:
             return midAge
     return NA
 
+def findICTWithEpsilonByBurstFor1(e, child):
+    #print(child.heightToAgeBurstFormula1)
+    for midAge, slope in child.heightToAgeBurstFormula1:
+        if slope > e:
+            return midAge
+    return NA
+
+def findICTWithEpsilonByBurstFor2(e, child):
+    #print(child.heightToAgeBurstFormula2)
+    for midAge, slope in child.heightToAgeBurstFormula2:
+        if slope > e:
+            return midAge
+    return NA

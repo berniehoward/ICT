@@ -48,9 +48,9 @@ class Child:
         goodSamples = [s for s in self.goodSamples if s.age > 0.35] #don't mind first examples
         for x, y, z in zip(goodSamples, goodSamples[1:],goodSamples[2:]):
             self.heightToAgeBurst.append((y.age, (z.height / y.height) - (y.height / x.height)))
-            self.heightToAgeBurstFormula2.append((y.age, (z.height - y.height) - (y.height - x.height)))
+            self.heightToAgeBurstFormula1.append((y.age, (z.height - y.height) - (y.height - x.height)))
         for x, y, z, w in zip(goodSamples, goodSamples[1:],goodSamples[2:],goodSamples[3:]):
-            self.heightToAgeBurstFormula2.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((w.height - x.height) / y.height)))
+            self.heightToAgeBurstFormula2.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
 
     def calculateSlops(self):
         goodSamples = [s for s in self.goodSamples if s.age > 0.35]
