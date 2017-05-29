@@ -2,7 +2,8 @@ from Parser.auxiliary import MONTHS
 from FirstStage.firstStageFunc import *
 from scipy import stats
 from simpleai import search
-import operator
+from random import uniform
+from operator import itemgetter
 
 def findChildGroup(c, heights): # c - heights of groups
     for g in heights:
@@ -25,7 +26,7 @@ def ictHeightCorrelation(epsilons, children, heights, function=findICTWithEpsilo
         #print("EPSILON =", e)
         icts = [function(e, c) for c in children]
         g1, g2, g3, g4, g_na = divideToGroups(icts, children, 5/MONTHS, 10/MONTHS, 15/MONTHS)
-        m = max(m, (scoreEpsilonByManhattanDistances([g1,g2,g3,g4], heights),e), key=operator.itemgetter(0))
+        m = max(m, (scoreEpsilonByManhattanDistances([g1,g2,g3,g4], heights),e), key=itemgetter(0))
     return m
 
 
@@ -34,9 +35,22 @@ def program(dictionary):
     h1, h2, h3, h4, h_na = divideToGroups(heights, children, -2, 0, 2)
     heights = [h1, h2, h3, h4, h_na]
     epsilons = [x / 1000 for x in range(50, 305, 5)]
-    (score1, eps1) = ictHeightCorrelation(epsilons, children, heights)
-    (score2, eps2) = ictHeightCorrelation(epsilons, children, heights, findICTWithEpsilonByBurstFor1)
-    (score3, eps3) = ictHeightCorrelation(epsilons, children, heights, findICTWithEpsilonByBurstFor2)
-    RESTARTS = 10
-#    search.local.hill_climbing_random_restarts(,RESTARTS)
+    score1, eps1 = findIct(epsilons, children, heights)
+    score2, eps2 = findIct(epsilons, children, heights, findICTWithEpsilonByBurstFor1)
+    score3, eps3 = findIct(epsilons, children, heights, findICTWithEpsilonByBurstFor2)
 
+def findIct(epsilons, children, heights, function=findICTWithEpsilonByBurst):
+    score, eps = ictHeightCorrelation(epsilons, children, heights, function)
+    return hill_climbing((score, eps), children, heights)
+
+def hill_climbing(initial, children, heights, count = 1000):
+    bestScore, bestEps = initial
+    print("INITBEST:", bestScore, bestEps)
+    for c in range(1,count):
+        r = uniform(-0.003,0.003)
+        s, e = ictHeightCorrelation([bestEps+r], children, heights)
+        #print("AA", s, e)
+        if s >= bestScore:
+            bestScore, bestEps = s, e
+    print(bestScore,bestEps)
+    return bestScore,bestEps
