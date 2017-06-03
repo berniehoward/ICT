@@ -32,10 +32,10 @@ class Child:
         self.bmiToAgeLevel1 = []
         self.bmiToAgeLevel2 = []
 
-        #Naive ICT check on swedish children - Step 1
-        self.heightToAgeBurst = []
+        #Stage 2 - formulas which are used to calculate ICT automatically
         self.heightToAgeBurstFormula1 = []
         self.heightToAgeBurstFormula2 = []
+        self.heightToAgeBurstFormula3 = []
 
         # Samples:
         self.goodSamples = []
@@ -45,12 +45,12 @@ class Child:
         pass
 
     def calculateBurst(self):
-        goodSamples = [s for s in self.goodSamples if s.age > 0.35] #don't mind first examples
-        for x, y, z in zip(goodSamples, goodSamples[1:],goodSamples[2:]):
-            self.heightToAgeBurst.append((y.age, (z.height / y.height) - (y.height / x.height)))
-            self.heightToAgeBurstFormula1.append((y.age, (z.height - y.height) - (y.height - x.height)))
-        for x, y, z, w in zip(goodSamples, goodSamples[1:],goodSamples[2:],goodSamples[3:]):
-            self.heightToAgeBurstFormula2.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
+        goodSamples = [s for s in self.goodSamples if s.age > 0.35]  # don't mind first examples
+        for x, y, z in zip(goodSamples, goodSamples[1:], goodSamples[2:]):
+            self.heightToAgeBurstFormula1.append((y.age, (z.height / y.height) - (y.height / x.height)))
+            self.heightToAgeBurstFormula2.append((y.age, (z.height - y.height) - (y.height - x.height)))
+        for x, y, z, w in zip(goodSamples, goodSamples[1:], goodSamples[2:],goodSamples[3:]):
+            self.heightToAgeBurstFormula3.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
 
     def calculateSlops(self):
         goodSamples = [s for s in self.goodSamples if s.age > 0.35]
@@ -64,6 +64,6 @@ class Child:
             self.bmiToAgeLevel2.append(y.BMI - x.BMI)
 
     def getNumberOfSampls(self, missing=False):
-        if missing==False:
+        if not missing:
             return len(self.goodSamples)
         return len(self.badSamples)

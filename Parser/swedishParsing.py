@@ -18,20 +18,21 @@ def formatSwedishDataset(samples):
 BIRTH = 0
 checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True
 
+
 def createSwedishChildrenAndSamples(samples, ids):
     swedishChildren = set()
-    for id in ids: #id = tup(id,ictA,ictZ,GA)
-        (ictA,ictZ,GA) = (id[1],id[2],id[3])
+    for id in ids:  # id = tup(id,ictA,ictZ,GA)
+        (ictA, ictZ, GA) = (id[1], id[2], id[3])
         samplesForId = sorted([s for s in samples if s[0] == id[0]],key=itemgetter(1))
         for s in samplesForId:
             if(s[1] == BIRTH):
                 (s[7], s[8], s[9]) = (s[2], s[3], GA)
                 swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6])
                 swedishChildren.add(swedishChild)
-            s[5],s[6] = (ictA, ictZ)
+            s[5], s[6] = (ictA, ictZ)
             swedishChild.addSample(s, checkMissing(s))
         swedishChild.calculateSlops()
-        #print(swedishChild.id, swedishChild.heightToAgeLevel1)
+        swedishChild.calculateBurst()
     return swedishChildren
 
 def parseSwedish():
