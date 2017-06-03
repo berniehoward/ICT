@@ -17,3 +17,11 @@ def normalityTests(listOfChildren):
 
     print("result for heights of children at age 6 months: ", stats.mstats.normaltest(six_months_heights))
     print("result for heights of children at age 7 years: ", stats.mstats.normaltest(seven_years_heights))
+
+
+# Print the first epsilon for each formula
+def printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3):
+    print("first formula: epsilon: ", eps1, ", score: ", score1)
+    print("second formula: epsilon: ", eps2, ", score: ", score2)
+    print("third formula: epsilon: ", eps3, ", score: ", score3)
+

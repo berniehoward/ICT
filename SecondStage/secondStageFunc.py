@@ -1,9 +1,7 @@
 from Utility import find_nearest
 from Parser.auxiliary import NA, MONTHS
 from scipy import stats
-
-# Definitions:
-cs = lambda c, idx, n, r: abs(c.goodSamples[idx].age - n) < r
+import numpy
 
 
 # Find heights of the children at age 6 months, 6 years, 7 years
@@ -25,7 +23,9 @@ def findHeightAroundAge(listOfChildren):
 
 
 # Normalizes the height lists and subtract it
+# Return normalized list of delta heights and list of indexes show the new order of the children's list
 def normalizeZScore(six_months_heights, six_years_heights, seven_years_heights):
+    # Normalized list of heights at age 6 month
     normalized_six_months_heights = stats.zscore(six_months_heights)
 
     # Dived into groups by height at age 6 years
@@ -43,33 +43,25 @@ def normalizeZScore(six_months_heights, six_years_heights, seven_years_heights):
         idx += 1
 
     # Normalizes height at age 7 years by their group at 6 years
-    seven_years_group1 = []
-    seven_years_group2 = []
-    seven_years_group3 = []
-    for id1, id2, id3 in zip(six_years_idx_group1, six_years_idx_group2, six_years_idx_group3):
-        seven_years_group1.append(seven_years_heights[id1])
-        seven_years_group2.append(seven_years_heights[id2])
-        seven_years_group3.append(seven_years_heights[id3])
+    seven_years_group1 = [seven_years_heights[idx] for idx in six_years_idx_group1]
+    seven_years_group2 = [seven_years_heights[idx] for idx in six_years_idx_group2]
+    seven_years_group3 = [seven_years_heights[idx] for idx in six_years_idx_group3]
     seven_years_group1 = stats.zscore(seven_years_group1)
     seven_years_group2 = stats.zscore(seven_years_group2)
     seven_years_group3 = stats.zscore(seven_years_group3)
-    normalized_seven_months_heights = seven_years_group1 + seven_years_group2 + seven_years_group3
+    normalized_seven_months_heights = list(seven_years_group1) + list(seven_years_group2) + list(seven_years_group3)
 
     # Reorganized six months group to be at the order of seven years group
-    reorganized_six_months_heights = [0] * len(normalized_six_months_heights)
-    i = 0
+    reorganized_six_months_heights = []
     for idx in six_years_idx_group1:
-        reorganized_six_months_heights[i] = normalized_six_months_heights[idx]
-        i += 1
+        reorganized_six_months_heights.append(normalized_six_months_heights[idx])
     for idx in six_years_idx_group2:
-        reorganized_six_months_heights[i] = normalized_six_months_heights[idx]
-        i += 1
+        reorganized_six_months_heights.append(normalized_six_months_heights[idx])
     for idx in six_years_idx_group3:
-        reorganized_six_months_heights[i] = normalized_six_months_heights[idx]
-        i += 1
+        reorganized_six_months_heights.append(normalized_six_months_heights[idx])
 
     indexes = six_years_idx_group1 + six_years_idx_group2 + six_years_idx_group3
-    return [h7 - h6 for h7, h6 in zip(normalized_seven_months_heights, list(reorganized_six_months_heights))], indexes
+    return [(h7 - h6) for h7, h6 in zip(normalized_seven_months_heights, reorganized_six_months_heights)], indexes
 
 
 # Divide to 5 groups according to the borders: b1, b2, b3
@@ -93,7 +85,7 @@ def divideToGroups(featureList, children, b1, b2, b3):
     return g1, g2, g3, g4, g_na
 
 
-# Find the first age where formula in bigger then epsilon
+# Find the first age where formula in bigger then epsilon - this age is the ICT point
 def findICTWithEpsilonByFormula(e, formulaList):
     for midAge, slope in formulaList:
         if slope > e:
@@ -114,10 +106,13 @@ def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum):
     scores = []
     for e in epsilons:
         icts = [findICTWithEpsilonByFormula(e, createFormulaList(formulaNum, c)) for c in children]
-        g1, g2, g3, g4, g_na = divideToGroups(icts, children, 6 / MONTHS, 9 / MONTHS, 15 / MONTHS)
-        print(len(g1), len(g2), len(g3), len(g4))
-        scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups))
-    print(scores)
+        icts_without_na = [p for p in icts if p > 0]
+        median = numpy.median(icts_without_na)
+        if not (5/MONTHS <= median <= 11/MONTHS):
+            scores.append(0)
+        else:
+            g1, g2, g3, g4, g_na = divideToGroups(icts, children, 6.5 / MONTHS, 9.5 / MONTHS, 11 / MONTHS)
+            scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups))
     bestScore = max(scores)
     return epsilons[scores.index(bestScore)], bestScore
 
@@ -134,14 +129,14 @@ def createFormulaList(formulaNum, child):
 # Score epsilon values using group distances
 def scoreEpsilonByGroupDistances(ict_groups, heights_groups):
     sum = 0
-    for ict_group in ict_groups:
-        for c in ict_group:
+    for g in ict_groups:
+        for c in g:
             try:
-                idx1 = ict_groups.index(ict_group)
+                idx1 = ict_groups.index(g)
             except ValueError:
                 continue
             idx2 = findChildGroup(c, heights_groups)
             if idx2 == NA:
                 continue
-            sum += abs((idx1 + 1) - (idx2 + 1))
+            sum += abs(idx1 - idx2)
     return sum

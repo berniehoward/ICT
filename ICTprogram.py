@@ -7,7 +7,7 @@ from Parser.israelParsing import parseIsraeli
 from Parser.auxiliary import picklepath, PICKLE_FILE
 from SecondStage.program import program as secondStage
 
-
+# For exact the parsing stage uncomment this part :
 # if __name__ == '__main__':
 #     dictionary = childrenDictionary()
 #     dictionary.swedishChildren = parseSwedish()
