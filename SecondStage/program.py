@@ -2,7 +2,6 @@ from SecondStage.searchEpsilon import SearchEpsilon
 from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing_random_restarts
 
-
 # Main program for second stage
 def program(dictionary):
     listOfChildren = list(dictionary.swedishChildren)
@@ -27,9 +26,9 @@ def program(dictionary):
     problem1 = SearchEpsilon(eps1, score1, 1, children, heights_groups)
     problem2 = SearchEpsilon(eps2, score2, 2, children, heights_groups)
     problem3 = SearchEpsilon(eps3, score3, 3, children, heights_groups)
-    bestEps1, bestScore1 = hill_climbing_random_restarts(problem1, 50, 500)
-    bestEps2, bestScore2 = hill_climbing_random_restarts(problem2, 50, 500)
-    bestEps3, bestScore3 = hill_climbing_random_restarts(problem3, 50, 500)
+    bestEps1, bestScore1 = hill_climbing_random_restarts(problem1, 50, 500).state
+    bestEps2, bestScore2 = hill_climbing_random_restarts(problem2, 50, 500).state
+    bestEps3, bestScore3 = hill_climbing_random_restarts(problem3, 50, 500).state
 
     # Find best formula
     best_scores = [bestScore1, bestScore2, bestScore3]
