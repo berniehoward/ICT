@@ -41,6 +41,9 @@ class Child:
         self.goodSamples = []
         self.badSamples = []
 
+    def __repr__(self):
+        return 'Child(id=%s)' % (self.id)
+
     def addSample(self, s, missing = False): #virtual function
         pass
 

@@ -45,6 +45,9 @@ class IsraeliChild(Child):
         self.HCdivWeightSqLevel1 = []
         self.HCdivWeightSqLevel2 = []
 
+    def __repr__(self):
+        return 'IsraeliChild(id=%s)' % (self.id)
+
     def addBrother(self, brother):
         self.brothers.add(brother)
 

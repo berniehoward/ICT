@@ -14,3 +14,6 @@ class SwedishChild(Child):
             self.goodSamples.append(sample)
         else:
             self.badSamples.append(sample)
+
+    def __repr__(self):
+        return 'SwedishChild(id=%s)' % (self.id)

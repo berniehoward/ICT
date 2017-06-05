@@ -15,9 +15,15 @@ class Sample:
             self.BMI = BMI(self.weight, self.height)
             #print(self.weight, self.height, self.BMI)
 
+    def __repr__(self):
+        return 'Sample(Age=%s,Height=%s)' % (self.age,self.height)
+
 class SwedishSample(Sample):
     def __init__(self, age, weight, height):
         Sample.__init__(self, age, weight, height)
+
+    def __repr__(self):
+        return 'SwedishSample(Age=%s,Height=%s)' % (self.age,self.height)
 
 class IsraeliSample(Sample):
     def __init__(self, age, weight, height, HC):
@@ -28,3 +34,6 @@ class IsraeliSample(Sample):
         self.HCdivHeightSq = HC / height**2
         self.HCdivWeight = HC/weight
         self.HCdivWeightSq = HC / weight**2
+
+    def __repr__(self):
+        return 'IsraeliSample(Age=%s,Height=%s)' % (self.age,self.height)
