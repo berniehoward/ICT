@@ -140,3 +140,14 @@ def scoreEpsilonByGroupDistances(ict_groups, heights_groups):
                 continue
             sum += abs(idx1 - idx2)
     return sum
+
+
+# Return a list of tuples (child, newICT)
+def calculateNewICT(children, bestEpsilon, bestFormula):
+    icts = []
+    for c in children:
+        ict = findICTWithEpsilonByFormula(bestEpsilon, createFormulaList(bestFormula, c))
+        if ict > 20:
+            ict = NA
+        icts.append((c, ict))
+    return icts

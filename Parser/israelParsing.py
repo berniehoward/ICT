@@ -9,11 +9,13 @@ def checkMissing(s):
         return ([float(i) for i in s],False)
     return ([float(i) if i != '' else NA for i in s],True)
 
+
 def addSamplesToIsraeliChild(headers, sisb, c):
     samples = [s for s in sisb if c.id == (int(s[1]),int(s[2]))]
     for s in samples: #check valid samples
         (s,bool) = checkMissing(s)
         c.addSample(s,bool)
+
 
 def addAdditionalInfo(israeliChildren):
     with open(getpath(ISRAELI_ADDITIONAL_INFO_FILE), 'r') as f:

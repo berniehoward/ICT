@@ -1,3 +1,4 @@
+from SecondStage.printFunc import *
 from SecondStage.searchEpsilon import SearchEpsilon
 from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing_random_restarts
@@ -21,6 +22,7 @@ def program(dictionary):
     eps1, score1 = findEpsilonByFormula(epsilons, children, heights_groups, 1)
     eps2, score2 = findEpsilonByFormula(epsilons, children, heights_groups, 2)
     eps3, score3 = findEpsilonByFormula(epsilons, children, heights_groups, 3)
+    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3)
 
     # Find best epsilon for each formula
     problem1 = SearchEpsilon(eps1, score1, 1, children, heights_groups)
@@ -35,5 +37,8 @@ def program(dictionary):
     best_epsilons = [bestEps1, bestEps2, bestEps3]
     bestScore = max(best_scores)
     best_formula = best_scores.index(bestScore)
-    print("Best formula is formula number: ", best_formula + 1)
-    print("Best epsilon is: ", best_epsilons[best_formula], " with score: ", bestScore)
+    printBestFormula(best_formula, best_epsilons, bestScore)
+
+    # Calculate new ICT:
+    newICT = calculateNewICT(listOfChildren, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
+    printCompareToPreviousICT(newICT)
