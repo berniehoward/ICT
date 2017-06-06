@@ -47,7 +47,5 @@ def parseSwedish():
             if (i[0] == j[0]):
                 i.append(j[1])
                 break
-            else:
-                i.append(NA)
-                break
+        i.append(NA)
     return createSwedishChildrenAndSamples(swedishSamples, idsWithICT)

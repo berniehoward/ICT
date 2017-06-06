@@ -1,4 +1,4 @@
-from partd import numpy
+from numpy import average, median
 from scipy import stats
 from Parser.auxiliary import NA, MONTHS
 from Utility import find_nearest
@@ -55,7 +55,6 @@ def printCompareToPreviousICT(icts, mode=False):
         if ict == NA:
             count_new_na += 1
             continue
-
         if c.ICT_Z == NA:
             count_previous_z_na += 1
             if c.ICT_A == NA:
@@ -67,28 +66,30 @@ def printCompareToPreviousICT(icts, mode=False):
         if c.ICT_A == NA:
             count_previous_a_na += 1
             continue
-
         distFromICTa.append(abs(c.ICT_A - ict))
         distFromICTmin.append(abs(c.ICT_MIN - ict))
         distFromICTmax.append(abs(c.ICT_MAX - ict))
         distFromICTavg.append(abs(c.ICT_AVG - ict))
 
     icts_without_na = [p for c, p in icts if p != NA]
+
     z_icts_without_na = [c.ICT_Z for c, p in icts if c.ICT_Z != NA]
     a_icts_without_na = [c.ICT_A for c, p in icts if c.ICT_A != NA]
 
-    print("New ict median: ", numpy.median(icts_without_na) * MONTHS, ", avg: ", numpy.average(icts_without_na)* MONTHS)
-    print("Ze'ev's ict tagging median: ", numpy.median(z_icts_without_na) * MONTHS, ", avg: ",
-          numpy.average(z_icts_without_na) * MONTHS)
-    print("Alina's ict tagging median: ", numpy.median(a_icts_without_na) * MONTHS, ", avg: ",
-          numpy.average(a_icts_without_na) * MONTHS)
+    avg_m = lambda n: average(n)*MONTHS
+
+    print("New ict median: ", median(icts_without_na) * MONTHS, ", avg: ", average(icts_without_na)* MONTHS)
+    print("Ze'ev's ict tagging median: ", median(z_icts_without_na) * MONTHS, ", avg: ",
+          avg_m(z_icts_without_na))
+    print("Alina's ict tagging median: ", median(a_icts_without_na) * MONTHS, ", avg: ",
+          avg_m(a_icts_without_na))
     print("Number of NA tags in new tagging process: ", count_new_na)
     print("Number of NA tags in Ze'ev's tagging process: ", count_previous_z_na)
     print("Number of NA tags in Alina's tagging process: ", count_previous_a_na)
-    print("Average distance of new tagging process from Ze'ev's tagging process: ", numpy.average(distFromICTz))
-    print("Average distance of new tagging process from Alina's tagging process: ", numpy.average(distFromICTa))
-    print("Average distance of new tagging process from Ze'ev and Alina average tagging: ", numpy.average(distFromICTavg))
-    print("Average distance of new tagging process from Ze'ev and Alina minimum tagging: ", numpy.average(distFromICTmin))
-    print("Average distance of new tagging process from Ze'ev and Alina maximum tagging: ", numpy.average(distFromICTmax))
+    print("Average distance of new tagging process from Ze'ev's tagging process: ", avg_m(distFromICTz))
+    print("Average distance of new tagging process from Alina's tagging process: ", avg_m(distFromICTa))
+    print("Average distance of new tagging process from Ze'ev and Alina average tagging: ", avg_m(distFromICTavg))
+    print("Average distance of new tagging process from Ze'ev and Alina minimum tagging: ", avg_m(distFromICTmin))
+    print("Average distance of new tagging process from Ze'ev and Alina maximum tagging: ", avg_m(distFromICTmax))
 
 

@@ -11,16 +11,19 @@ class Child:
         self.birthWeight = birthWeight
         self.birthHeight = birthHeight
         self.gestationalAge = gestationalAge
+        self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
+        self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
 
         # ICT info:
         if ICT_A == NA and ICT_Z == NA:
             self.ICT_AVG = NA
         elif ICT_A == NA or ICT_Z == NA:
-            self.ICT_AVG = ICT_Z if ICT_A == NA else ICT_A
+            self.ICT_AVG = self.ICT_Z if self.ICT_A == NA else self.ICT_A
         else:
-            self.ICT_AVG = (ICT_A + ICT_Z)/2
-        self.ICT_MIN = min(ICT_A, ICT_Z)
-        self.ICT_MAX = max(ICT_A, ICT_Z)
+            self.ICT_AVG = (self.ICT_A + self.ICT_Z)/2
+
+        self.ICT_MIN = min(self.ICT_A, self.ICT_Z)
+        self.ICT_MAX = max(self.ICT_A, self.ICT_Z)
 
         # Slope lists:
         # Level1: (height1-height2 / age1-age2)
