@@ -41,4 +41,4 @@ def program(dictionary):
 
     # Calculate new ICT:
     newICT = calculateNewICT(listOfChildren, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
-    printCompareToPreviousICT(newICT)
+    printCompareToPreviousICT(newICT, True)

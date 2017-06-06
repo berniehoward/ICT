@@ -39,7 +39,9 @@ def printBestFormula(best_formula, best_epsilons, bestScore, mode=False):
 
 
 # Print result of comparing for the previous ict tagging
-def printCompareToPreviousICT(icts):
+def printCompareToPreviousICT(icts, mode=False):
+    if not mode:
+        return
     distFromICTz = []
     distFromICTa = []
     distFromICTmin = []
