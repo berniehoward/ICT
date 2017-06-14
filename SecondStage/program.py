@@ -5,13 +5,16 @@ from simpleai.search.local import hill_climbing_random_restarts
 
 # Main program for second stage
 def program(dictionary):
-    listOfChildren = list(dictionary.swedishChildren)
-    heights, indexes = findHeightAroundAge(listOfChildren)
+    childrenList = list(dictionary.swedishChildren)
+    heights, indexes = findHeightAroundAge(childrenList)
 
     # Reorganized children by the order of indexes list
     children = []
     for index in indexes:
-        children.append(listOfChildren[index])
+        children.append(childrenList[index])
+
+    # First method - bins!
+    #
 
     # Divide children to heights groups
     h1, h2, h3, h4, h_na = divideToGroups(heights, children, -1, 0, 1)
@@ -22,7 +25,7 @@ def program(dictionary):
     eps1, score1 = findEpsilonByFormula(epsilons, children, heights_groups, 1)
     eps2, score2 = findEpsilonByFormula(epsilons, children, heights_groups, 2)
     eps3, score3 = findEpsilonByFormula(epsilons, children, heights_groups, 3)
-    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3)
+    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3, True)
 
     # Find best epsilon for each formula
     problem1 = SearchEpsilon(eps1, score1, 1, children, heights_groups)
@@ -40,5 +43,16 @@ def program(dictionary):
     printBestFormula(best_formula, best_epsilons, bestScore)
 
     # Calculate new ICT:
-    newICT = calculateNewICT(listOfChildren, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
+    newICT = calculateNewICT(childrenList, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     printCompareToPreviousICT(newICT, True)
+
+    # Second Method - Regular manhattan dist!
+    #
+    print()
+    WITHOUT_BINS = False
+    eps1, score1 = findEpsilonByFormula(epsilons, children, heights, 1, WITHOUT_BINS)
+    eps2, score2 = findEpsilonByFormula(epsilons, children, heights, 2, WITHOUT_BINS)
+    eps3, score3 = findEpsilonByFormula(epsilons, children, heights, 3, WITHOUT_BINS)
+    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3, True)
+
+

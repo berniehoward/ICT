@@ -69,7 +69,6 @@ class IsraeliChild(Child):
             self.HCdivWeightSqLevel2.append(y.HCdivWeightSq - x.HCdivWeightSq)
 
     def addSample(self, s, missing = False):
-        #print(s[0],s[1],s[2],s[3])
         sample = IsraeliSample(s[0],s[1],s[2],s[3])
         if missing == False:
             self.goodSamples.append(sample)

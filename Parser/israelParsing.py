@@ -5,7 +5,6 @@ from Parser.auxiliary import *
 def checkMissing(s):
     s = [s[8], s[5], s[6], s[7]]
     if all(s):
-        #print(s)
         return ([float(i) for i in s],False)
     return ([float(i) if i != '' else NA for i in s],True)
 
@@ -25,7 +24,6 @@ def addAdditionalInfo(israeliChildren):
             date = lambda x: x[headers.index('birthDate')]
             ci = lambda l, x: float(l[headers.index(x)])
             f, i = c.id
-            #print(f,i)
             datelist = [date(x) for x in sisb if (ci(x,'familyN') == f and (ci(x,'indexN')==i))]
             birthDate = datelist[0] if len(datelist)>0 else FALSE_DATE
             c.updateYear(int(birthDate.split('/')[2]))

@@ -13,7 +13,6 @@ class Sample:
         else:
             self.height = height / METER
             self.BMI = BMI(self.weight, self.height)
-            #print(self.weight, self.height, self.BMI)
 
     def __repr__(self):
         return 'Sample(Age=%s,Height=%s)' % (self.age,self.height)

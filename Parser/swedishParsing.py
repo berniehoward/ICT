@@ -5,7 +5,7 @@ from Parser.swedishChild import SwedishChild
 
 from Parser.auxiliary import *
 
-
+# Formats the dataset for further usage (floats etc)
 def formatSwedishDataset(samples):
     s = []
     for sample in samples:
@@ -16,16 +16,16 @@ def formatSwedishDataset(samples):
     return s
 
 BIRTH = 0
-checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True
+checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True #bool value to check missing values
 
-
-def createSwedishChildrenAndSamples(samples, ids):
+# Creates a child with good and bad samples
+def createSwedishChildrenWithSamples(samples, ids):
     swedishChildren = set()
     for id in ids:  # id = tup(id,ictA,ictZ,GA)
         (ictA, ictZ, GA) = (id[1], id[2], id[3])
         samplesForId = sorted([s for s in samples if s[0] == id[0]],key=itemgetter(1))
         for s in samplesForId:
-            if(s[1] == BIRTH):
+            if(s[1] == BIRTH): #work around for bad birth records
                 (s[7], s[8], s[9]) = (s[2], s[3], GA)
                 swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6])
                 swedishChildren.add(swedishChild)
@@ -35,17 +35,17 @@ def createSwedishChildrenAndSamples(samples, ids):
         swedishChild.calculateBurst()
     return swedishChildren
 
+# Swedish child pareser main function
 def parseSwedish():
     with open(getpath(SWEDISH_FILE), 'r') as f:
         swedishSamples = list(csv.reader(f))
-    headers = swedishSamples.pop(0)
-    swedishSamples = formatSwedishDataset(swedishSamples)
+    swedishSamples = formatSwedishDataset(swedishSamples[1:])
     idsWithICT = [[sample[0],sample[5],sample[6]] for sample in swedishSamples if sample[5] != '' or sample[6] != '']
     idandGA = [[sample[0],sample[9]] for sample in swedishSamples if sample[9] !='']
-    for i in idsWithICT: #yuck
+    for i in idsWithICT: #merge GA with other data, woraround beacuse of stupid dataset
         for j in idandGA:
             if (i[0] == j[0]):
                 i.append(j[1])
                 break
         i.append(NA)
-    return createSwedishChildrenAndSamples(swedishSamples, idsWithICT)
+    return createSwedishChildrenWithSamples(swedishSamples, idsWithICT)

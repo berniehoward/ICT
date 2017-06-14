@@ -1,6 +1,7 @@
 from Utility import find_nearest
 from Parser.auxiliary import NA, MONTHS
 from scipy import stats
+from operator import itemgetter
 import numpy
 
 
@@ -49,7 +50,8 @@ def normalizeZScore(six_months_heights, six_years_heights, seven_years_heights):
     seven_years_group1 = stats.zscore(seven_years_group1)
     seven_years_group2 = stats.zscore(seven_years_group2)
     seven_years_group3 = stats.zscore(seven_years_group3)
-    normalized_seven_months_heights = list(seven_years_group1) + list(seven_years_group2) + list(seven_years_group3)
+    normalized_seven_months_heights = list(seven_years_group1) + \
+                                      list(seven_years_group2) + list(seven_years_group3)
 
     # Reorganized six months group to be at the order of seven years group
     reorganized_six_months_heights = []
@@ -61,7 +63,8 @@ def normalizeZScore(six_months_heights, six_years_heights, seven_years_heights):
         reorganized_six_months_heights.append(normalized_six_months_heights[idx])
 
     indexes = six_years_idx_group1 + six_years_idx_group2 + six_years_idx_group3
-    return [(h7 - h6) for h7, h6 in zip(normalized_seven_months_heights, reorganized_six_months_heights)], indexes
+    return [(h7 - h6) for h7, h6 in zip(normalized_seven_months_heights, \
+            reorganized_six_months_heights)], indexes
 
 
 # Divide to 5 groups according to the borders: b1, b2, b3
@@ -102,7 +105,7 @@ def findChildGroup(c, heights_groups):
 
 
 # Find the epsilon which cause the largest score
-def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum):
+def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum, bins=True):
     scores = []
     for e in epsilons:
         icts = [findICTWithEpsilonByFormula(e, createFormulaList(formulaNum, c)) for c in children]
@@ -110,9 +113,18 @@ def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum):
         median = numpy.median(icts_without_na)
         if not (5/MONTHS <= median <= 11/MONTHS):
             scores.append(0)
-        else:
+        elif bins==True:
             g1, g2, g3, g4, g_na = divideToGroups(icts, children, 6.5 / MONTHS, 9.5 / MONTHS, 11 / MONTHS)
-            scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups))
+            scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups, 1))
+        else:
+            child_ict = []
+            child_height = []
+            for c,ict in zip(children,icts):
+                child_ict.append((c.id,ict))
+            for c,h in zip(children,heights_groups):
+                child_height.append((c.id,h))
+            scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)), \
+                                                       sorted(child_height,key=itemgetter(1)), 2))
     bestScore = max(scores)
     return epsilons[scores.index(bestScore)], bestScore
 
@@ -127,20 +139,29 @@ def createFormulaList(formulaNum, child):
 
 
 # Score epsilon values using group distances
-def scoreEpsilonByGroupDistances(ict_groups, heights_groups):
+def scoreEpsilonByGroupDistances(ict_groups, heights_groups, method=1):
     sum = 0
-    for g in ict_groups:
-        for c in g:
-            try:
-                idx1 = ict_groups.index(g)
-            except ValueError:
+    if method==1:
+        for g in ict_groups:
+            for c in g:
+                try:
+                    idx1 = ict_groups.index(g)
+                except ValueError:
+                    continue
+                idx2 = findChildGroup(c, heights_groups)
+                if idx2 == NA:
+                    continue
+                sum += abs(idx1 - idx2)
+        return sum
+    else:
+        for c, ict in ict_groups:
+            h_current_index = 0
+            item = [i for i in heights_groups if i[0] == c]
+            for i in item:
+                h_current_index = (heights_groups.index(i))
                 continue
-            idx2 = findChildGroup(c, heights_groups)
-            if idx2 == NA:
-                continue
-            sum += abs(idx1 - idx2)
-    return sum
-
+            sum+= abs(ict_groups.index((c,ict)) - h_current_index)
+        return sum
 
 # Return a list of tuples (child, newICT)
 def calculateNewICT(children, bestEpsilon, bestFormula):
