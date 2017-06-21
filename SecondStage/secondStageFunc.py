@@ -113,18 +113,18 @@ def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum, bins=Tr
         median = numpy.median(icts_without_na)
         if not (5/MONTHS <= median <= 11/MONTHS):
             scores.append(0)
-        elif bins==True:
+        elif bins:
             g1, g2, g3, g4, g_na = divideToGroups(icts, children, 6.5 / MONTHS, 9.5 / MONTHS, 11 / MONTHS)
             scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups, 1))
         else:
             child_ict = []
             child_height = []
-            for c,ict in zip(children,icts):
-                child_ict.append((c.id,ict))
-            for c,h in zip(children,heights_groups):
-                child_height.append((c.id,h))
+            for c, ict in zip(children, icts):
+                child_ict.append((c.id, ict))
+            for c, h in zip(children, heights_groups):
+                child_height.append((c.id, h))
             scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)), \
-                                                       sorted(child_height,key=itemgetter(1)), 2))
+                                                       sorted(child_height, key=itemgetter(1)), 2))
     bestScore = max(scores)
     return epsilons[scores.index(bestScore)], bestScore
 
@@ -141,7 +141,7 @@ def createFormulaList(formulaNum, child):
 # Score epsilon values using group distances
 def scoreEpsilonByGroupDistances(ict_groups, heights_groups, method=1):
     sum = 0
-    if method==1:
+    if method == 1:
         for g in ict_groups:
             for c in g:
                 try:
@@ -160,8 +160,9 @@ def scoreEpsilonByGroupDistances(ict_groups, heights_groups, method=1):
             for i in item:
                 h_current_index = (heights_groups.index(i))
                 continue
-            sum+= abs(ict_groups.index((c,ict)) - h_current_index)
+            sum += abs(ict_groups.index((c, ict)) - h_current_index)
         return sum
+
 
 # Return a list of tuples (child, newICT)
 def calculateNewICT(children, bestEpsilon, bestFormula):

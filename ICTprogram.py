@@ -1,27 +1,27 @@
 
 import pickle as pkl
-from Parser.dictionary import childrenDictionary
+from Parser.set import childrenSet
 from Parser.parser import print_statistics
 from Parser.swedishParsing import parseSwedish
 from Parser.israelParsing import parseIsraeli
 from Parser.auxiliary import picklepath, PICKLE_FILE
-from SecondStage.program import program as secondStage
+from SecondStage.experimentProgram import program as secondStage
 
 # For exact the parsing stage uncomment this part :
 # if __name__ == '__main__':
-#     dictionary = childrenDictionary()
-#     dictionary.swedishChildren = parseSwedish()
+#     setOfChildren = childrenSet()
+#     setOfChildren.swedishChildren = parseSwedish()
 #     #print_statistics("S")
 #     #print()
-#     dictionary.israeliChildren = parseIsraeli()
+#     setOfChildren.israeliChildren = parseIsraeli()
 #     #print_statistics("I")
-#     for c in dictionary.swedishChildren:
+#     for c in setOfChildren.swedishChildren:
 #         print([i.age for i in c.goodSamples])
-#     with open(picklepath(PICKLE_FILE),"wb") as pklfile:
-#         pkl.dump(dictionary, pklfile)
+#     with open(picklepath(PICKLE_FILE), "wb") as pklfile:
+#         pkl.dump(setOfChildren, pklfile)
 
 
 if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
-        dictionary = pkl.load(pklfile)
-    secondStage(dictionary)
+        setOfChildren = pkl.load(pklfile)
+    secondStage(setOfChildren)

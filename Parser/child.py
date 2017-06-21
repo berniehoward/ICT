@@ -35,7 +35,7 @@ class Child:
         self.bmiToAgeLevel1 = []
         self.bmiToAgeLevel2 = []
 
-        #Stage 2 - formulas which are used to calculate ICT automatically
+        # Stage 2 - formulas which are used to calculate ICT automatically
         self.heightToAgeBurstFormula1 = []
         self.heightToAgeBurstFormula2 = []
         self.heightToAgeBurstFormula3 = []
@@ -47,7 +47,7 @@ class Child:
     def __repr__(self):
         return 'Child(id=%s)' % (self.id)
 
-    def addSample(self, s, missing = False): #virtual function
+    def addSample(self, s, missing=False):  # virtual function
         pass
 
     def calculateBurst(self):
@@ -73,3 +73,7 @@ class Child:
         if not missing:
             return len(self.goodSamples)
         return len(self.badSamples)
+
+    def __lt__(self, other):
+        return self.id < other.id
+

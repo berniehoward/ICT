@@ -1,18 +1,18 @@
 from Parser.auxiliary import *
 from Parser.child import Child
-
 from Parser.sample import IsraeliSample
 
-season = [NA,0,1,1,1,2,2,2,3,3,3,0,0] #winter, spring, summer, fall
-class IsraeliChild(Child):
+season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
+
+class IsraeliChild(Child):
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
                  birthPosition, fatherAge, motherAge, motherWeight, motherHeight, \
                  birthMonth):
 
         Child.__init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z)
 
-        #family related information
+        # family related information
         self.position = birthPosition
 
         if fatherAge == '':
@@ -68,9 +68,9 @@ class IsraeliChild(Child):
             self.HCdivWeightLevel2.append(y.HCdivWeight - x.HCdivWeight)
             self.HCdivWeightSqLevel2.append(y.HCdivWeightSq - x.HCdivWeightSq)
 
-    def addSample(self, s, missing = False):
-        sample = IsraeliSample(s[0],s[1],s[2],s[3])
-        if missing == False:
+    def addSample(self, s, missing=False):
+        sample = IsraeliSample(s[0], s[1], s[2], s[3])
+        if not missing:
             self.goodSamples.append(sample)
         else:
             self.badSamples.append(sample)
