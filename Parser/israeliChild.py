@@ -46,7 +46,7 @@ class IsraeliChild(Child):
         self.HCdivWeightSqLevel2 = []
 
     def __repr__(self):
-        return 'IsraeliChild(id=%s)' % (self.id)
+        return 'IsraeliChild(id=%s, %s)' % (self.id)
 
     def addBrother(self, brother):
         self.brothers.add(brother)
@@ -70,7 +70,7 @@ class IsraeliChild(Child):
 
     def addSample(self, s, missing=False):
         sample = IsraeliSample(s[0], s[1], s[2], s[3])
-        if not missing:
-            self.goodSamples.append(sample)
-        else:
+        if missing:
             self.badSamples.append(sample)
+        else:
+            self.goodSamples.append(sample)

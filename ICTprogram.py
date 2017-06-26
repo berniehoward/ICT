@@ -7,7 +7,7 @@ from Parser.israelParsing import parseIsraeli
 from Parser.auxiliary import picklepath, PICKLE_FILE
 from SecondStage.experimentProgram import program as secondStage
 
-# For exact the parsing stage uncomment this part :
+# #For exact the parsing stage uncomment this part :
 # if __name__ == '__main__':
 #     setOfChildren = childrenSet()
 #     setOfChildren.swedishChildren = parseSwedish()
@@ -24,4 +24,5 @@ from SecondStage.experimentProgram import program as secondStage
 if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
-    secondStage(setOfChildren)
+    #secondStage(setOfChildren.swedishChildren)
+    secondStage(setOfChildren.israeliChildren)

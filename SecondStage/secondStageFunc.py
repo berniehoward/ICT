@@ -11,9 +11,12 @@ def findHeightAroundAge(listOfChildren):
     six_years_heights = []
     seven_years_heights = []
     for child in listOfChildren:
+        if not child.goodSamples:
+            continue
         six_months_idx = find_nearest([a.age for a in child.goodSamples], 0.5)
         six_years_idx = find_nearest([a.age for a in child.goodSamples], 6)
         seven_years_idx = find_nearest([a.age for a in child.goodSamples], 7)
+        print(child, child.goodSamples[six_months_idx], child.goodSamples[six_years_idx], child.goodSamples[seven_years_idx])
         if (abs(child.goodSamples[six_months_idx].age - 0.5) < 0.3) and \
                 (abs(child.goodSamples[six_years_idx].age - 6) < 0.8) and \
                 (abs(child.goodSamples[seven_years_idx].age - 7) < 0.8):

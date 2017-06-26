@@ -11,7 +11,7 @@ class Sample:
             self.height = NA
             self.BMI = NA
         else:
-            self.height = height / METER
+            self.height = height / METER if height != NA else NA
             self.BMI = BMI(self.weight, self.height)
 
     def __repr__(self):
@@ -26,7 +26,7 @@ class SwedishSample(Sample):
 
 class IsraeliSample(Sample):
     def __init__(self, age, weight, height, HC):
-        Sample.__init__(self, age, weight, height)
+        Sample.__init__(self, age/MONTHS, weight, height)
 
         self.HC = HC
         self.HCdivHeight = HC/height

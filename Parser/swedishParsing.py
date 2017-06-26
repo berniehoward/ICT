@@ -35,17 +35,39 @@ def createSwedishChildrenWithSamples(samples, ids):
         swedishChild.calculateBurst()
     return swedishChildren
 
-# Swedish child pareser main function
-def parseSwedish():
+# Parse first given file
+def praseFirstSwedish():
     with open(getpath(SWEDISH_FILE), 'r') as f:
         swedishSamples = list(csv.reader(f))
     swedishSamples = formatSwedishDataset(swedishSamples[1:])
-    idsWithICT = [[sample[0],sample[5],sample[6]] for sample in swedishSamples if sample[5] != '' or sample[6] != '']
-    idandGA = [[sample[0],sample[9]] for sample in swedishSamples if sample[9] !='']
-    for i in idsWithICT: #merge GA with other data, woraround beacuse of stupid dataset
+    idsWithICT = [[sample[0], sample[5], sample[6]] for sample in swedishSamples if sample[5] != '' or sample[6] != '']
+    idandGA = [[sample[0], sample[9]] for sample in swedishSamples if sample[9] != '']
+    for i in idsWithICT:  # merge GA with other data, workaround because of stupid dataset
         for j in idandGA:
-            if (i[0] == j[0]):
+            if i[0] == j[0]:
                 i.append(j[1])
                 break
         i.append(NA)
     return createSwedishChildrenWithSamples(swedishSamples, idsWithICT)
+
+def manageLaterSamplesSets(samples):
+    for s in samples:
+        # ID,Mesurement_date,ICT_months,GA_weeks,Birth_date,
+        # G_age_years,Height_cm,Weight_kg,GenderB1G2,MdateSAS,BdateSAS,diff
+        sample_age = s[11]
+        if sample_age == BIRTH:
+            pass# swedishChildren.add()
+
+
+def praseSecondSwedish(swedishChildren):
+    with open(getpath(SWEDISH_NEW_BOYS_FILE), 'r') as f:
+        swedishBoysSamples = list(csv.reader(f))
+    with open(getpath(SWEDISH_NEW_GIRLS_FILE), 'r') as g:
+        swedishGirlsSamples = list(csv.reader(g))
+        manageLaterSamplesSets(swedishChildren, swedishBoysSamples[1:])
+        manageLaterSamplesSets(swedishChildren, swedishGirlsSamples[1:])
+
+# Swedish child pareser main function
+def parseSwedish():
+    swedishChildren = praseFirstSwedish()
+    praseSecondSwedish(swedishChildren)
