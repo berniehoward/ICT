@@ -6,7 +6,7 @@ from Parser.swedishChild import SwedishChild
 from Parser.auxiliary import *
 
 # Formats the dataset for further usage (floats etc)
-def formatSwedishDataset(samples):
+def formatFirstSwedishDataset(samples):
     s = []
     for sample in samples:
         sample[5] = NA if sample[5] == 'NA' else sample[5]
@@ -39,7 +39,7 @@ def createSwedishChildrenWithSamples(samples, ids):
 def praseFirstSwedish():
     with open(getpath(SWEDISH_FILE), 'r') as f:
         swedishSamples = list(csv.reader(f))
-    swedishSamples = formatSwedishDataset(swedishSamples[1:])
+    swedishSamples = formatFirstSwedishDataset(swedishSamples[1:])
     idsWithICT = [[sample[0], sample[5], sample[6]] for sample in swedishSamples if sample[5] != '' or sample[6] != '']
     idandGA = [[sample[0], sample[9]] for sample in swedishSamples if sample[9] != '']
     for i in idsWithICT:  # merge GA with other data, workaround because of stupid dataset
@@ -50,24 +50,35 @@ def praseFirstSwedish():
         i.append(NA)
     return createSwedishChildrenWithSamples(swedishSamples, idsWithICT)
 
-def manageLaterSamplesSets(samples):
-    for s in samples:
-        # ID,Mesurement_date,ICT_months,GA_weeks,Birth_date,
-        # G_age_years,Height_cm,Weight_kg,GenderB1G2,MdateSAS,BdateSAS,diff
-        sample_age = s[11]
-        if sample_age == BIRTH:
-            pass# swedishChildren.add()
+def addLatterSamplesToChild(c, samples):
+    samplesForId = sorted([s for s in samples if float(s[0]) == c.id])
+    for s in samplesForId:
+        mod_s = [float(s[0]), float(s[9]), float(s[5]) if s[5] != '' else '', float(s[4]) if s[4] != '' else '']
+        c.addSample(mod_s, checkMissing(mod_s))
+    c.calculateSlops()
+    swedishChild.calculateBurst()
 
+
+def manageLatterSampleSets(children, samples):
+    for s in samples:
+        if float(s[9]) == BIRTH:
+            mod_s = [s[0], s[6], s[5], s[4], s[2], s[1], s[1]]
+            mod_s = [float(field) if field else NA for field in mod_s]
+            sc = SwedishChild(mod_s[0], mod_s[1], mod_s[2], mod_s[3], mod_s[4], mod_s[5], mod_s[6])
+            children.add(sc)
+            addLatterSamplesToChild(sc, samples)
 
 def praseSecondSwedish(swedishChildren):
     with open(getpath(SWEDISH_NEW_BOYS_FILE), 'r') as f:
         swedishBoysSamples = list(csv.reader(f))
+    manageLatterSampleSets(swedishChildren, swedishBoysSamples[1:])
     with open(getpath(SWEDISH_NEW_GIRLS_FILE), 'r') as g:
         swedishGirlsSamples = list(csv.reader(g))
-        manageLaterSamplesSets(swedishChildren, swedishBoysSamples[1:])
-        manageLaterSamplesSets(swedishChildren, swedishGirlsSamples[1:])
+    manageLatterSampleSets(swedishChildren, swedishGirlsSamples[1:])
 
 # Swedish child pareser main function
 def parseSwedish():
     swedishChildren = praseFirstSwedish()
+    print("OK")
     praseSecondSwedish(swedishChildren)
+    return swedishChildren

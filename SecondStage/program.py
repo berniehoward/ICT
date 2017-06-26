@@ -21,7 +21,7 @@ def program(dictionary):
     heights_groups = [h1, h2, h3, h4, h_na]  # (At each group there are children)
 
     # Find first epsilon for each formula
-    epsilons = [x / 1000 for x in range(20, 305, 5)]
+    epsilons = [x / 1000 for x in range(30, 305, 5)]
     eps1, score1 = findEpsilonByFormula(epsilons, children, heights_groups, 1)
     eps2, score2 = findEpsilonByFormula(epsilons, children, heights_groups, 2)
     eps3, score3 = findEpsilonByFormula(epsilons, children, heights_groups, 3)

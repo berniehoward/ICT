@@ -25,7 +25,7 @@ class SearchEpsilon(SearchProblem):
         epsilon1, score1 = state
         first_epsilon, first_score = self.first_state
         new_epsilons = [x / 1000 for x in range(int((epsilon1 * 1000) - 10), int((epsilon1 * 1000) + 10), 1)]
-        new_epsilons = [x for x in new_epsilons if (first_epsilon - 0.02) <= x <= (first_epsilon + 0.02) and x>0]
+        new_epsilons = [x for x in new_epsilons if (first_epsilon - 0.005) <= x <= (first_epsilon + 0.005) and x>0]
         new_scores = []
         for e in new_epsilons:
             icts = [findICTWithEpsilonByFormula(e, createFormulaList(self.formula_nam, c)) for c in self.children]

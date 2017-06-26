@@ -16,7 +16,7 @@ from SecondStage.experimentProgram import program as secondStage
 #     setOfChildren.israeliChildren = parseIsraeli()
 #     #print_statistics("I")
 #     for c in setOfChildren.swedishChildren:
-#         print([i.age for i in c.goodSamples])
+#         print(c.id, [(i.age, i.height) for i in c.goodSamples])
 #     with open(picklepath(PICKLE_FILE), "wb") as pklfile:
 #         pkl.dump(setOfChildren, pklfile)
 
@@ -24,5 +24,5 @@ from SecondStage.experimentProgram import program as secondStage
 if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
-    #secondStage(setOfChildren.swedishChildren)
-    secondStage(setOfChildren.israeliChildren)
+    secondStage(setOfChildren.swedishChildren)
+    #secondStage(setOfChildren.israeliChildren)

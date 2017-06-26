@@ -46,5 +46,4 @@ def parseIsraeli():
             ci('motherHeight'),
             ci('birthMonth') if c[headers.index('birthMonth')] != '' else 0))
     addAdditionalInfo(israeliChildren)
-    print([(x, x.goodSamples, x.badSamples) for x in israeliChildren if x.id == (101.0, 5.0)])
     return israeliChildren
