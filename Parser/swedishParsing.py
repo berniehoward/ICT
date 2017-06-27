@@ -56,7 +56,7 @@ def addLatterSamplesToChild(c, samples):
         mod_s = [float(s[0]), float(s[9]), float(s[5]) if s[5] != '' else '', float(s[4]) if s[4] != '' else '']
         c.addSample(mod_s, checkMissing(mod_s))
     c.calculateSlops()
-    swedishChild.calculateBurst()
+    c.calculateBurst()
 
 
 def manageLatterSampleSets(children, samples):
