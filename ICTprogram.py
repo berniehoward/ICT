@@ -24,5 +24,7 @@ from SecondStage.experimentProgram import program as secondStage
 if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
-    secondStage(setOfChildren.swedishChildren)
+
+    swedishChildrenList = sorted(list(setOfChildren.swedishChildren))
+    #secondStage(setOfChildren.swedishChildren)
     #secondStage(setOfChildren.israeliChildren)

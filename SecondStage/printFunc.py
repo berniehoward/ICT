@@ -1,5 +1,4 @@
 from numpy import average, median
-from scipy import stats
 from Parser.auxiliary import NA, MONTHS
 from Utility import find_nearest
 
@@ -9,16 +8,20 @@ def normalityTests(listOfChildren):
     six_months_heights = []
     seven_years_heights = []
     for child in listOfChildren:
-        child.calculateBurst()  # on the fly
-        six_idx = find_nearest([a.age for a in child.goodSamples], 0.6)
-        if abs(child.goodSamples[six_idx].age - 0.5) < 0.1:
+        six_idx = find_nearest([a.age for a in child.goodSamples], 0.5)
+        if abs(child.goodSamples[six_idx].age - 0.5) < 0.3:
             six_months_heights.append(child.goodSamples[six_idx].height)
         seven_idx = find_nearest([a.age for a in child.goodSamples], 7)
-        if abs(child.goodSamples[seven_idx].age - 7) < 0.3:
+        if abs(child.goodSamples[seven_idx].age - 7) < 0.8:
             seven_years_heights.append(child.goodSamples[seven_idx].height)
 
-    print("result for heights of children at age 6 months: ", stats.mstats.normaltest(six_months_heights))
-    print("result for heights of children at age 7 years: ", stats.mstats.normaltest(seven_years_heights))
+    print("Height at age 6 months")
+    for x in sorted(list(set(six_months_heights))):
+        print(x, ",", len([y for y in six_months_heights if abs(x - y) < 0.05]))
+
+    print("Height at age 7 years")
+    for x in sorted(list(set(seven_years_heights))):
+        print(x, ",", len([y for y in seven_years_heights if abs(x - y) < 0.05]))
 
 
 # Print the first epsilon for each formula
