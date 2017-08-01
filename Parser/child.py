@@ -1,9 +1,11 @@
 from Parser.auxiliary import *
 
+season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
 class Child:
 
-    def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z):
+    def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z,
+                 birthDate, birthMonth):
 
         # General info:
         self.id = id
@@ -13,6 +15,12 @@ class Child:
         self.gestationalAge = gestationalAge
         self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
+
+        self.preterm = NA
+
+        self.birthDate = birthDate
+        self.birthMonth = birthMonth if birthMonth > 0 else 0
+        self.season = season[int(self.birthMonth)]
 
         # ICT info:
         if ICT_A == NA and ICT_Z == NA:
@@ -73,6 +81,12 @@ class Child:
         if not missing:
             return len(self.goodSamples)
         return len(self.badSamples)
+
+    def setPretermFlag(self):
+        if self.gestationalAge > NA:
+            self.preterm = 1 if self.gestationalAge < 37 else 0
+        else:
+            self.preterm = NA
 
     def __lt__(self, other):
         return self.id < other.id

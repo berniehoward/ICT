@@ -1,8 +1,6 @@
 import csv
 from operator import itemgetter
-
 from Parser.swedishChild import SwedishChild
-
 from Parser.auxiliary import *
 
 # Formats the dataset for further usage (floats etc)
@@ -27,12 +25,10 @@ def createSwedishChildrenWithSamples(samples, ids):
         for s in samplesForId:
             if(s[1] == BIRTH): #work around for bad birth records
                 (s[7], s[8], s[9]) = (s[2], s[3], GA)
-                swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6])
+                swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6], NA, NA)
                 swedishChildren.add(swedishChild)
             s[5], s[6] = (ictA, ictZ)
             swedishChild.addSample(s, checkMissing(s))
-        swedishChild.calculateSlops()
-        swedishChild.calculateBurst()
     return swedishChildren
 
 # Parse first given file
@@ -55,30 +51,43 @@ def addLatterSamplesToChild(c, samples):
     for s in samplesForId:
         mod_s = [float(s[0]), float(s[9]), float(s[5]) if s[5] != '' else '', float(s[4]) if s[4] != '' else '']
         c.addSample(mod_s, checkMissing(mod_s))
-    c.calculateSlops()
-    c.calculateBurst()
 
-
-def manageLatterSampleSets(children, samples):
+def manageLatterSampleSets(children, samples, str):
     for s in samples:
         if float(s[9]) == BIRTH:
-            mod_s = [s[0], s[6], s[5], s[4], s[2], s[1], s[1]]
+            mod_s = [s[0], s[6], s[5], s[4], s[2], s[1], s[1], float(s[8].split('/')[1])]
             mod_s = [float(field) if field else NA for field in mod_s]
-            sc = SwedishChild(mod_s[0], mod_s[1], mod_s[2], mod_s[3], mod_s[4], mod_s[5], mod_s[6])
+            sc = SwedishChild(mod_s[0], mod_s[1], mod_s[2], mod_s[3], mod_s[4], mod_s[5], mod_s[6], s[8], mod_s[7])
+            sp = ''
+            if (str == "Boys"):
+                with open(getpath(SWEDISH_NEW_BOYS_P_FILE), 'r') as f:
+                    sp = list(csv.reader(f))[1:]
+            else:
+                with open(getpath(SWEDISH_NEW_GIRLS_P_FILE), 'r') as f:
+                    sp = list(csv.reader(f))[1:]
+            for i in [s for s in sp if s[0] == sc.id]:
+                sc.setParentHeights(i)
             children.add(sc)
             addLatterSamplesToChild(sc, samples)
 
 def praseSecondSwedish(swedishChildren):
     with open(getpath(SWEDISH_NEW_BOYS_FILE), 'r') as f:
         swedishBoysSamples = list(csv.reader(f))
-    manageLatterSampleSets(swedishChildren, swedishBoysSamples[1:])
+    manageLatterSampleSets(swedishChildren, swedishBoysSamples[1:], "Boys")
     with open(getpath(SWEDISH_NEW_GIRLS_FILE), 'r') as g:
         swedishGirlsSamples = list(csv.reader(g))
-    manageLatterSampleSets(swedishChildren, swedishGirlsSamples[1:])
+    manageLatterSampleSets(swedishChildren, swedishGirlsSamples[1:], "Girls")
+
+def setMisc(swedishChildren):
+    for c in swedishChildren:
+        c.setPretermFlag()
+        c.calculateSlops()
+        c.calculateBurst()
 
 # Swedish child pareser main function
 def parseSwedish():
     swedishChildren = praseFirstSwedish()
     print("OK")
     praseSecondSwedish(swedishChildren)
+    setMisc(swedishChildren)
     return swedishChildren

@@ -14,6 +14,7 @@ def program(children):
     for index in indexes:
         children.append(childrenList[index])
 
+    print(childrenList)
     ####################################################################################################################
     # First method - bins!
 

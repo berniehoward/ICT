@@ -7,10 +7,10 @@ season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fal
 
 class IsraeliChild(Child):
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
-                 birthPosition, fatherAge, motherAge, motherWeight, motherHeight, \
-                 birthMonth):
+                 birthPosition, fatherAge, motherAge, motherWeight, motherHeight,
+                 birthDate, birthMonth):
 
-        Child.__init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z)
+        Child.__init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, birthDate, birthMonth)
 
         # family related information
         self.position = birthPosition
@@ -30,10 +30,6 @@ class IsraeliChild(Child):
 
         self.brothers = set()
 
-        self.birthYear = NA
-        self.birthMonth = birthMonth
-        self.season = season[int(birthMonth)]
-
         self.HCToAgeLevel1 = []
         self.HCToAgeLevel2 = []
         self.HCdivHeightLevel1 = []
@@ -46,7 +42,10 @@ class IsraeliChild(Child):
         self.HCdivWeightSqLevel2 = []
 
     def __repr__(self):
-        return 'IsraeliChild(id=%s, %s)' % (self.id)
+        if len(self.id) == 2:
+            return 'IsraeliChild(id=%s, %s)' % (self.id)
+        else:
+            return 'IsraeliChild(id=%s, %s, %s)' % (self.id)
 
     def addBrother(self, brother):
         self.brothers.add(brother)

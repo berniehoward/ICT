@@ -11,9 +11,22 @@ FALSE_DATE = '1/1/'+ str(NA)
 # Files
 SWEDISH_FILE = "Sweden_ICT.csv"
 SWEDISH_NEW_BOYS_FILE = 'NewData\\SwedishBoysFile.csv'
-SWEDISH_NEW_GIRLS_FILE = 'NewData\\SwedishBoysFile.csv'
+SWEDISH_NEW_GIRLS_FILE = 'NewData\\SwedishGirlsFile.csv'
+SWEDISH_NEW_GIRLS_P_FILE = 'NewData\\SwedishGirlsParents.csv'
+SWEDISH_NEW_BOYS_P_FILE = 'NewData\\SwedishBoysParents.csv'
+
+#################
+
 ISRAELI_MAIN_FILE = "MS_ICT.csv"
 ISRAELI_ADDITIONAL_INFO_FILE = "MS_SIBS.csv"
+
+ISRAELI_FMLY_RSRCH_FILE = "ILS_ResearchGroup.csv"
+ISRAELI_FMLY_TEST_FILE = "ILS_TestGroup.csv"
+ISRAELI_FMLY_ICT_FILE = "ILS_LargeFamiliesICT.csv"
+#ISRAELI_FMLY_ICT2_FILE = "ILS_LargeFamiliesICT2.csv"
+
+#################
+
 PICKLE_FILE = "ChildrenSet.pkl"
 
 # Lambdas
