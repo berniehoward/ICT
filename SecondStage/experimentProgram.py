@@ -7,6 +7,8 @@ from simpleai.search.local import hill_climbing_random_restarts, hill_climbing
 # Experiment program for second stage
 def program(children):
     childrenList = sorted(list(children))
+    for c in children:
+        sorted(c.goodSamples)
     heights, indexes = findHeightAroundAge(childrenList)
 
     # Reorganized children by the order of indexes list
@@ -27,19 +29,22 @@ def program(children):
     eps1, score1 = findEpsilonByFormula(epsilons, children, heights_groups, 1)
     eps2, score2 = findEpsilonByFormula(epsilons, children, heights_groups, 2)
     eps3, score3 = findEpsilonByFormula(epsilons, children, heights_groups, 3)
-    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3, True)
+    eps4, score4 = findEpsilonByFormula(epsilons, children, heights_groups, 4)
+    printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, True)
 
     # Find best epsilon for each formula
     problem1 = SearchEpsilon(eps1, score1, 1, children, heights_groups)
     problem2 = SearchEpsilon(eps2, score2, 2, children, heights_groups)
     problem3 = SearchEpsilon(eps3, score3, 3, children, heights_groups)
+    problem4 = SearchEpsilon(eps3, score3, 4, children, heights_groups)
     bestEps1, bestScore1 = hill_climbing(problem1, 50).state
     bestEps2, bestScore2 = hill_climbing(problem2, 50).state
     bestEps3, bestScore3 = hill_climbing(problem3, 50).state
+    bestEps4, bestScore4 = hill_climbing(problem4, 50).state
 
     # Find best formula
-    best_scores = [bestScore1, bestScore2, bestScore3]
-    best_epsilons = [bestEps1, bestEps2, bestEps3]
+    best_scores = [bestScore1, bestScore2, bestScore3, bestScore4]
+    best_epsilons = [bestEps1, bestEps2, bestEps3, bestEps4]
     bestScore = max(best_scores)
     best_formula = best_scores.index(bestScore)
     printBestFormula(best_formula, best_epsilons, bestScore, True)
@@ -58,19 +63,22 @@ def program(children):
     eps1, score1 = findEpsilonByFormula(epsilons, children, heights, 1, WITHOUT_BINS)
     eps2, score2 = findEpsilonByFormula(epsilons, children, heights, 2, WITHOUT_BINS)
     eps3, score3 = findEpsilonByFormula(epsilons, children, heights, 3, WITHOUT_BINS)
-    printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3, True)
+    eps4, score4 = findEpsilonByFormula(epsilons, children, heights, 4, WITHOUT_BINS)
+    printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, True)
 
     # Find best epsilon for each formula
     problem1 = SearchEpsilon(eps1, score1, 1, children, heights, WITHOUT_BINS)
     problem2 = SearchEpsilon(eps2, score2, 2, children, heights, WITHOUT_BINS)
     problem3 = SearchEpsilon(eps3, score3, 3, children, heights, WITHOUT_BINS)
+    problem4 = SearchEpsilon(eps4, score4, 4, children, heights, WITHOUT_BINS)
     bestEps1, bestScore1 = hill_climbing(problem1, 50).state
     bestEps2, bestScore2 = hill_climbing(problem2, 50).state
     bestEps3, bestScore3 = hill_climbing(problem3, 50).state
+    bestEps4, bestScore4 = hill_climbing(problem4, 50).state
 
     # Find best formula
-    best_scores = [bestScore1, bestScore2, bestScore3]
-    best_epsilons = [bestEps1, bestEps2, bestEps3]
+    best_scores = [bestScore1, bestScore2, bestScore3, bestScore4]
+    best_epsilons = [bestEps1, bestEps2, bestEps3, bestEps4]
     bestScore = max(best_scores)
     best_formula = best_scores.index(bestScore)
     printBestFormula(best_formula, best_epsilons, bestScore, True)

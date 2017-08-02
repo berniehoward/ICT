@@ -1,5 +1,5 @@
 from Parser.auxiliary import *
-
+from operator import attrgetter
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
 class Child:
@@ -47,6 +47,7 @@ class Child:
         self.heightToAgeBurstFormula1 = []
         self.heightToAgeBurstFormula2 = []
         self.heightToAgeBurstFormula3 = []
+        self.heightToAgeBurstFormula4 = []
 
         # Samples:
         self.goodSamples = []
@@ -65,6 +66,14 @@ class Child:
             self.heightToAgeBurstFormula2.append((y.age, (z.height - y.height) - (y.height - x.height)))
         for x, y, z, w in zip(goodSamples, goodSamples[1:], goodSamples[2:],goodSamples[3:]):
             self.heightToAgeBurstFormula3.append(((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
+
+        dividedSamples = [goodSamples[i:i + 3] for i in range(0, len(goodSamples), 3)]
+        dividedSamples = [x for x in dividedSamples if len(x)==3]
+        for x1,y1,z1, x2,y2,z2 in zip(dividedSamples, dividedSamples[1:]):
+            m1 = (z1.height - x1.height) / (z1.age - x1.age)
+            m2 = (z2.height - x2.height) / (z2.age - x2.age)
+            midage = ((z2.age - x2.age) / 2 + (z1.age - x1.age) / 2) / 2
+            self.heightToAgeBurstFormula4.append(midage , m2 - m1)
 
     def calculateSlops(self):
         goodSamples = [s for s in self.goodSamples if s.age > 0.35]
@@ -87,6 +96,10 @@ class Child:
             self.preterm = 1 if self.gestationalAge < 37 else 0
         else:
             self.preterm = NA
+
+    def sortSamplesByAge(self):
+        sorted(self.goodSamples)
+        sorted(self.badSamples)
 
     def __lt__(self, other):
         return self.id < other.id

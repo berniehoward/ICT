@@ -25,12 +25,13 @@ def normalityTests(listOfChildren):
 
 
 # Print the first epsilon for each formula
-def printFirstEpsilonPerFormula(eps1, eps2, eps3, score1, score2, score3, mode=False):
+def printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, mode=False):
     if not mode:
         return
     print("first formula: epsilon: ", eps1, ", score: ", score1)
     print("second formula: epsilon: ", eps2, ", score: ", score2)
     print("third formula: epsilon: ", eps3, ", score: ", score3)
+    print("fourth formula: epsilon: ", eps4, ", score: ", score4)
 
 
 # Print the details of the best formula after doing "hill-climbing" algorithm

@@ -1,8 +1,10 @@
 from math import ceil
 from Parser.auxiliary import *
+from functools import total_ordering
 
 BMI = lambda w,h: w/h**2
 
+@total_ordering
 class Sample:
     def __init__(self, age, weight, height):
         self.age = float(format(age, '.2f'))
@@ -17,12 +19,19 @@ class Sample:
     def __repr__(self):
         return 'Sample(Age=%s,Height=%s)' % (self.age,self.height)
 
+    def __lt__(self, other):
+        return self.age < other.age
+
+@total_ordering
 class SwedishSample(Sample):
     def __init__(self, age, weight, height):
         Sample.__init__(self, age, weight, height)
 
     def __repr__(self):
         return 'SwedishSample(Age=%s,Height=%s)' % (self.age,self.height)
+
+    def __lt__(self, other):
+        return self.age < other.age
 
 class IsraeliSample(Sample):
     def __init__(self, age, weight, height, HC):

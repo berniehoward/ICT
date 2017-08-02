@@ -28,7 +28,10 @@ def createSwedishChildrenWithSamples(samples, ids):
                 swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6], NA, NA)
                 swedishChildren.add(swedishChild)
             s[5], s[6] = (ictA, ictZ)
-            swedishChild.addSample(s, checkMissing(s))
+            if (s[1] != BIRTH):
+                swedishChild.addSample(s, checkMissing(s))
+            else:
+                swedishChild.addSample(s, not checkMissing(s))
     return swedishChildren
 
 # Parse first given file
@@ -50,7 +53,10 @@ def addLatterSamplesToChild(c, samples):
     samplesForId = sorted([s for s in samples if float(s[0]) == c.id])
     for s in samplesForId:
         mod_s = [float(s[0]), float(s[9]), float(s[5]) if s[5] != '' else '', float(s[4]) if s[4] != '' else '']
-        c.addSample(mod_s, checkMissing(mod_s))
+        if (float(s[9]) != BIRTH):
+            c.addSample(mod_s, checkMissing(mod_s))
+        else:
+            c.addSample(mod_s, not checkMissing(mod_s))
 
 def manageLatterSampleSets(children, samples, str):
     for s in samples:
@@ -81,6 +87,7 @@ def praseSecondSwedish(swedishChildren):
 def setMisc(swedishChildren):
     for c in swedishChildren:
         c.setPretermFlag()
+        c.sortSamplesByAge()
         c.calculateSlops()
         c.calculateBurst()
 

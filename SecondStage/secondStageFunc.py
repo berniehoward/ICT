@@ -93,9 +93,10 @@ def divideToGroups(featureList, children, b1, b2, b3):
 # Find the first age where formula in bigger then epsilon - this age is the ICT point
 def findICTWithEpsilonByFormula(e, formulaList):
     for midAge, slope in formulaList:
-        if slope > e:
+         if slope > e:
             return midAge
     return NA
+
 
 
 # Find the height group of a specific child
@@ -137,7 +138,10 @@ def createFormulaList(formulaNum, child):
         return child.heightToAgeBurstFormula1
     elif formulaNum == 2:
         return child.heightToAgeBurstFormula2
-    return child.heightToAgeBurstFormula3
+    elif formulaNum == 3:
+        return child.heightToAgeBurstFormula3
+    else:
+        return child.heightToAgeBurstFormula4
 
 
 # Score epsilon values using group distances
