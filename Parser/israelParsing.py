@@ -2,17 +2,20 @@ from Parser.israeliChild import IsraeliChild
 import csv
 from Parser.auxiliary import *
 
+
 def checkMissing(s):
     s = [s[8], s[5], s[6], s[7]]
     if all(s):
-        return ([float(i) for i in s],False)
-    return ([float(i) if i != '' else NA for i in s],True)
+        return [float(i) for i in s],False
+    return [float(i) if i != '' else NA for i in s], True
+
 
 def addSamplesToIsraeliChild(headers, sisb, c):
-    samples = [s for s in sisb if c.id == (int(s[1]),int(s[2]))]
-    for s in samples: #check valid samples
-        s,bool = checkMissing(s)
-        c.addSample(s,bool)
+    samples = [s for s in sisb if c.id == (int(s[1]), int(s[2]))]
+    for s in samples:  # check valid samples
+        s, bool = checkMissing(s)
+        c.addSample(s, bool)
+
 
 def addAdditionalInfo(israeliChildren):
     with open(getpath(ISRAELI_ADDITIONAL_INFO_FILE), 'r') as f:
@@ -26,6 +29,7 @@ def addAdditionalInfo(israeliChildren):
             birthDate = datelist[0] if len(datelist)>0 else FALSE_DATE
             c.updateYear(int(birthDate.split('/')[2]))
             addSamplesToIsraeliChild(headers, sisb, c)
+
 
 def parseFirstSet():
     israeliChildren = set()
@@ -45,16 +49,18 @@ def parseFirstSet():
     addAdditionalInfo(israeliChildren)
     return israeliChildren
 
+
 def checkMissingSecondSet(s):
     if 0 in s:
         return [float(i) if i != 0 else NA for i in s], True
     return [float(i) for i in s], False
 
+
 def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_RSRCH_FILE), 'r') as f:
         rsrch = list(csv.reader(f))[1:]
     for c in secondSet:
-        samples = [[float(s[4]),float(s[6]),float(s[7]),float(s[8])] for s in rsrch if c.id == (int(s[0]),int(s[1]),int(s[2]))]
+        samples = [[float(s[4]), float(s[6]), float(s[7]), float(s[8])] for s in rsrch if c.id == (int(s[0]), int(s[1]), int(s[2]))]
         for s in samples:
             s, bool = checkMissingSecondSet(s)
             c.addSample(s, bool)
@@ -62,10 +68,11 @@ def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_TEST_FILE), 'r') as f:
         test = list(csv.reader(f))[1:]
     for c in secondSet:
-        samples = [[float(s[4]),float(s[6]),float(s[7]),float(s[8])] for s in test if c.id == (int(s[0]),int(s[1]),int(s[2]))]
+        samples = [[float(s[4]), float(s[6]), float(s[7]), float(s[8])] for s in test if c.id == (int(s[0]), int(s[1]), int(s[2]))]
         for s in samples:
             s, bool = checkMissingSecondSet(s)
             c.addSample(s, bool)
+
 
 def parseSecondSet():
     with open(getpath(ISRAELI_FMLY_ICT_FILE), 'r') as f:
@@ -83,11 +90,13 @@ def parseSecondSet():
     addAdditionalInfoSecondSet(secondSet)
     return secondSet
 
+
 def setMisc(israeliChildren):
     for c in israeliChildren:
         c.setPretermFlag()
         c.calculateSlops()
         c.calculateBurst()
+
 
 def parseIsraeli():
     israeliChildren = parseFirstSet()

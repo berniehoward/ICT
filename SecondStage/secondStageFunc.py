@@ -126,7 +126,7 @@ def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum, bins=Tr
                 child_ict.append((c.id, ict))
             for c, h in zip(children, heights_groups):
                 child_height.append((c.id, h))
-            scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)), \
+            scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)),
                                                        sorted(child_height, key=itemgetter(1)), 2))
     bestScore = max(scores)
     return epsilons[scores.index(bestScore)], bestScore
@@ -179,3 +179,22 @@ def calculateNewICT(children, bestEpsilon, bestFormula):
             ict = NA
         icts.append((c, ict))
     return icts
+
+
+# Return the score of a given tagging
+def findScore(ict, children, heights_groups, discreetMethod):
+    median = numpy.median(ict)
+    if not (5 / MONTHS <= median <= 11 / MONTHS):
+        return 0
+    elif discreetMethod:
+        g1, g2, g3, g4, g_na = divideToGroups(ict, children, 6.5 / MONTHS, 9.5 / MONTHS, 11 / MONTHS)
+        return scoreEpsilonByGroupDistances([g1, g2, g3, g4], heights_groups, 1)
+    else:
+        child_ict = []
+        child_height = []
+        for c, ict in zip(children, ict):
+            child_ict.append((c.id, ict))
+        for c, h in zip(children, heights_groups):
+            child_height.append((c.id, h))
+        return scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)),
+                                            sorted(child_height, key=itemgetter(1)), 2)

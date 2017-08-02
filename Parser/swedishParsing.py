@@ -3,6 +3,7 @@ from operator import itemgetter
 from Parser.swedishChild import SwedishChild
 from Parser.auxiliary import *
 
+
 # Formats the dataset for further usage (floats etc)
 def formatFirstSwedishDataset(samples):
     s = []
@@ -14,25 +15,27 @@ def formatFirstSwedishDataset(samples):
     return s
 
 BIRTH = 0
-checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True #bool value to check missing values
+checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True  # boolean value to check missing values
+
 
 # Creates a child with good and bad samples
 def createSwedishChildrenWithSamples(samples, ids):
     swedishChildren = set()
     for id in ids:  # id = tup(id,ictA,ictZ,GA)
         (ictA, ictZ, GA) = (id[1], id[2], id[3])
-        samplesForId = sorted([s for s in samples if s[0] == id[0]],key=itemgetter(1))
+        samplesForId = sorted([s for s in samples if s[0] == id[0]], key=itemgetter(1))
         for s in samplesForId:
-            if(s[1] == BIRTH): #work around for bad birth records
+            if s[1] == BIRTH:  # work around for bad birth records
                 (s[7], s[8], s[9]) = (s[2], s[3], GA)
                 swedishChild = SwedishChild(s[0], s[4], s[2], s[3], s[9], s[5], s[6], NA, NA)
                 swedishChildren.add(swedishChild)
             s[5], s[6] = (ictA, ictZ)
-            if (s[1] != BIRTH):
+            if s[1] != BIRTH:
                 swedishChild.addSample(s, checkMissing(s))
             else:
                 swedishChild.addSample(s, not checkMissing(s))
     return swedishChildren
+
 
 # Parse first given file
 def praseFirstSwedish():
@@ -49,6 +52,7 @@ def praseFirstSwedish():
         i.append(NA)
     return createSwedishChildrenWithSamples(swedishSamples, idsWithICT)
 
+
 def addLatterSamplesToChild(c, samples):
     samplesForId = sorted([s for s in samples if float(s[0]) == c.id])
     for s in samplesForId:
@@ -57,6 +61,7 @@ def addLatterSamplesToChild(c, samples):
             c.addSample(mod_s, checkMissing(mod_s))
         else:
             c.addSample(mod_s, not checkMissing(mod_s))
+
 
 def manageLatterSampleSets(children, samples, str):
     for s in samples:
@@ -76,6 +81,7 @@ def manageLatterSampleSets(children, samples, str):
             children.add(sc)
             addLatterSamplesToChild(sc, samples)
 
+
 def praseSecondSwedish(swedishChildren):
     with open(getpath(SWEDISH_NEW_BOYS_FILE), 'r') as f:
         swedishBoysSamples = list(csv.reader(f))
@@ -84,12 +90,14 @@ def praseSecondSwedish(swedishChildren):
         swedishGirlsSamples = list(csv.reader(g))
     manageLatterSampleSets(swedishChildren, swedishGirlsSamples[1:], "Girls")
 
+
 def setMisc(swedishChildren):
     for c in swedishChildren:
         c.setPretermFlag()
         c.sortSamplesByAge()
         c.calculateSlops()
         c.calculateBurst()
+
 
 # Swedish child pareser main function
 def parseSwedish():

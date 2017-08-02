@@ -22,16 +22,19 @@ def normalityTests(listOfChildren):
     print("Height at age 7 years")
     for x in sorted(list(set(seven_years_heights))):
         print(x, ",", len([y for y in seven_years_heights if abs(x - y) < 0.05]))
+    print()
 
 
 # Print the first epsilon for each formula
 def printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, mode=False):
     if not mode:
         return
+    print("First epsilon for each formula: ")
     print("first formula: epsilon: ", eps1, ", score: ", score1)
     print("second formula: epsilon: ", eps2, ", score: ", score2)
     print("third formula: epsilon: ", eps3, ", score: ", score3)
     print("fourth formula: epsilon: ", eps4, ", score: ", score4)
+    print()
 
 
 # Print the details of the best formula after doing "hill-climbing" algorithm
@@ -40,6 +43,7 @@ def printBestFormula(best_formula, best_epsilons, bestScore, mode=False):
         return
     print("Best formula is formula number: ", best_formula + 1)
     print("Best epsilon is: ", best_epsilons[best_formula], " with score: ", bestScore)
+    print()
 
 
 # Print result of comparing for the previous ict tagging
@@ -48,9 +52,6 @@ def printCompareToPreviousICT(icts, mode=False):
         return
     distFromICTz = []
     distFromICTa = []
-    distFromICTmin = []
-    distFromICTmax = []
-    distFromICTavg = []
     count_new_na = 0
     count_previous_z_na = 0
     count_previous_a_na = 0
@@ -71,9 +72,6 @@ def printCompareToPreviousICT(icts, mode=False):
             count_previous_a_na += 1
             continue
         distFromICTa.append(abs(c.ICT_A - ict))
-        distFromICTmin.append(abs(c.ICT_MIN - ict))
-        distFromICTmax.append(abs(c.ICT_MAX - ict))
-        distFromICTavg.append(abs(c.ICT_AVG - ict))
 
     icts_without_na = [p for c, p in icts if p != NA]
 
@@ -82,7 +80,7 @@ def printCompareToPreviousICT(icts, mode=False):
 
     avg_m = lambda n: average(n)*MONTHS
 
-    print("New ict median: ", median(icts_without_na) * MONTHS, ", avg: ", average(icts_without_na)* MONTHS)
+    print("New ict median: ", median(icts_without_na) * MONTHS, ", avg: ", average(icts_without_na) * MONTHS)
     print("Ze'ev's ict tagging median: ", median(z_icts_without_na) * MONTHS, ", avg: ",
           avg_m(z_icts_without_na))
     print("Alina's ict tagging median: ", median(a_icts_without_na) * MONTHS, ", avg: ",
@@ -90,10 +88,12 @@ def printCompareToPreviousICT(icts, mode=False):
     print("Number of NA tags in new tagging process: ", count_new_na)
     print("Number of NA tags in Ze'ev's tagging process: ", count_previous_z_na)
     print("Number of NA tags in Alina's tagging process: ", count_previous_a_na)
-    print("Average distance of new tagging process from Ze'ev's tagging process: ", avg_m(distFromICTz))
-    print("Average distance of new tagging process from Alina's tagging process: ", avg_m(distFromICTa))
-    print("Average distance of new tagging process from Ze'ev and Alina average tagging: ", avg_m(distFromICTavg))
-    print("Average distance of new tagging process from Ze'ev and Alina minimum tagging: ", avg_m(distFromICTmin))
-    print("Average distance of new tagging process from Ze'ev and Alina maximum tagging: ", avg_m(distFromICTmax))
+    print()
 
+
+def printExpertsScores(z_score, a_score, printMode):
+    if printMode:
+        print("The score of Ze'ev's tagging process: ", z_score)
+        print("The score of Alina's tagging process: ", a_score)
+        print()
 
