@@ -9,7 +9,7 @@ def program(children, printMode=False):
 
     childrenList = sorted(list(children))
     for c in children:
-        sorted(c.goodSamples)
+        c.goodSamples = sorted(c.goodSamples)
 
     heights, indexes = findHeightAroundAge(childrenList)
 
