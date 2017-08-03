@@ -126,6 +126,12 @@ def findEpsilonByFormula(epsilons, children, heights_groups, formulaNum, bins=Tr
                 child_ict.append((c.id, ict))
             for c, h in zip(children, heights_groups):
                 child_height.append((c.id, h))
+            for i in child_ict: #for removal of NA's
+                if(i[1] == NA):
+                    c = [c[0] for c in child_height]
+                    idx = c.index(i[0])
+                    child_height = child_height[:idx] + child_height[idx+1:]
+                    child_ict.remove(i)
             scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)),
                                                        sorted(child_height, key=itemgetter(1)), 2))
     bestScore = max(scores)

@@ -70,7 +70,7 @@ def program(children, printMode=False):
     # print the new icts and delta heights
     if printMode:
         print("New ict tags: ")
-        print([p * MONTHS for c, p in newICT])
+        print([p * MONTHS if p != NA else p for c, p in newICT])
         print("Delta heights during childhood: ")
         print(heights)
         print()
@@ -127,7 +127,7 @@ def program(children, printMode=False):
     # print the new icts and delta heights
     if printMode:
         print("New ict tags: ")
-        print([p * MONTHS for c, p in newICT])
+        print([p * MONTHS if p != NA else p for c, p in newICT])
         print("Delta heights during childhood: ")
         print(heights)
         print()
