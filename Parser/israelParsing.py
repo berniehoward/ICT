@@ -100,7 +100,6 @@ def setMisc(israeliChildren):
 
 def parseIsraeli():
     israeliChildren = parseFirstSet()
-    print("OK")
     secondSet = parseSecondSet()
     israeliChildren = israeliChildren.union(secondSet)
     setMisc(israeliChildren)

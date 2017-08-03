@@ -68,8 +68,8 @@ class Child:
         for x, y, z, w in zip(goodSamples, goodSamples[1:], goodSamples[2:], goodSamples[3:]):
             self.heightToAgeBurstFormula3.append(
                 ((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
-        for a,b,c,d,e in zip(goodSamples, goodSamples[1:], goodSamples[2:],
-                                              goodSamples[3:],goodSamples[4:]):
+        for a, b, c, d, e in zip(goodSamples, goodSamples[1:], goodSamples[2:],
+                                              goodSamples[3:], goodSamples[4:]):
             m1 = (e.height - c.height) / (e.age - c.age)
             m2 = (c.height - a.height) / (c.age - a.age)
             midage = (((e.age + c.age) / 2) + ((c.age + a.age) / 2)) / 2

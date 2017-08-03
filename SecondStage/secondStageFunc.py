@@ -181,7 +181,7 @@ def calculateNewICT(children, bestEpsilon, bestFormula):
     icts = []
     for c in children:
         ict = findICTWithEpsilonByFormula(bestEpsilon, createFormulaList(bestFormula, c))
-        if ict > 20:
+        if ict > 20 / MONTHS:
             ict = NA
         icts.append((c, ict))
     return icts

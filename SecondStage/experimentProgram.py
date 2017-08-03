@@ -5,11 +5,7 @@ from simpleai.search.local import hill_climbing
 
 
 # Experiment program for second stage
-def program(children, printMode=False):
-
-    childrenList = sorted(list(children))
-    for c in children:
-        c.goodSamples = sorted(c.goodSamples)
+def program(childrenList, israeliChildren, printMode=False):
 
     heights, indexes = findHeightAroundAge(childrenList)
 
@@ -67,13 +63,15 @@ def program(children, printMode=False):
                         heights_groups, True)
     printExpertsScores(z_score, a_score, printMode)
 
-    # print the new icts and delta heights
+    # Print the new icts and heights
     if printMode:
         print("New ict tags: ")
-        print([p * MONTHS if p != NA else p for c, p in newICT])
-        print("Delta heights during childhood: ")
-        print(heights)
+        print([p * MONTHS for c, p in newICT if p != NA])
+        print("heights at age 7 years: ")
+        print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
         print()
+
+    # Calculate new ICT for israeli:
 
     ############################################ Second Method - Sequential  ###########################################
 
@@ -127,9 +125,9 @@ def program(children, printMode=False):
     # print the new icts and delta heights
     if printMode:
         print("New ict tags: ")
-        print([p * MONTHS if p != NA else p for c, p in newICT])
-        print("Delta heights during childhood: ")
-        print(heights)
+        print([p * MONTHS for c, p in newICT if p != NA])
+        print("heights at age 7 years: ")
+        print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
         print()
 
 

@@ -16,12 +16,21 @@ def parsingStage():
         pkl.dump(setOfChildren, pklfile)
 
 
-if __name__ == '__main__':
-    parsingStage()
+# Return sorted lists of children
+def sortListsOfChildren(setOfChildren):
+    swedishChildrenList = sorted(list(setOfChildren.swedishChildren))
+    israeliChildrenList = sorted(list(setOfChildren.israeliChildren))
+    for c in swedishChildrenList:
+        c.goodSamples = sorted(c.goodSamples)
+    for c in israeliChildrenList:
+        c.goodSamples = sorted(c.goodSamples)
+    return swedishChildrenList, israeliChildrenList
 
+if __name__ == '__main__':
+    #parsingStage()
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
+    swedishChildrenList, israeliChildrenList = sortListsOfChildren(setOfChildren)
+    secondStage(swedishChildrenList, israeliChildrenList, True)
 
-    swedishChildrenList = sorted(list(setOfChildren.swedishChildren))
-    secondStage(setOfChildren.swedishChildren, True)
-    #secondStage(setOfChildren.israeliChildren)
+
