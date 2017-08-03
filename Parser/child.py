@@ -65,22 +65,15 @@ class Child:
         for x, y, z in zip(goodSamples, goodSamples[1:], goodSamples[2:]):
             self.heightToAgeBurstFormula1.append((y.age, (z.height / y.height) - (y.height / x.height)))
             self.heightToAgeBurstFormula2.append((y.age, (z.height - y.height) - (y.height - x.height)))
-            m = (z.height - x.height) / (z.age - x.age)
-            self.heightToAgeBurstFormula4.append(((z.age - x.age)/2, m))
         for x, y, z, w in zip(goodSamples, goodSamples[1:], goodSamples[2:], goodSamples[3:]):
             self.heightToAgeBurstFormula3.append(
                 ((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
-
-        # dividedSamples = [goodSamples[i:i + 3] for i in range(0, len(goodSamples), 3)]
-        # dividedSamples = [x for x in dividedSamples if len(x) == 3]
-        # for (x1, y1, z1), (x2, y2, z2) in zip(dividedSamples, dividedSamples[1:]):
-        #     #print((x1, y1, z1), (x2, y2, z2))
-        #     m1 = (z1.height - x1.height) / (z1.age - x1.age)
-        #     m2 = (z2.height - x2.height) / (z2.age - x2.age)
-        #     print(m2-m1)
-        #     midage = (((z2.age + x2.age) / 2) + ((z1.age + x1.age) / 2)) / 2
-        #     self.heightToAgeBurstFormula4.append((midage, m2 - m1))
-        # print()
+        for a,b,c,d,e in zip(goodSamples, goodSamples[1:], goodSamples[2:],
+                                              goodSamples[3:],goodSamples[4:]):
+            m1 = (e.height - c.height) / (e.age - c.age)
+            m2 = (c.height - a.height) / (c.age - a.age)
+            midage = (((e.age + c.age) / 2) + ((c.age + a.age) / 2)) / 2
+            self.heightToAgeBurstFormula4.append((midage, m2-m1))
 
     def calculateSlops(self):
         goodSamples = [s for s in self.goodSamples if s.age > 0.35]
