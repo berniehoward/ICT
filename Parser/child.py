@@ -66,7 +66,7 @@ class Child:
             self.heightToAgeBurstFormula1.append((y.age, (z.height / y.height) - (y.height / x.height)))
             self.heightToAgeBurstFormula2.append((y.age, (z.height - y.height) - (y.height - x.height)))
             m = (z.height - x.height) / (z.age - x.age)
-            self.heightToAgeBurstFormula4.append((y.age, m))
+            self.heightToAgeBurstFormula4.append(((z.age - x.age)/2, m))
         for x, y, z, w in zip(goodSamples, goodSamples[1:], goodSamples[2:], goodSamples[3:]):
             self.heightToAgeBurstFormula3.append(
                 ((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
