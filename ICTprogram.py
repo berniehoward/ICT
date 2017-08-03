@@ -17,6 +17,8 @@ def parsingStage():
 
 
 if __name__ == '__main__':
+    parsingStage()
+
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
 
