@@ -4,21 +4,10 @@ from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing
 
 
-# Experiment program for second stage
-def program(childrenList, israeliChildren, printMode=False):
-
-    heights, indexes = findHeightAroundAge(childrenList)
-
-    # Reorganized children by the order of indexes list
-    children = []
-    for index in indexes:
-        children.append(childrenList[index])
-
-    ############################################# First method - Discreet #############################################
-
-    # Divide children to heights groups
-    h1, h2, h3, h4, h_na = divideToGroups(heights, children, -1, 0, 1)
-    heights_groups = [h1, h2, h3, h4, h_na]  # (At each group there are children)
+# Exact the discreet method
+def discreetMethod(children, israeliChildren, heights_groups, printMode):
+    if printMode:
+        print("Discreet Method: ")
 
     # Find first epsilon for each formula
     epsilons = [x / 1000 for x in range(15, 305, 5)]
@@ -64,20 +53,20 @@ def program(childrenList, israeliChildren, printMode=False):
     printExpertsScores(z_score, a_score, printMode)
 
     # Print the new icts and heights
+    printICTAndHeights(newICT, printMode)
+
+    # Calculate new ICT for israeli children
+    israeliICT = calculateNewICT(israeliChildren, best_epsilons[best_formula], best_formula + 1) # List of (child, newICT)
     if printMode:
-        print("New ict tags: ")
-        print([p * MONTHS for c, p in newICT if p != NA])
-        print("heights at age 7 years: ")
-        print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
-        print()
+        print("Israeli ICT tagging info: ")
+    printCompareToPreviousICT(israeliICT, printMode)
 
-    # Calculate new ICT for israeli:
 
-    ############################################ Second Method - Sequential  ###########################################
-
+# Exact the sequential method
+def sequentialMethod(children, heights, israeliChildren, heights_groups, printMode):
     if printMode:
-        print("#######################################################################################################")
-        print()
+        print("Sequential Method: ")
+    epsilons = [x / 1000 for x in range(15, 305, 5)]
 
     # Find first epsilon for each formula
     WITHOUT_BINS = False
@@ -123,12 +112,37 @@ def program(childrenList, israeliChildren, printMode=False):
     printExpertsScores(z_score, a_score, printMode)
 
     # print the new icts and delta heights
+    printICTAndHeights(newICT, printMode)
+
+    # Calculate new ICT for israeli children
+    israeliICT = calculateNewICT(israeliChildren, best_epsilons[best_formula],
+                                 best_formula + 1)  # List of (child, newICT)
     if printMode:
-        print("New ict tags: ")
-        print([p * MONTHS for c, p in newICT if p != NA])
-        print("heights at age 7 years: ")
-        print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
+        print("Israeli ICT tagging info: ")
+    printCompareToPreviousICT(israeliICT, printMode)
+
+
+# Experiment program for second stage
+def program(childrenList, israeliChildren, printMode=False):
+
+    heights, indexes = findHeightAroundAge(childrenList)
+
+    # Reorganized children by the order of indexes list
+    children = []
+    for index in indexes:
+        children.append(childrenList[index])
+
+    # Divide children to heights groups
+    h1, h2, h3, h4, h_na = divideToGroups(heights, children, -1, 0, 1)
+    heights_groups = [h1, h2, h3, h4, h_na]  # (At each group there are children)
+
+    discreetMethod(children, israeliChildren, heights_groups, printMode)
+
+    if printMode:
+        print("#######################################################################################################")
         print()
+
+    sequentialMethod(children, heights, israeliChildren, heights_groups, printMode)
 
 
 

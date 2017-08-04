@@ -89,9 +89,9 @@ def printCompareToPreviousICT(icts, mode=False):
           avg_m(z_icts_without_na))
     print("Alina's ict tagging median: ", median(a_icts_without_na) * MONTHS, ", avg: ",
           avg_m(a_icts_without_na))
-    print("Number of NA tags in new tagging process: ", count_new_na)
-    print("Number of NA tags in Ze'ev's tagging process: ", count_previous_z_na)
-    print("Number of NA tags in Alina's tagging process: ", count_previous_a_na)
+    print("Number of NA tags in new tagging process: ", count_new_na, " out of ", len(icts))
+    print("Number of NA tags in Ze'ev's tagging process: ", count_previous_z_na, " out of ", len(icts))
+    print("Number of NA tags in Alina's tagging process: ", count_previous_a_na, " out of ", len(icts))
     print()
 
 
@@ -101,4 +101,15 @@ def printExpertsScores(z_score, a_score, printMode):
         print("The score of Ze'ev's tagging process: ", z_score)
         print("The score of Alina's tagging process: ", a_score)
         print()
+
+
+# Print the new icts and heights
+def printICTAndHeights(newICT, printMode):
+    if not printMode:
+        return
+    print("New ict tags: ")
+    print([p * MONTHS for c, p in newICT if p != NA])
+    print("heights at age 7 years: ")
+    print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
+    print()
 

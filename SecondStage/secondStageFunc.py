@@ -98,7 +98,6 @@ def findICTWithEpsilonByFormula(e, formulaList):
     return NA
 
 
-
 # Find the height group of a specific child
 def findChildGroup(c, heights_groups):
     for g in heights_groups:
