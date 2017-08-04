@@ -72,4 +72,9 @@ class IsraeliChild(Child):
         if missing:
             self.badSamples.append(sample)
         else:
-            self.goodSamples.append(sample)
+            HC = s[3]
+            if (HC == NA or HC == 0 or HC == ''):
+                self.goodSamples.append(sample) #now goodSamples with possible bad HC
+            else:
+                self.goodSamples.append(sample)
+                self.goodSamplesWithHC.append(sample)

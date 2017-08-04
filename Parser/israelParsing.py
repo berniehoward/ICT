@@ -4,8 +4,10 @@ from Parser.auxiliary import *
 
 
 def checkMissing(s):
-    s = [s[8], s[5], s[6], s[7]]
-    if all(s):
+    s = [s[8], s[5], s[6], s[7]] #don't check now HC
+    if (s[1] != '' and s[2] != ''):
+        print(s)
+        s[3] = NA if s[3] == '' else s[3]
         return [float(i) for i in s],False
     return [float(i) if i != '' else NA for i in s], True
 
@@ -42,9 +44,8 @@ def parseFirstSet():
                                          getGender(c[headers.index('Sex')]), ci('BirthWeight'),
                                          ci('BirthHeight') / METER if c[headers.index("BirthHeight")] else NA,
                                          ci('GA'), ci('ICT'),
-                                         NA, ci('indexN'), ci('fatherAge'), ci('motherAge'),
-                                         ci('motherWeight'),
-                                         ci('motherHeight'), '',
+                                         ci('ICT'), ci('indexN'), ci('fatherAge'), ci('motherAge'),
+                                         ci('motherWeight'), ci('motherHeight'), '',
                                          ci('birthMonth') if c[headers.index('birthMonth')] != '' else 0))
     addAdditionalInfo(israeliChildren)
     return israeliChildren
@@ -60,7 +61,7 @@ def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_RSRCH_FILE), 'r') as f:
         rsrch = list(csv.reader(f))[1:]
     for c in secondSet:
-        samples = [[float(s[4]), float(s[6]), float(s[7]), float(s[8])] for s in rsrch if c.id == (int(s[0]), int(s[1]), int(s[2]))]
+        samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in rsrch if c.id == (int(s[0]), int(s[1]), int(s[2]))]
         for s in samples:
             s, bool = checkMissingSecondSet(s)
             c.addSample(s, bool)
@@ -68,7 +69,7 @@ def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_TEST_FILE), 'r') as f:
         test = list(csv.reader(f))[1:]
     for c in secondSet:
-        samples = [[float(s[4]), float(s[6]), float(s[7]), float(s[8])] for s in test if c.id == (int(s[0]), int(s[1]), int(s[2]))]
+        samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in test if c.id == (int(s[0]), int(s[1]), int(s[2]))]
         for s in samples:
             s, bool = checkMissingSecondSet(s)
             c.addSample(s, bool)

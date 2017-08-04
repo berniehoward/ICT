@@ -28,7 +28,7 @@ class SwedishSample(Sample):
         Sample.__init__(self, age, weight, height)
 
     def __repr__(self):
-        return 'SwedishSample(Age=%s,Height=%s)' % (self.age,self.height)
+        return 'SwedishSample(Age=%s,Height=%s,Weight=%s)' % (self.age,self.height,self.weight)
 
     def __lt__(self, other):
         return self.age < other.age
@@ -52,4 +52,4 @@ class IsraeliSample(Sample):
             self.HCdivWeightSq = NA
 
     def __repr__(self):
-        return 'IsraeliSample(Age=%s,Height=%s)' % (self.age,self.height)
+        return 'IsraeliSample(Age=%s,Height=%s,Weight=%s,HC=%s)' % (self.age,self.height,self.weight,self.HC)
