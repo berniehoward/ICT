@@ -53,6 +53,7 @@ class Child:
         # Samples:
         self.goodSamples = []
         self.badSamples = []
+        self.goodSamplesWithHC = []
 
     def __repr__(self):
         return 'Child(id=%s)' % (self.id)
