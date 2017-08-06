@@ -48,7 +48,7 @@ if __name__ == '__main__':
                 israeliChildrenList.remove(c)
 
     #printSamples(swedishChildrenList)
-    printSamples(israeliChildrenList)
+    #printSamples(israeliChildrenList)
 
     secondStage(swedishChildrenList, israeliChildrenList, True)
 

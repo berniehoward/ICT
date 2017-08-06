@@ -1,12 +1,11 @@
 from Parser.israeliChild import IsraeliChild
 import csv
 from Parser.auxiliary import *
-
+from datetime import date
 
 def checkMissing(s):
     s = [s[8], s[5], s[6], s[7]] #don't check now HC
     if (s[1] != '' and s[2] != ''):
-        print(s)
         s[3] = NA if s[3] == '' else s[3]
         return [float(i) for i in s],False
     return [float(i) if i != '' else NA for i in s], True
@@ -32,6 +31,11 @@ def addAdditionalInfo(israeliChildren):
             c.updateYear(int(birthDate.split('/')[2]))
             addSamplesToIsraeliChild(headers, sisb, c)
 
+def addBrothers(children):
+    for c in children:
+        brothers = [x for x in children if ((c.id)[:-1] == (x.id)[:-1] and x.id!=c.id)]
+        for x in brothers:
+            c.addBrother(x)
 
 def parseFirstSet():
     israeliChildren = set()
@@ -48,6 +52,7 @@ def parseFirstSet():
                                          ci('motherWeight'), ci('motherHeight'), '',
                                          ci('birthMonth') if c[headers.index('birthMonth')] != '' else 0))
     addAdditionalInfo(israeliChildren)
+    addBrothers(israeliChildren)
     return israeliChildren
 
 
@@ -57,23 +62,47 @@ def checkMissingSecondSet(s):
     return [float(i) for i in s], False
 
 
+def addAdditionalInfoSecondSetAux(children, file):
+    for c in children:
+        samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in file if c.id == (int(s[0]), int(s[1]), int(s[2]))]
+        for s in samples:
+            s, bool = checkMissingSecondSet(s)
+            c.addSample(s, bool)
+        for s in c.goodSamples:
+            if s.age == BIRTH:
+                c.height = s.height
+
+def addMotherAge(children, file):
+    for c in children:
+        samples = [s[9] for s in file if
+                   c.id == (int(s[0]), int(s[1]), int(s[2]))]
+        mb = set(samples)
+        bd = c.birthDate
+        if len(mb) > 0:
+            mb = mb.pop()
+            mb = mb.split('/')  # such as 1,1,2012
+            mb.reverse()
+            bd = bd.split('/')
+            bd.reverse()
+            bd = [int(x) for x in bd]
+            mb = [int(x) for x in mb]
+            ma = (date(bd[0], bd[1], bd[2]) - date(mb[0], mb[1], mb[2])).total_seconds() / 3600 / 24 / 365.25
+            c.motherAge = float(format(ma, '.2f'))
+
 def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_RSRCH_FILE), 'r') as f:
         rsrch = list(csv.reader(f))[1:]
-    for c in secondSet:
-        samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in rsrch if c.id == (int(s[0]), int(s[1]), int(s[2]))]
-        for s in samples:
-            s, bool = checkMissingSecondSet(s)
-            c.addSample(s, bool)
-
+        addAdditionalInfoSecondSetAux(secondSet, rsrch)
     with open(getpath(ISRAELI_FMLY_TEST_FILE), 'r') as f:
         test = list(csv.reader(f))[1:]
-    for c in secondSet:
-        samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in test if c.id == (int(s[0]), int(s[1]), int(s[2]))]
-        for s in samples:
-            s, bool = checkMissingSecondSet(s)
-            c.addSample(s, bool)
+        addAdditionalInfoSecondSetAux(secondSet, test)
+        addMotherAge(secondSet, test)
 
+def addPosition(children):
+    for c in children: #only for second
+        brothers = [b.id[-1] for b in c.brothers] + [c.id[-1]]
+        sorted(brothers)
+        c.position = brothers.index(c.id[-1]) + 1
 
 def parseSecondSet():
     with open(getpath(ISRAELI_FMLY_ICT_FILE), 'r') as f:
@@ -89,6 +118,8 @@ def parseSecondSet():
                              int(c[5].split('/')[1]))
         secondSet.add(child)
     addAdditionalInfoSecondSet(secondSet)
+    addBrothers(secondSet)
+    addPosition(secondSet)
     return secondSet
 
 

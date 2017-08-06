@@ -3,7 +3,6 @@ from operator import itemgetter
 from Parser.swedishChild import SwedishChild
 from Parser.auxiliary import *
 
-
 # Formats the dataset for further usage (floats etc)
 def formatFirstSwedishDataset(samples):
     s = []
@@ -14,7 +13,6 @@ def formatFirstSwedishDataset(samples):
         s.append([float(cell) if cell != '' else cell for cell in sample])
     return s
 
-BIRTH = 0
 checkMissing = lambda s: False if all([s[1], s[2], s[3]]) else True  # boolean value to check missing values
 
 
