@@ -5,6 +5,7 @@ METER = 100
 NA = -100  # value representing we are not able to determine the ICT
 KILO = 1000
 YEAR = 365
+BIRTH = 0
 MONTHS = 12
 FALSE_DATE = '1/1/'+ str(NA)
 
