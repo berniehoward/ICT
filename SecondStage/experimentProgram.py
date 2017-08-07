@@ -53,7 +53,7 @@ def discreetMethod(children, israeliChildren, heights_groups, printMode):
     printExpertsScores(z_score, a_score, printMode)
 
     # Print the new icts and heights
-    printICTAndHeights(newICT, printMode)
+    #printICTAndHeights(newICT, printMode)
 
     # Calculate new ICT for israeli children
     israeliICT = calculateNewICT(israeliChildren, best_epsilons[best_formula], best_formula + 1) # List of (child, newICT)
