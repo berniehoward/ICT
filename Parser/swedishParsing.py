@@ -100,7 +100,6 @@ def setMisc(swedishChildren):
 # Swedish child pareser main function
 def parseSwedish():
     swedishChildren = praseFirstSwedish()
-    print("OK")
     praseSecondSwedish(swedishChildren)
     setMisc(swedishChildren)
     return swedishChildren

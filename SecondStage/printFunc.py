@@ -108,8 +108,8 @@ def printICTAndHeights(newICT, printMode):
     if not printMode:
         return
     print("New ict tags: ")
-    #print([p * MONTHS for c, p in newICT if p != NA])
+    print([p * MONTHS for c, p in newICT if p != NA])
     print("heights at age 7 years: ")
-    #print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
+    print([c.goodSamples[find_nearest([a.age for a in c.goodSamples], 7)].height for c, p in newICT if p != NA])
     print()
 

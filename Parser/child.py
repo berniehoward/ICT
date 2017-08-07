@@ -16,6 +16,7 @@ class Child:
         self.gestationalAge = gestationalAge
         self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
+        self.autoICT = NA
 
         self.preterm = NA
 

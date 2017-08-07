@@ -5,6 +5,7 @@ from Parser.swedishParsing import parseSwedish
 from Parser.israelParsing import parseIsraeli
 from Parser.auxiliary import picklepath, PICKLE_FILE, MONTHS
 from SecondStage.experimentProgram import program as secondStage
+from SecondStage.automaticTagging import automaticTagging
 
 
 # Exacting the parsing stage
@@ -24,21 +25,7 @@ def sortListsOfChildren(setOfChildren):
         c.goodSamples = sorted(c.goodSamples)
     for c in israeliChildrenList:
         c.goodSamples = sorted(c.goodSamples)
-    return swedishChildrenList, israeliChildrenList
-
-def printSamples(list):
-    for c in list:
-        for s in c.goodSamples:
-            print(c,s)
-        print()
-
-
-if __name__ == '__main__':
-    #parsingStage()
-    with open(picklepath(PICKLE_FILE), "rb") as pklfile:
-        setOfChildren = pkl.load(pklfile)
-    swedishChildrenList, israeliChildrenList = sortListsOfChildren(setOfChildren)
-
+    # Remove children without enough samples
     for c in israeliChildrenList:
         if len(c.goodSamples) == 0:
             israeliChildrenList.remove(c)
@@ -46,10 +33,21 @@ if __name__ == '__main__':
             samples = [s for s in c.goodSamples]
             if samples[-1].age < 14 / MONTHS:
                 israeliChildrenList.remove(c)
+    return swedishChildrenList, israeliChildrenList
 
-    #printSamples(swedishChildrenList)
-    #printSamples(israeliChildrenList)
 
-    secondStage(swedishChildrenList, israeliChildrenList, True)
+def printSamples(list):
+    for c in list:
+        for s in c.goodSamples:
+            print(c, s)
+        print()
 
+
+if __name__ == '__main__':
+    parsingStage()
+    with open(picklepath(PICKLE_FILE), "rb") as pklfile:
+        setOfChildren = pkl.load(pklfile)
+    swedishChildrenList, israeliChildrenList = sortListsOfChildren(setOfChildren)
+    automaticTagging(swedishChildrenList)
+    automaticTagging(israeliChildrenList)
 
