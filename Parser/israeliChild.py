@@ -1,9 +1,9 @@
 from Parser.auxiliary import *
 from Parser.child import Child
 from Parser.sample import IsraeliSample
+from Utility import find_nearest
 
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
-
 
 class IsraeliChild(Child):
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
@@ -14,7 +14,7 @@ class IsraeliChild(Child):
 
         # family related information
         self.position = birthPosition
-
+        self.birthYear = NA
         if fatherAge == '':
             self.fatherAge = NA
         else:
@@ -41,12 +41,6 @@ class IsraeliChild(Child):
         self.HCdivWeightSqLevel1 = []
         self.HCdivWeightSqLevel2 = []
 
-    def __repr__(self):
-        if len(self.id) == 2:
-            return 'IsraeliChild(id=%s, %s)' % (self.id)
-        else:
-            return 'IsraeliChild(id=%s, %s, %s)' % (self.id)
-
     def addBrother(self, brother):
         self.brothers.add(brother)
 
@@ -54,13 +48,13 @@ class IsraeliChild(Child):
         self.birthYear = year
 
     def calculateHeadSlops(self):
-        for x, y in zip(self.goodSamples, self.goodSamples[1:]):
+        for x, y in zip(self.goodSamplesWithHC, self.goodSamplesWithHC[1:]):
             self.HCToAgeLevel1.append(y.HC - x.HC)
             self.HCdivHeightLevel1.append(y.HCdivHeight - x.HCdivHeight)
             self.HCdivHeightSqLevel1.append(y.HCdivHeightSq - x.HCdivHeightSq)
             self.HCdivWeightLevel1.append(y.HCdivWeight - x.HCdivWeight)
             self.HCdivWeightSqLevel1.append(y.HCdivWeightSq - x.HCdivWeightSq)
-        for x, y in zip(self.goodSamples, self.goodSamples[2:]):
+        for x, y in zip(self.goodSamplesWithHC, self.goodSamplesWithHC[2:]):
             self.HCToAgeLevel2.append(y.HC - x.HC)
             self.HCdivHeightLevel2.append(y.HCdivHeight - x.HCdivHeight)
             self.HCdivHeightSqLevel2.append(y.HCdivHeightSq - x.HCdivHeightSq)
@@ -78,3 +72,36 @@ class IsraeliChild(Child):
             else:
                 self.goodSamples.append(sample)
                 self.goodSamplesWithHC.append(sample)
+
+    # parameters for regression decision tree
+    # returns features vector, data vector and ICT classification
+    def generateParametersForRegressionDecisionTree(self, first=True):
+        if self.autoICT == NA:
+            return [], [], 0
+        features = ["sex", "birthWeight (Grams)", "birthHeight (M)", "gestationalAge (Weeks)",
+                    "birthPosition", "birthYear", "birthMonth", "season",
+                    "preterm flag", "Height at 6 months",
+                    "Weight at 6 months", "HC at 6 months"]
+        data = [self.sex, self.birthWeight/KILO, self.birthHeight, self.gestationalAge,
+                self.position, self.birthYear, self.birthMonth, self.season,
+                self.preterm]
+        if self.goodSamples:
+            six_month_idx = find_nearest([a.age for a in self.goodSamples], 0.5)
+            six_month_idx_HC = find_nearest([a.age for a in self.goodSamplesWithHC], 0.5)
+            data += [(self.goodSamples[six_month_idx]).height,
+                     (self.goodSamples[six_month_idx]).weight,
+                     (self.goodSamplesWithHC[six_month_idx_HC]).HC]
+
+        # "motherAge (Years)" is only on Test.csv and not on reasrch.csv. possible problem. TODO
+        if first == True:
+            features += ["fatherAge (Years)", "motherWeight (KG)", "motherHeight (M)"]
+            data += [self.fatherAge, self.motherWeight, self.motherHeight/METER]
+
+        return features, data, self.autoICT
+
+
+    def __repr__(self):
+        if len(self.id) == 2:
+            return 'IsraeliChild(id=%s, %s)' % (self.id)
+        else:
+            return 'IsraeliChild(id=%s, %s, %s)' % (self.id)

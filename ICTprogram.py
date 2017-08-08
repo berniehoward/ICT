@@ -5,6 +5,7 @@ from Parser.israelParsing import parseIsraeli
 from Parser.auxiliary import picklepath, PICKLE_FILE, MONTHS
 from SecondStage.experimentProgram import program as secondStage
 from SecondStage.automaticTagging import automaticTagging
+from LearningStage.learningProgram import load_paramters as ThirdStage
 from random import shuffle
 
 # Exacting the parsing stage
@@ -59,12 +60,13 @@ if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         setOfChildren = pkl.load(pklfile)
     swedishChildrenList, israeliChildrenList = sortListsOfChildren(setOfChildren)
-    #automaticTagging(swedishChildrenList)
-    #automaticTagging(israeliChildrenList)
-    #secondStage(swedishChildrenList, israeliChildrenList, True)
+    # secondStage(swedishChildrenList, israeliChildrenList, True)
+    # automaticTagging(swedishChildrenList)
+    automaticTagging(israeliChildrenList)
 
-    ####### K FOLD ######
-    # k = 10
-    # k_fold(k, swedishChildrenList, israeliChildrenList)
-
-    secondStage(swedishChildrenList, swedishChildrenList+israeliChildrenList, True)
+    #
+    # ####### K FOLD ######
+    # # k = 10
+    # # k_fold(k, swedishChildrenList, israeliChildrenList)
+    #
+    ThirdStage(swedishChildrenList, israeliChildrenList, True)

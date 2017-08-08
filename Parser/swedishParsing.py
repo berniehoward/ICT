@@ -92,9 +92,9 @@ def praseSecondSwedish(swedishChildren):
 def setMisc(swedishChildren):
     for c in swedishChildren:
         c.setPretermFlag()
-        c.sortSamplesByAge()
         c.calculateSlops()
         c.calculateBurst()
+        #c.setValuesOfSlopeVectors()
 
 
 # Swedish child pareser main function

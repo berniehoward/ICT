@@ -1,6 +1,6 @@
 from Parser.auxiliary import *
 from operator import attrgetter
-
+from numpy import mean as avg
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
 
@@ -16,9 +16,9 @@ class Child:
         self.gestationalAge = gestationalAge
         self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
-        self.autoICT = NA
-
         self.preterm = NA
+
+        self.autoICT = NA #value is set at end of second stage
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0
@@ -40,11 +40,55 @@ class Child:
         # Level2: (height1-height3 / age1-age3) : non-adjacent samples
         self.heightToAgeLevel1 = []
         self.heightToAgeLevel2 = []
+        self.heightDivAgeLevel1 = []
+        self.heightDivAgeLevel2 = []
+
         self.weightToAgeLevel1 = []
         self.weightToAgeLevel2 = []
+        self.weightDivAgeLevel1 = []
+        self.weightDivAgeLevel2 = []
+
         self.bmiToAgeLevel1 = []
         self.bmiToAgeLevel2 = []
+        self.bmiDivAgeLevel1 = []
+        self.bmiDivAgeLevel2 = []
 
+        self.max_weightToAgeLevel1 = NA
+        self.max_weightToAgeLevel2 = NA
+        self.max_weightDivAgeLevel1 = NA
+        self.max_weightDivAgeLevel2 = NA
+        self.min_weightToAgeLevel1 = NA
+        self.min_weightToAgeLevel2 = NA
+        self.min_weightDivAgeLevel1 = NA
+        self.min_weightDivAgeLevel2 = NA
+        self.avg_weightToAgeLevel1 = NA
+        self.avg_weightToAgeLevel2 = NA
+        self.avg_weightDivAgeLevel1 = NA
+        self.avg_weightDivAgeLevel2 = NA
+        self.max_heightToAgeLevel1 = NA
+        self.max_heightToAgeLevel2 = NA
+        self.max_heightDivAgeLevel1 = NA
+        self.max_heightDivAgeLevel2 = NA
+        self.min_heightToAgeLevel1 = NA
+        self.min_heightToAgeLevel2 = NA
+        self.min_heightDivAgeLevel1 = NA
+        self.min_heightDivAgeLevel2 = NA
+        self.avg_heightToAgeLevel1 = NA
+        self.avg_heightToAgeLevel2 = NA
+        self.avg_heightDivAgeLevel1 = NA
+        self.avg_heightDivAgeLevel2 = NA
+        self.max_bmiToAgeLevel1 = NA
+        self.max_bmiToAgeLevel2 = NA
+        self.max_bmiDivAgeLevel1 = NA
+        self.max_bmiDivAgeLevel2 = NA
+        self.min_bmiToAgeLevel1 = NA
+        self.min_bmiToAgeLevel2 = NA
+        self.min_bmiDivAgeLevel1 = NA
+        self.min_bmiDivAgeLevel2 = NA
+        self.avg_bmiToAgeLevel1 = NA
+        self.avg_bmiToAgeLevel2 = NA
+        self.avg_bmiDivAgeLevel1 = NA
+        self.avg_bmiDivAgeLevel2 = NA
         # Stage 2 - formulas which are used to calculate ICT automatically
         self.heightToAgeBurstFormula1 = []
         self.heightToAgeBurstFormula2 = []
@@ -55,9 +99,6 @@ class Child:
         self.goodSamples = []
         self.badSamples = []
         self.goodSamplesWithHC = []
-
-    def __repr__(self):
-        return 'Child(id=%s)' % (self.id)
 
     def addSample(self, s, missing=False):  # virtual function
         pass
@@ -82,11 +123,17 @@ class Child:
         for x, y in zip(goodSamples, goodSamples[1:]):
             self.heightToAgeLevel1.append(y.height - x.height)
             self.weightToAgeLevel1.append(y.weight - x.weight)
+            self.heightDivAgeLevel1.append(y.height / x.height)
+            self.weightDivAgeLevel1.append(y.weight / x.weight)
             self.bmiToAgeLevel1.append(y.BMI - x.BMI)
+            self.bmiDivAgeLevel1.append(y.BMI / x.BMI)
         for x, y in zip(goodSamples, goodSamples[2:]):
             self.heightToAgeLevel2.append(y.height - x.height)
             self.weightToAgeLevel2.append(y.weight - x.weight)
+            self.heightDivAgeLevel2.append(y.height / x.height)
+            self.weightDivAgeLevel2.append(y.weight / x.weight)
             self.bmiToAgeLevel2.append(y.BMI - x.BMI)
+            self.bmiDivAgeLevel2.append(y.BMI / x.BMI)
 
     def getNumberOfSampls(self, missing=False):
         if not missing:
@@ -102,6 +149,56 @@ class Child:
     def sortSamplesByAge(self):
         sorted(self.goodSamples)
         sorted(self.badSamples)
+        sorted(self.goodSamplesWithHC)
+
+    def generateParametersForRegressionTree(self):
+        pass
+
+    def setValuesOfSlopeVectors(self):
+        #### weight slopes ####
+        self.max_weightToAgeLevel1 = max(self.weightToAgeLevel1)
+        self.max_weightToAgeLevel2 = max(self.weightToAgeLevel2)
+        self.max_weightDivAgeLevel1 = max(self.weightDivAgeLevel1)
+        self.max_weightDivAgeLevel2 = max(self.weightDivAgeLevel2)
+        self.min_weightToAgeLevel1 = min(self.weightToAgeLevel1)
+        self.min_weightToAgeLevel2 = min(self.weightToAgeLevel2)
+        self.min_weightDivAgeLevel1 = min(self.weightDivAgeLevel1)
+        self.min_weightDivAgeLevel2 = min(self.weightDivAgeLevel2)
+        self.avg_weightToAgeLevel1 = avg(self.weightToAgeLevel1)
+        self.avg_weightToAgeLevel2 = avg(self.weightToAgeLevel2)
+        self.avg_weightDivAgeLevel1 = avg(self.weightDivAgeLevel1)
+        self.avg_weightDivAgeLevel2 = avg(self.weightDivAgeLevel2)
+
+        #### height slopes ####
+        self.max_heightToAgeLevel1 = max(self.heightToAgeLevel1)
+        self.max_heightToAgeLevel2 = max(self.heightToAgeLevel2)
+        self.max_heightDivAgeLevel1 = max(self.heightDivAgeLevel1)
+        self.max_heightDivAgeLevel2 = max(self.heightDivAgeLevel2)
+        self.min_heightToAgeLevel1 = min(self.heightToAgeLevel1)
+        self.min_heightToAgeLevel2 = min(self.heightToAgeLevel2)
+        self.min_heightDivAgeLevel1 = min(self.heightDivAgeLevel1)
+        self.min_heightDivAgeLevel2 = min(self.heightDivAgeLevel2)
+        self.avg_heightToAgeLevel1 = avg(self.heightToAgeLevel1)
+        self.avg_heightToAgeLevel2 = avg(self.heightToAgeLevel2)
+        self.avg_heightDivAgeLevel1 = avg(self.heightDivAgeLevel1)
+        self.avg_heightDivAgeLevel2 = avg(self.heightDivAgeLevel2)
+
+        #### BMI slopes ####
+        self.max_bmiToAgeLevel1 = max(self.bmiToAgeLevel1)
+        self.max_bmiToAgeLevel2 = max(self.bmiToAgeLevel2)
+        self.max_bmiDivAgeLevel1 = max(self.bmiDivAgeLevel1)
+        self.max_bmiDivAgeLevel2 = max(self.bmiDivAgeLevel2)
+        self.min_bmiToAgeLevel1 = min(self.bmiToAgeLevel1)
+        self.min_bmiToAgeLevel2 = min(self.bmiToAgeLevel2)
+        self.min_bmiDivAgeLevel1 = min(self.bmiDivAgeLevel1)
+        self.min_bmiDivAgeLevel2 = min(self.bmiDivAgeLevel2)
+        self.avg_bmiToAgeLevel1 = avg(self.bmiToAgeLevel1)
+        self.avg_bmiToAgeLevel2 = avg(self.bmiToAgeLevel2)
+        self.avg_bmiDivAgeLevel1 = avg(self.bmiDivAgeLevel1)
+        self.avg_bmiDivAgeLevel2 = avg(self.bmiDivAgeLevel2)
+
+    def __repr__(self):
+        return 'Child(id=%s)' % (self.id)
 
     def __lt__(self, other):
         return self.id < other.id

@@ -128,6 +128,7 @@ def setMisc(israeliChildren):
         c.setPretermFlag()
         c.calculateSlops()
         c.calculateBurst()
+        #c.setValuesOfSlopeVectors()
 
 
 def parseIsraeli():

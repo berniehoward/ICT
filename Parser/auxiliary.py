@@ -7,7 +7,7 @@ KILO = 1000
 YEAR = 365
 BIRTH = 0
 MONTHS = 12
-FALSE_DATE = '1/1/'+ str(NA)
+FALSE_DATE = '-100/-100/-100'
 
 # Files
 SWEDISH_FILE = "Sweden_ICT.csv"
