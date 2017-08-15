@@ -4,24 +4,24 @@ from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing
 
 
-# Exact the discreet method
-def discreetMethod(children, israeliChildren, heights_groups, printMode):
+# Perform the discreet method
+def discreetMethod(experimentGroup, testGroup, heights_groups, printMode):
     if printMode:
         print("Discreet Method: ")
 
     # Find first epsilon for each formula
     epsilons = [x / 1000 for x in range(15, 305, 5)]
-    eps1, score1 = findEpsilonByFormula(epsilons, children, heights_groups, 1)
-    eps2, score2 = findEpsilonByFormula(epsilons, children, heights_groups, 2)
-    eps3, score3 = findEpsilonByFormula(epsilons, children, heights_groups, 3)
-    eps4, score4 = findEpsilonByFormula(epsilons, children, heights_groups, 4)
+    eps1, score1 = findEpsilonByFormula(epsilons, experimentGroup, heights_groups, 1)
+    eps2, score2 = findEpsilonByFormula(epsilons, experimentGroup, heights_groups, 2)
+    eps3, score3 = findEpsilonByFormula(epsilons, experimentGroup, heights_groups, 3)
+    eps4, score4 = findEpsilonByFormula(epsilons, experimentGroup, heights_groups, 4)
     printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, printMode)
 
     # Find best epsilon for each formula
-    problem1 = SearchEpsilon(eps1, score1, 1, children, heights_groups)
-    problem2 = SearchEpsilon(eps2, score2, 2, children, heights_groups)
-    problem3 = SearchEpsilon(eps3, score3, 3, children, heights_groups)
-    problem4 = SearchEpsilon(eps3, score3, 4, children, heights_groups)
+    problem1 = SearchEpsilon(eps1, score1, 1, experimentGroup, heights_groups)
+    problem2 = SearchEpsilon(eps2, score2, 2, experimentGroup, heights_groups)
+    problem3 = SearchEpsilon(eps3, score3, 3, experimentGroup, heights_groups)
+    problem4 = SearchEpsilon(eps3, score3, 4, experimentGroup, heights_groups)
     bestEps1, bestScore1 = hill_climbing(problem1, 50).state
     bestEps2, bestScore2 = hill_climbing(problem2, 50).state
     bestEps3, bestScore3 = hill_climbing(problem3, 50).state
@@ -42,7 +42,7 @@ def discreetMethod(children, israeliChildren, heights_groups, printMode):
     printBestFormula(best_formula, best_epsilons, bestScore, printMode)
 
     # Calculate new ICT:
-    newICT = calculateNewICT(children, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
+    newICT = calculateNewICT(experimentGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     printCompareToPreviousICT(newICT, printMode)
 
     # Find the experts scores
@@ -53,34 +53,34 @@ def discreetMethod(children, israeliChildren, heights_groups, printMode):
     printExpertsScores(z_score, a_score, printMode)
 
     # Print the new icts and heights
-    #printICTAndHeights(newICT, printMode)
+    printICTAndHeights(newICT, printMode)
 
-    # Calculate new ICT for israeli children
-    israeliICT = calculateNewICT(israeliChildren, best_epsilons[best_formula], best_formula + 1) # List of (child, newICT)
+    # Calculate new ICT for test group children
+    teatGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1) # List of (child, newICT)
     if printMode:
-        print("Israeli ICT tagging info: ")
-    printCompareToPreviousICT(israeliICT, printMode)
+        print("Test group ICT tagging info: ")
+    printCompareToPreviousICT(teatGroupICT, printMode)
 
 
-# Exact the sequential method
-def sequentialMethod(children, heights, israeliChildren, heights_groups, printMode):
+# Perform the sequential method
+def sequentialMethod(experimentGroup, heights, testGroup, heights_groups, printMode):
     if printMode:
         print("Sequential Method: ")
     epsilons = [x / 1000 for x in range(15, 305, 5)]
 
     # Find first epsilon for each formula
     WITHOUT_BINS = False
-    eps1, score1 = findEpsilonByFormula(epsilons, children, heights, 1, WITHOUT_BINS)
-    eps2, score2 = findEpsilonByFormula(epsilons, children, heights, 2, WITHOUT_BINS)
-    eps3, score3 = findEpsilonByFormula(epsilons, children, heights, 3, WITHOUT_BINS)
-    eps4, score4 = findEpsilonByFormula(epsilons, children, heights, 4, WITHOUT_BINS)
+    eps1, score1 = findEpsilonByFormula(epsilons, experimentGroup, heights, 1, WITHOUT_BINS)
+    eps2, score2 = findEpsilonByFormula(epsilons, experimentGroup, heights, 2, WITHOUT_BINS)
+    eps3, score3 = findEpsilonByFormula(epsilons, experimentGroup, heights, 3, WITHOUT_BINS)
+    eps4, score4 = findEpsilonByFormula(epsilons, experimentGroup, heights, 4, WITHOUT_BINS)
     printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, score4, printMode)
 
     # Find best epsilon for each formula
-    problem1 = SearchEpsilon(eps1, score1, 1, children, heights, WITHOUT_BINS)
-    problem2 = SearchEpsilon(eps2, score2, 2, children, heights, WITHOUT_BINS)
-    problem3 = SearchEpsilon(eps3, score3, 3, children, heights, WITHOUT_BINS)
-    problem4 = SearchEpsilon(eps4, score4, 4, children, heights, WITHOUT_BINS)
+    problem1 = SearchEpsilon(eps1, score1, 1, experimentGroup, heights, WITHOUT_BINS)
+    problem2 = SearchEpsilon(eps2, score2, 2, experimentGroup, heights, WITHOUT_BINS)
+    problem3 = SearchEpsilon(eps3, score3, 3, experimentGroup, heights, WITHOUT_BINS)
+    problem4 = SearchEpsilon(eps4, score4, 4, experimentGroup, heights, WITHOUT_BINS)
     bestEps1, bestScore1 = hill_climbing(problem1, 50).state
     bestEps2, bestScore2 = hill_climbing(problem2, 50).state
     bestEps3, bestScore3 = hill_climbing(problem3, 50).state
@@ -101,7 +101,7 @@ def sequentialMethod(children, heights, israeliChildren, heights_groups, printMo
     printBestFormula(best_formula, best_epsilons, bestScore, printMode)
 
     # Calculate new ICT:
-    newICT = calculateNewICT(children, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
+    newICT = calculateNewICT(experimentGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     printCompareToPreviousICT(newICT, printMode)
 
     # Find the experts scores
@@ -111,35 +111,34 @@ def sequentialMethod(children, heights, israeliChildren, heights_groups, printMo
                         heights_groups, False)
     printExpertsScores(z_score, a_score, printMode)
 
-    # Calculate new ICT for israeli children
-    israeliICT = calculateNewICT(israeliChildren, best_epsilons[best_formula],
-                                 best_formula + 1)  # List of (child, newICT)
+    # Calculate new ICT for children in the test Group
+    testGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     if printMode:
-        print("Israeli ICT tagging info: ")
-    printCompareToPreviousICT(israeliICT, printMode)
+        print("Test Group ICT tagging info: ")
+    printCompareToPreviousICT(testGroupICT, printMode)
 
 
 # Experiment program for second stage
-def program(childrenList, israeliChildren, printMode=False):
+def program(experimentGroup, testGroup, printMode=False):
 
-    heights, indexes = findHeightAroundAge(childrenList)
+    heights, indexes = findHeightAroundAge(experimentGroup)
 
     # Reorganized children by the order of indexes list
     children = []
     for index in indexes:
-        children.append(childrenList[index])
+        children.append(experimentGroup[index])
 
     # Divide children to heights groups
     h1, h2, h3, h4, h_na = divideToGroups(heights, children, -1, 0, 1)
     heights_groups = [h1, h2, h3, h4, h_na]  # (At each group there are children)
 
-    discreetMethod(children, israeliChildren, heights_groups, printMode)
+    discreetMethod(children, testGroup, heights_groups, printMode)
 
     if printMode:
         print("#######################################################################################################")
         print()
 
-    sequentialMethod(children, heights, israeliChildren, heights_groups, printMode)
+    sequentialMethod(children, heights, testGroup, heights_groups, printMode)
 
 
 
