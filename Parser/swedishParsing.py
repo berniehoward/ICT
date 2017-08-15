@@ -3,6 +3,7 @@ from operator import itemgetter
 from Parser.swedishChild import SwedishChild
 from Parser.auxiliary import *
 
+
 # Formats the dataset for further usage (floats etc)
 def formatFirstSwedishDataset(samples):
     s = []
@@ -68,7 +69,7 @@ def manageLatterSampleSets(children, samples, str):
             mod_s = [float(field) if field else NA for field in mod_s]
             sc = SwedishChild(mod_s[0], mod_s[1], mod_s[2], mod_s[3], mod_s[4], mod_s[5], mod_s[6], s[8], mod_s[7])
             sp = ''
-            if (str == "Boys"):
+            if str == "Boys":
                 with open(getpath(SWEDISH_NEW_BOYS_P_FILE), 'r') as f:
                     sp = list(csv.reader(f))[1:]
             else:
@@ -94,7 +95,7 @@ def setMisc(swedishChildren):
         c.setPretermFlag()
         c.calculateSlops()
         c.calculateBurst()
-        #c.setValuesOfSlopeVectors()
+        # c.setValuesOfSlopeVectors()
 
 
 # Swedish child pareser main function

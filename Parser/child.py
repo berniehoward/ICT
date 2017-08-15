@@ -1,12 +1,10 @@
 from Parser.auxiliary import *
-from operator import attrgetter
 from numpy import mean as avg
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
 
 class Child:
-    def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z,
-                 birthDate, birthMonth):
+    def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, birthDate, birthMonth):
 
         # General info:
         self.id = id
@@ -18,7 +16,7 @@ class Child:
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
         self.preterm = NA
 
-        self.autoICT = NA #value is set at end of second stage
+        self.autoICT = NA  # value is set at end of second stage
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0
@@ -36,8 +34,8 @@ class Child:
         self.ICT_MAX = max(self.ICT_A, self.ICT_Z)
 
         # Slope lists:
-        # Level1: (height1-height2 / age1-age2)
-        # Level2: (height1-height3 / age1-age3) : non-adjacent samples
+        # Level1: (height2-height1 / age2-age1)
+        # Level2: (height3-height1 / age3-age1) : non-adjacent samples
         self.heightToAgeLevel1 = []
         self.heightToAgeLevel2 = []
         self.heightDivAgeLevel1 = []
@@ -89,6 +87,7 @@ class Child:
         self.avg_bmiToAgeLevel2 = NA
         self.avg_bmiDivAgeLevel1 = NA
         self.avg_bmiDivAgeLevel2 = NA
+
         # Stage 2 - formulas which are used to calculate ICT automatically
         self.heightToAgeBurstFormula1 = []
         self.heightToAgeBurstFormula2 = []

@@ -2,7 +2,7 @@ import pickle as pkl
 
 from Parser.auxiliary import picklepath, PICKLE_FILE
 from Parser.parsingStage import parsingStage
-from SecondStage.FullExperiment import fullProg as secondStage
+from SecondStage.fullExperiment import fullProg as secondStage
 from SecondStage.automaticTagging import automaticTagging
 # from LearningStage.learningProgram import load_paramters as ThirdStage
 

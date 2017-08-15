@@ -2,6 +2,7 @@ from Parser.child import Child
 from Parser.sample import SwedishSample
 from Parser.auxiliary import NA, METER
 
+
 class SwedishChild(Child):
 
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, birthDate, birthMonth):

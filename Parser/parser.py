@@ -7,6 +7,7 @@ def print_sample_statistics(dictionary, t, missing):
     string_hist = ', '.join(str(i) for i in hist)
     print("Histogram: " + string_hist)
 
+
 def print_statistics(dictionary, t):
     if t == "S":
         string = "swedish"

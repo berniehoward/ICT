@@ -5,6 +5,7 @@ from Utility import find_nearest
 
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
+
 class IsraeliChild(Child):
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
                  birthPosition, fatherAge, motherAge, motherWeight, motherHeight,
@@ -67,8 +68,8 @@ class IsraeliChild(Child):
             self.badSamples.append(sample)
         else:
             HC = s[3]
-            if (HC == NA or HC == 0 or HC == ''):
-                self.goodSamples.append(sample) #now goodSamples with possible bad HC
+            if HC == NA or HC == 0 or HC == '':
+                self.goodSamples.append(sample)  # now goodSamples with possible bad HC
             else:
                 self.goodSamples.append(sample)
                 self.goodSamplesWithHC.append(sample)
@@ -93,12 +94,11 @@ class IsraeliChild(Child):
                      (self.goodSamplesWithHC[six_month_idx_HC]).HC]
 
         # "motherAge (Years)" is only on Test.csv and not on reasrch.csv. possible problem. TODO
-        if first == True:
+        if first:
             features += ["fatherAge (Years)", "motherWeight (KG)", "motherHeight (M)"]
             data += [self.fatherAge, self.motherWeight, self.motherHeight/METER]
 
         return features, data, self.autoICT
-
 
     def __repr__(self):
         if len(self.id) == 2:

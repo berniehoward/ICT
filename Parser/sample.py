@@ -1,8 +1,8 @@
-from math import ceil
 from Parser.auxiliary import *
 from functools import total_ordering
 
-BMI = lambda w,h: w/h**2
+BMI = lambda w, h: w / h ** 2
+
 
 @total_ordering
 class Sample:
@@ -17,10 +17,11 @@ class Sample:
             self.BMI = BMI(self.weight, self.height)
 
     def __repr__(self):
-        return 'Sample(Age=%s,Height=%s)' % (self.age,self.height)
+        return 'Sample(Age=%s,Height=%s)' % (self.age, self.height)
 
     def __lt__(self, other):
         return self.age < other.age
+
 
 @total_ordering
 class SwedishSample(Sample):
@@ -28,22 +29,23 @@ class SwedishSample(Sample):
         Sample.__init__(self, age, weight, height)
 
     def __repr__(self):
-        return 'SwedishSample(Age=%s,Height=%s,Weight=%s)' % (self.age,self.height,self.weight)
+        return 'SwedishSample(Age=%s,Height=%s,Weight=%s)' % (self.age, self.height, self.weight)
 
     def __lt__(self, other):
         return self.age < other.age
 
+
 class IsraeliSample(Sample):
     def __init__(self, age, weight, height, HC):
-        Sample.__init__(self, age/MONTHS, weight, height)
+        Sample.__init__(self, age / MONTHS, weight, height)
 
         self.HC = HC
 
         if HC > 0 and weight > 0 and height > 0:
-            self.HCdivHeight = HC/height
-            self.HCdivHeightSq = HC / height**2
-            self.HCdivWeight = HC/weight
-            self.HCdivWeightSq = HC / weight**2
+            self.HCdivHeight = HC / height
+            self.HCdivHeightSq = HC / height ** 2
+            self.HCdivWeight = HC / weight
+            self.HCdivWeightSq = HC / weight ** 2
         else:
             self.HC = NA
             self.HCdivHeight = NA
@@ -52,4 +54,4 @@ class IsraeliSample(Sample):
             self.HCdivWeightSq = NA
 
     def __repr__(self):
-        return 'IsraeliSample(Age=%s,Height=%s,Weight=%s,HC=%s)' % (self.age,self.height,self.weight,self.HC)
+        return 'IsraeliSample(Age=%s,Height=%s,Weight=%s,HC=%s)' % (self.age, self.height, self.weight, self.HC)

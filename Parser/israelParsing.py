@@ -3,11 +3,12 @@ import csv
 from Parser.auxiliary import *
 from datetime import date
 
+
 def checkMissing(s):
-    s = [s[8], s[5], s[6], s[7]] #don't check now HC
-    if (s[1] != '' and s[2] != ''):
+    s = [s[8], s[5], s[6], s[7]]  # don't check now HC
+    if s[1] != '' and s[2] != '':
         s[3] = NA if s[3] == '' else s[3]
-        return [float(i) for i in s],False
+        return [float(i) for i in s], False
     return [float(i) if i != '' else NA for i in s], True
 
 
@@ -31,11 +32,13 @@ def addAdditionalInfo(israeliChildren):
             c.updateYear(int(birthDate.split('/')[2]))
             addSamplesToIsraeliChild(headers, sisb, c)
 
+
 def addBrothers(children):
     for c in children:
         brothers = [x for x in children if ((c.id)[:-1] == (x.id)[:-1] and x.id!=c.id)]
         for x in brothers:
             c.addBrother(x)
+
 
 def parseFirstSet():
     israeliChildren = set()
@@ -72,6 +75,7 @@ def addAdditionalInfoSecondSetAux(children, file):
             if s.age == BIRTH:
                 c.height = s.height
 
+
 def addMotherAge(children, file):
     for c in children:
         samples = [s[9] for s in file if
@@ -89,6 +93,7 @@ def addMotherAge(children, file):
             ma = (date(bd[0], bd[1], bd[2]) - date(mb[0], mb[1], mb[2])).total_seconds() / 3600 / 24 / 365.25
             c.motherAge = float(format(ma, '.2f'))
 
+
 def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_RSRCH_FILE), 'r') as f:
         rsrch = list(csv.reader(f))[1:]
@@ -98,11 +103,13 @@ def addAdditionalInfoSecondSet(secondSet):
         addAdditionalInfoSecondSetAux(secondSet, test)
         addMotherAge(secondSet, test)
 
+
 def addPosition(children):
-    for c in children: #only for second
+    for c in children:  # only for second
         brothers = [b.id[-1] for b in c.brothers] + [c.id[-1]]
         sorted(brothers)
         c.position = brothers.index(c.id[-1]) + 1
+
 
 def parseSecondSet():
     with open(getpath(ISRAELI_FMLY_ICT_FILE), 'r') as f:
@@ -128,7 +135,7 @@ def setMisc(israeliChildren):
         c.setPretermFlag()
         c.calculateSlops()
         c.calculateBurst()
-        #c.setValuesOfSlopeVectors()
+        # c.setValuesOfSlopeVectors()
 
 
 def parseIsraeli():

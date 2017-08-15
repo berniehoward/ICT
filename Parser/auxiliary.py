@@ -20,11 +20,10 @@ SWEDISH_NEW_BOYS_P_FILE = 'NewData\\SwedishBoysParents.csv'
 
 ISRAELI_MAIN_FILE = "MS_ICT.csv"
 ISRAELI_ADDITIONAL_INFO_FILE = "MS_SIBS.csv"
-
 ISRAELI_FMLY_RSRCH_FILE = "ILS_ResearchGroup.csv"
 ISRAELI_FMLY_TEST_FILE = "ILS_TestGroup.csv"
 ISRAELI_FMLY_ICT_FILE = "ILS_LargeFamiliesICT.csv"
-#ISRAELI_FMLY_ICT2_FILE = "ILS_LargeFamiliesICT2.csv"
+# ISRAELI_FMLY_ICT2_FILE = "ILS_LargeFamiliesICT2.csv"
 
 #################
 
@@ -32,5 +31,6 @@ PICKLE_FILE = "ChildrenSet.pkl"
 
 # Lambdas
 getGender = lambda g: 1 if g == 'M' else 2
-getpath = lambda file: os.path.join(os.getcwd(),"ICTData",file)
-picklepath = lambda file: os.path.join(os.getcwd(),"Parser",file)
+getpath = lambda file: os.path.join(os.getcwd(), "ICTData", file)
+picklepath = lambda file: os.path.join(os.getcwd(), "Parser", file)
+
