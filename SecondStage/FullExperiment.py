@@ -10,11 +10,9 @@ def postHocStage(numOfFolds, swedishChildrenList, israeliChildrenList, printMode
     testGroup = [c for c in israeliChildrenList]
     for i in range(0, numOfFolds):
         print("Current group is", i)
-        testGroup += splitSwedish[i]
         expGroup = swedishChildrenList[:i] + swedishChildrenList[i+1:]
         sorted(expGroup)
-        expProg(expGroup, testGroup, printMode)
-        testGroup = [c for c in israeliChildrenList]
+        expProg(expGroup, splitSwedish[i], printMode)
 
 
 # Perform the full experiment of second Stage
@@ -23,5 +21,6 @@ def fullProg(swedishChildrenList, israeliChildrenList, printMode):
     expProg(swedishChildrenList, israeliChildrenList, printMode)
     # perform the additional stage (post hoc stage)
     if printMode:
+        print("######################################################################################################")
         print("Post-hoc Stage: ")
     postHocStage(10, swedishChildrenList, israeliChildrenList, printMode)

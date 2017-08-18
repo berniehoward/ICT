@@ -2,7 +2,7 @@ from SecondStage.printFunc import *
 from SecondStage.searchEpsilon import SearchEpsilon
 from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing
-
+import numpy as np
 
 # Perform the discreet method
 def discreetMethod(experimentGroup, testGroup, heights_groups, printMode):
@@ -53,10 +53,10 @@ def discreetMethod(experimentGroup, testGroup, heights_groups, printMode):
     printExpertsScores(z_score, a_score, printMode)
 
     # Print the new icts and heights
-    printICTAndHeights(newICT, printMode)
+    # printICTAndHeights(newICT, printMode)
 
     # Calculate new ICT for test group children
-    teatGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1) # List of (child, newICT)
+    teatGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     if printMode:
         print("Test group ICT tagging info: ")
     printCompareToPreviousICT(teatGroupICT, printMode)

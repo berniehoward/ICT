@@ -12,7 +12,7 @@ if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    # secondStage(swedishChildrenList, israeliChildrenList, True)
+    secondStage(swedishChildrenList, israeliChildrenList, True)
     # automaticTagging(swedishChildrenList)
     # automaticTagging(israeliChildrenList)
 

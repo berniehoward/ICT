@@ -1,6 +1,8 @@
+from statistics import stdev
 from numpy import average, median
 from Parser.auxiliary import NA, MONTHS
 from Utility import find_nearest
+import numpy
 
 
 # Print the first epsilon for each formula
@@ -47,13 +49,20 @@ def printCompareToPreviousICT(icts, mode=False):
     avg_m = lambda n: average(n)*MONTHS
 
     print("New ict median: ", median(icts_without_na) * MONTHS, ", avg: ", average(icts_without_na) * MONTHS)
-    print("Ze'ev's ict tagging median: ", median(z_icts_without_na) * MONTHS, ", avg: ",
-          avg_m(z_icts_without_na))
-    print("Alina's ict tagging median: ", median(a_icts_without_na) * MONTHS, ", avg: ",
-          avg_m(a_icts_without_na))
+    print("Ze'ev's ict tagging median: ", median(z_icts_without_na) * MONTHS, ", avg: ", avg_m(z_icts_without_na))
+    print("Alina's ict tagging median: ", median(a_icts_without_na) * MONTHS, ", avg: ", avg_m(a_icts_without_na))
     print("Number of NA tags in new tagging process: ", count_new_na, " out of ", len(icts))
     print("Number of NA tags in Ze'ev's tagging process: ", count_previous_z_na, " out of ", len(icts))
     print("Number of NA tags in Alina's tagging process: ", count_previous_a_na, " out of ", len(icts))
+    print()
+    print("The deference between the new tagging to the first expert tagging: ")
+    diff_z = [int((p * MONTHS)-(c.ICT_Z * MONTHS)) for c, p in icts if p != NA and c.ICT_Z != NA]
+    diff_a = [int((p * MONTHS)-(c.ICT_A * MONTHS)) for c, p in icts if p != NA and c.ICT_A != NA]
+    print([diff_z.count(x) for x in range(-12, 12)])
+    print([diff_a.count(x) for x in range(-12, 12)])
+    print("median: ", median([(p * MONTHS)-(c.ICT_Z * MONTHS) for c, p in icts if p != NA and c.ICT_Z != NA]))
+    print("avg: ", average([(p * MONTHS)-(c.ICT_Z * MONTHS) for c, p in icts if p != NA and c.ICT_Z != NA]))
+    print("stdev: ", stdev([(p * MONTHS)-(c.ICT_Z * MONTHS) for c, p in icts if p != NA and c.ICT_Z != NA]))
     print()
 
 
