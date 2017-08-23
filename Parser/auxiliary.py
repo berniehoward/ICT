@@ -27,7 +27,7 @@ ISRAELI_FMLY_ICT_FILE = "ILS_LargeFamiliesICT.csv"
 
 #################
 
-PICKLE_FILE = "ChildrenSet.pkl"
+PICKLE_FILE = "ChildrenParsedData.pkl"
 
 # Lambdas
 getGender = lambda g: 1 if g == 'M' else 2
