@@ -1,13 +1,11 @@
 from random import shuffle
 from SecondStage.experimentProgram import program as expProg
 
-
-# Perform the additional stage (post hoc stage):
+# Perform a k-fold additional stage (post hoc stage):
 def postHocStage(numOfFolds, swedishChildrenList, israeliChildrenList, printMode):
     shuffle(swedishChildrenList)
     chunk = int(len(swedishChildrenList) / numOfFolds)
     splitSwedish = [swedishChildrenList[i:i + chunk] for i in range(0, len(swedishChildrenList), chunk)]
-    testGroup = [c for c in israeliChildrenList]
     for i in range(0, numOfFolds):
         print("Current group is", i)
         expGroup = swedishChildrenList[:i] + swedishChildrenList[i+1:]
@@ -22,5 +20,5 @@ def fullProg(swedishChildrenList, israeliChildrenList, printMode):
     # perform the additional stage (post hoc stage)
     if printMode:
         print("######################################################################################################")
-        print("Post-hoc Stage: ")
+        print("Post-hoc k-fold Stage: ")
     postHocStage(10, swedishChildrenList, israeliChildrenList, printMode)

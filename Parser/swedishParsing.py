@@ -80,7 +80,7 @@ def manageLatterSampleSets(children, samples, str):
             children.add(sc)
             addLatterSamplesToChild(sc, samples)
 
-
+# second swedish set parser
 def praseSecondSwedish(swedishChildren):
     with open(getpath(SWEDISH_NEW_BOYS_FILE), 'r') as f:
         swedishBoysSamples = list(csv.reader(f))
@@ -89,7 +89,7 @@ def praseSecondSwedish(swedishChildren):
         swedishGirlsSamples = list(csv.reader(g))
     manageLatterSampleSets(swedishChildren, swedishGirlsSamples[1:], "Girls")
 
-
+# set post-parsing values of lists and flags
 def setMisc(swedishChildren):
     for c in swedishChildren:
         c.setPretermFlag()

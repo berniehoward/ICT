@@ -3,7 +3,7 @@ import csv
 from Parser.auxiliary import *
 from datetime import date
 
-
+# check missing data on first set
 def checkMissing(s):
     s = [s[8], s[5], s[6], s[7]]  # don't check now HC
     if s[1] != '' and s[2] != '':
@@ -39,7 +39,7 @@ def addBrothers(children):
         for x in brothers:
             c.addBrother(x)
 
-
+#first israeli children dataset parser
 def parseFirstSet():
     israeliChildren = set()
     with open(getpath(ISRAELI_MAIN_FILE), 'r') as f:
@@ -64,7 +64,7 @@ def checkMissingSecondSet(s):
         return [float(i) if i != 0 else NA for i in s], True
     return [float(i) for i in s], False
 
-
+# add samples to second-dataset-children
 def addAdditionalInfoSecondSetAux(children, file):
     for c in children:
         samples = [[float(s[4])*MONTHS, float(s[6]), float(s[7]), float(s[8])] for s in file if c.id == (int(s[0]), int(s[1]), int(s[2]))]
@@ -75,7 +75,7 @@ def addAdditionalInfoSecondSetAux(children, file):
             if s.age == BIRTH:
                 c.height = s.height
 
-
+# add mother age to second dataset children
 def addMotherAge(children, file):
     for c in children:
         samples = [s[9] for s in file if
@@ -93,7 +93,7 @@ def addMotherAge(children, file):
             ma = (date(bd[0], bd[1], bd[2]) - date(mb[0], mb[1], mb[2])).total_seconds() / 3600 / 24 / 365.25
             c.motherAge = float(format(ma, '.2f'))
 
-
+# added additional data to second dataset
 def addAdditionalInfoSecondSet(secondSet):
     with open(getpath(ISRAELI_FMLY_RSRCH_FILE), 'r') as f:
         rsrch = list(csv.reader(f))[1:]
@@ -103,14 +103,14 @@ def addAdditionalInfoSecondSet(secondSet):
         addAdditionalInfoSecondSetAux(secondSet, test)
         addMotherAge(secondSet, test)
 
-
+# add position among brothers based on dataset
 def addPosition(children):
     for c in children:  # only for second
         brothers = [b.id[-1] for b in c.brothers] + [c.id[-1]]
         sorted(brothers)
         c.position = brothers.index(c.id[-1]) + 1
 
-
+# second israeli set parser
 def parseSecondSet():
     with open(getpath(ISRAELI_FMLY_ICT_FILE), 'r') as f:
         israeliSamples = list(csv.reader(f))
@@ -129,7 +129,7 @@ def parseSecondSet():
     addPosition(secondSet)
     return secondSet
 
-
+# set post-parsing values of lists and flags
 def setMisc(israeliChildren):
     for c in israeliChildren:
         c.setPretermFlag()
@@ -137,7 +137,7 @@ def setMisc(israeliChildren):
         c.calculateBurst()
         # c.setValuesOfSlopeVectors()
 
-
+# main israeli parse function
 def parseIsraeli():
     israeliChildren = parseFirstSet()
     secondSet = parseSecondSet()
