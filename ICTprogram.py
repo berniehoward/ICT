@@ -8,12 +8,14 @@ from SecondStage.automaticTagging import automaticTagging
 # from LearningStage.learningProgram import load_paramters as ThirdStage
 
 if __name__ == '__main__':
-    # parsingStage()
+    #parsingStage()
 
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    # printChildrenStatistics(swedishChildrenList, israeliChildrenList)
+    for c in israeliChildrenList:
+        print(len(c.bmiToAgeLevel1), len(c.bmiToAgeLevel2))
+    #printSampleListStatistics(swedishChildrenList, israeliChildrenList)
     # secondStage(swedishChildrenList, israeliChildrenList, True)
     # automaticTagging(swedishChildrenList)
     # automaticTagging(israeliChildrenList)

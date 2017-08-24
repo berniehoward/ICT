@@ -95,7 +95,7 @@ def setMisc(swedishChildren):
         c.setPretermFlag()
         c.calculateSlops()
         c.calculateBurst()
-        # c.setValuesOfSlopeVectors()
+        c.setValuesOfSlopeVectors()
 
 
 # Swedish child pareser main function

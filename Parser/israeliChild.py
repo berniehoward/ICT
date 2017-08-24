@@ -80,12 +80,34 @@ class IsraeliChild(Child):
         if self.autoICT == NA:
             return [], [], 0
         features = ["sex", "birthWeight (Grams)", "birthHeight (M)", "gestationalAge (Weeks)",
-                    "birthPosition", "birthYear", "birthMonth", "season",
-                    "preterm flag", "Height at 6 months",
-                    "Weight at 6 months", "HC at 6 months"]
+                "birthPosition", "birthYear", "birthMonth", "season",
+                "preterm flag", "Height at 6 months", "Weight at 6 months", "HC at 6 months",
+                "max_weightToAgeLevel1", "max_weightDivAgeLevel1", "min_weightToAgeLevel1",
+                "min_weightDivAgeLevel1", "avg_weightToAgeLevel1", "avg_weightDivAgeLevel1",
+                "max_weightToAgeLevel2", "max_weightDivAgeLevel2", "min_weightToAgeLevel2",
+                "min_weightDivAgeLevel2", "avg_weightToAgeLevel2", "avg_weightDivAgeLevel2",
+                "max_heightToAgeLevel1", "max_heightDivAgeLevel1", "min_heightToAgeLevel1",
+                "min_heightDivAgeLevel1", "avg_heightToAgeLevel1", "avg_heightDivAgeLevel1",
+                "max_heightToAgeLevel2", "max_heightDivAgeLevel2", "min_heightToAgeLevel2",
+                "min_heightDivAgeLevel2", "avg_heightToAgeLevel2", "avg_heightDivAgeLevel2",
+                "max_BMIToAgeLevel1", "max_BMIDivAgeLevel1", "min_BMIToAgeLevel1",
+                "min_BMIDivAgeLevel1", "avg_BMIToAgeLevel1", "avg_BMIDivAgeLevel1",
+                "max_BMIToAgeLevel2", "max_BMIDivAgeLevel2", "min_BMIToAgeLevel2",
+                "min_BMIDivAgeLevel2", "avg_BMIToAgeLevel2", "avg_BMIDivAgeLevel2"]
         data = [self.sex, self.birthWeight/KILO, self.birthHeight, self.gestationalAge,
-                self.position, self.birthYear, self.birthMonth, self.season,
-                self.preterm]
+                self.position, self.birthYear, self.birthMonth, self.season, self.preterm,
+                self.max_weightToAgeLevel1, self.max_weightDivAgeLevel1, self.min_weightToAgeLevel1,
+                self.min_weightDivAgeLevel1,self.avg_weightToAgeLevel1, self.avg_weightDivAgeLevel1,
+                self.max_weightToAgeLevel2, self.max_weightDivAgeLevel2, self.min_weightToAgeLevel2,
+                self.min_weightDivAgeLevel2, self.avg_weightToAgeLevel2, self.avg_weightDivAgeLevel2,
+                self.max_heightToAgeLevel1, self.max_heightDivAgeLevel1, self.min_heightToAgeLevel1,
+                self.min_heightDivAgeLevel1, self.avg_heightToAgeLevel1, self.avg_heightDivAgeLevel1,
+                self.max_heightToAgeLevel2, self.max_heightDivAgeLevel2, self.min_heightToAgeLevel2,
+                self.min_heightDivAgeLevel2, self.avg_heightToAgeLevel2, self.avg_heightDivAgeLevel2,
+                self.max_bmiToAgeLevel1, self.max_bmiDivAgeLevel1, self.min_bmiToAgeLevel1,
+                self.min_bmiDivAgeLevel1, self.avg_bmiToAgeLevel1, self.avg_bmiDivAgeLevel1,
+                self.max_bmiToAgeLevel2, self.max_bmiDivAgeLevel2, self.min_bmiToAgeLevel2,
+                self.min_bmiDivAgeLevel2, self.avg_bmiToAgeLevel2, self.avg_bmiDivAgeLevel2]
         if self.goodSamples:
             six_month_idx = find_nearest([a.age for a in self.goodSamples], 0.5)
             six_month_idx_HC = find_nearest([a.age for a in self.goodSamplesWithHC], 0.5)
@@ -93,7 +115,7 @@ class IsraeliChild(Child):
                      (self.goodSamples[six_month_idx]).weight,
                      (self.goodSamplesWithHC[six_month_idx_HC]).HC]
 
-        # "motherAge (Years)" is only on Test.csv and not on reasrch.csv. possible problem. TODO
+        # "motherAge (Years)" is only on Test.csv and not on research.csv. possible problem. TODO
         if first:
             features += ["fatherAge (Years)", "motherWeight (KG)", "motherHeight (M)"]
             data += [self.fatherAge, self.motherWeight, self.motherHeight/METER]
