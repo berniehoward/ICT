@@ -68,7 +68,7 @@ def regressionForestCreatorAux(f, X, c, msl, m):
     imputer = Imputer(strategy='mean', axis=0)
     X = imputer.fit_transform(X)  # instead of fit
     r_forest = RandomForestRegressor(max_depth=None, max_features=m, random_state=1,
-                                     min_samples_split=30, min_samples_leaf=msl)
+                                     min_samples_split = 30, min_samples_leaf = msl)
     r_forest.fit(X, c)
     score = np.mean(
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
