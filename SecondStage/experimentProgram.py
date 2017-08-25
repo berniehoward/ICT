@@ -56,10 +56,10 @@ def discreetMethod(experimentGroup, testGroup, heights_groups, printMode):
     # printICTAndHeights(newICT, printMode)
 
     # Calculate new ICT for test group children
-    teatGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
+    testGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
     if printMode:
         print("Test group ICT tagging info: ")
-    printCompareToPreviousICT(teatGroupICT, printMode)
+    printCompareToPreviousICT(testGroupICT, printMode)
 
 
 # Perform the sequential method

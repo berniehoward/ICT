@@ -13,10 +13,8 @@ if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    for c in israeliChildrenList:
-        print(len(c.bmiToAgeLevel1), len(c.bmiToAgeLevel2))
     #printSampleListStatistics(swedishChildrenList, israeliChildrenList)
-    # secondStage(swedishChildrenList, israeliChildrenList, True)
+    secondStage(swedishChildrenList, israeliChildrenList, True)
     # automaticTagging(swedishChildrenList)
     # automaticTagging(israeliChildrenList)
 

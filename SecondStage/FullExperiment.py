@@ -18,7 +18,7 @@ def fullProg(swedishChildrenList, israeliChildrenList, printMode):
     # perform experiment with the swedish children as experiment group and the israeli children as test group
     expProg(swedishChildrenList, israeliChildrenList, printMode)
     # perform the additional stage (post hoc stage)
-    if printMode:
-        print("######################################################################################################")
-        print("Post-hoc k-fold Stage: ")
-    postHocStage(10, swedishChildrenList, israeliChildrenList, printMode)
+    #if printMode:
+    #    print("######################################################################################################")
+     #   print("Post-hoc k-fold Stage: ")
+    #postHocStage(10, swedishChildrenList, israeliChildrenList, printMode)
