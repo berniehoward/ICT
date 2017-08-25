@@ -10,16 +10,15 @@ def sortListsOfChildren(setOfChildren):
     swedishChildrenList = sorted(list(setOfChildren.swedishChildren))
     israeliChildrenList = sorted(list(setOfChildren.israeliChildren))
     for c in swedishChildrenList:
-        if len(c.heightToAgeBurstFormula1) < 3:
-            swedishChildrenList.remove(c)
+        c.goodSamples = sorted(c.goodSamples)
+    for c in israeliChildrenList:
         c.goodSamples = sorted(c.goodSamples)
     # Remove children without enough samples
     for c in israeliChildrenList:
-        c.goodSamples = sorted(c.goodSamples)
-        if len([x for x in c.goodSamples if x.age > 0.35]) < 3:
+        if len(c.goodSamples) == 0:
             israeliChildrenList.remove(c)
         else:
-            samples = [s for s in [x for x in c.goodSamples if x.age > 0.35]]
+            samples = [s for s in c.goodSamples]
             if samples[-1].age < 14 / MONTHS:
                 israeliChildrenList.remove(c)
     return swedishChildrenList, israeliChildrenList
