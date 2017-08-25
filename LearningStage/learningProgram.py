@@ -1,9 +1,18 @@
 from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import KFold
+from sklearn.tree import export_graphviz
+from pydotplus import graph_from_dot_data
+import six, os
 from sklearn.preprocessing import Imputer
 from sklearn import tree
 import numpy as np
 from Parser.auxiliary import NA
+
+
+"""  
+http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor
+"""
 
 def getDataForClassification(swedishChildrenList, israeliChildrenList):
     data = []
@@ -24,19 +33,62 @@ def getDataForClassification(swedishChildrenList, israeliChildrenList):
             checkFlag = True
     return features, data, classifications
 
-
-def load_paramters(swedishChildrenList, israeliChildrenList, printFlag = True):
-    f, X, c = getDataForClassification(swedishChildrenList, israeliChildrenList)
+def regressionTreeCreator(f, X, c):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
-    for depth in range(1,10):
+    for depth in range(1, 10):
         imputer = Imputer(strategy='mean', axis=0)
-        X = imputer.fit_transform(X) #instead of fit
-        regression_tree = tree.DecisionTreeRegressor(max_depth=depth, random_state=0, min_samples_split=30, min_samples_leaf=10)
+        X = imputer.fit_transform(X)  # instead of fit
+        regression_tree = tree.DecisionTreeRegressor(max_depth=depth, random_state=0, min_samples_split=30,
+                                                     min_samples_leaf=10)
         regression_tree.fit(X, c)
-        tree.export_graphviz(regression_tree, feature_names=f, out_file = 'tree' + str(depth) + '.dot')
+        if depth == 9:
+            dotfile = six.StringIO()
+            tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
+            graph_from_dot_data(dotfile.getvalue()).write_png('tree' + str(depth) + '.png')
         if regression_tree.fit(X, c).tree_.max_depth < depth:
             break
-        score = np.mean(cross_val_score(regression_tree, X, c, scoring='neg_mean_squared_error', cv=crossvalidation, n_jobs=1))
-        print("Depth: %i MSE: %.3f" % (depth,abs(score)))
+        score = np.mean(
+            cross_val_score(regression_tree, X, c, scoring='neg_mean_squared_error', cv=crossvalidation, n_jobs=1))
+        print("Depth: %i MSE: %.3f" % (depth, abs(score)))
+
+def exportTreesFromRegressionForest(f, r_forest):
+    for regression_tree in r_forest.estimators_:
+            dotfile = six.StringIO()
+            tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
+            graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
+            +'.png')
+
+def regressionForestCreator(f, X, c):
+    bestForest, best_m, best_d, bestMSE = None, 0, 0, 1.0
+    crossvalidation = KFold(n_splits=2, shuffle=True, random_state=1)
+    for depth in range(1, 10):
+        for m in [x/100 for x in range(50,100,5)]:
+            imputer = Imputer(strategy='mean', axis=0)
+            X = imputer.fit_transform(X)  # instead of fit
+            r_forest = RandomForestRegressor(max_depth=depth, max_features = m, random_state=1,
+                                             min_samples_split=30, min_samples_leaf=5)
+            r_forest.fit(X, c)
+            #exportTreesFromRegressionForest(f, r_forest)
+            score = np.mean(
+                cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
+            if abs(score) < bestMSE:
+                bestForest, best_m, best_d, bestMSE = r_forest, m, depth, abs(score)
+    print("Depth: %i, max_features: %.2f precent, MSE: %.3f" % (best_d, best_m, abs(bestMSE)))
+    return r_forest
+
+def classifyData(forest, children):
+    for c in children:
+        #TODO fv = getFeatureVector(c)
+        predictation = forest.predict(fv)
+
+def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
+    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
+    f, X, c = getDataForClassification(swedishChildrenList, israeliChildrenList)
+    #regressionTreeCreator(f, X, c)
+    #print()
+    forest = regressionForestCreator(f, X, c)
+    classifyData(forest, children)
+
+
 
 
