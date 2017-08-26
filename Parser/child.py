@@ -1,5 +1,7 @@
 from Parser.auxiliary import *
 from numpy import mean as avg
+from Utility import find_nearest
+
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
 
@@ -143,7 +145,7 @@ class Child:
         sorted(self.badSamples)
         sorted(self.goodSamplesWithHC)
 
-    def generateParametersForRegressionTree(self):
+    def generateParametersForRegressionTree(self, first = True):
         pass
 
     def setValuesOfSlopeVectors(self):

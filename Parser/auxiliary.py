@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 # Consts
 METER = 100
@@ -33,4 +34,9 @@ PICKLE_FILE = "ChildrenParsedData.pkl"
 getGender = lambda g: 1 if g == 'M' else 2
 getpath = lambda file: os.path.join(os.getcwd(), "ICTData", file)
 picklepath = lambda file: os.path.join(os.getcwd(), "Parser", file)
+
+class Nationality(Enum):
+    ISR = 0
+    SWE = 1
+
 

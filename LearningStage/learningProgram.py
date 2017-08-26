@@ -19,18 +19,17 @@ def getDataForClassification(swedishChildrenList, israeliChildrenList):
     classifications = []
     features = []
     checkFlag = False
-    for c in israeliChildrenList:
-        if len(c.id) == 2:
-            if len(c.goodSamples) == 0:
-                continue
-            f, d, c = c.generateParametersForRegressionDecisionTree(True)
-            if not checkFlag:
-                features = [i for i in f]
-            if not c:
-                continue
-            data.append([x if x!=NA else np.NaN for x in d])
-            classifications.append(c)
-            checkFlag = True
+    for ch in israeliChildrenList:
+        if len(ch.goodSamples) == 0:
+            continue
+        f, d, c = ch.generateParametersForRegressionDecisionTree(False)
+        if not checkFlag:
+            features = [i for i in f]
+        if not c:
+            continue
+        data.append([x if x != NA else np.NaN for x in d])
+        classifications.append(c)
+        checkFlag = True
     return features, data, classifications
 
 def regressionTreeCreator(f, X, c):
@@ -53,8 +52,7 @@ def regressionTreeCreator(f, X, c):
 
 def exportTreesFromRegressionForest(f, r_forest):
     rf_path = os.path.join(os.getcwd(), "RegressionForest")
-    for f in glob.glob('rf_path\*'):
-        os.remove(f)
+    os.system("del /f /q "+rf_path+"\\*")
     os.chdir(rf_path)
     for regression_tree in r_forest.estimators_:
             dotfile = six.StringIO()
@@ -77,7 +75,7 @@ def regressionForestCreatorAux(f, X, c, msl, m):
 def regressionForestCreator(f, X, c):
     bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
     for msl in range(3, 25):
-        for m in [x/100 for x in range(50,100,5)]:
+        for m in [x/100 for x in range(30,100,10)]:
             r_forest, score = regressionForestCreatorAux(f, X, c, msl, m)
             if abs(score) < bestMSE:
                 bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
@@ -90,11 +88,16 @@ def classifyData(forest, children):
         #TODO fv = getFeatureVector(c)
         predictation = forest.predict(fv)
 
+def printVectors(f, X):
+    for x in X:
+        print("feature number:", len(x),[(fe,x) for fe, x in zip(f,x)])
+
 def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
     f, X, c = getDataForClassification(swedishChildrenList, israeliChildrenList)
+    printVectors(f,X)
     #regressionTreeCreator(f, X, c)
-    #print()
+
     forest = regressionForestCreator(f, X, c)
     #classifyData(forest, children)
 

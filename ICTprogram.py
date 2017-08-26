@@ -8,19 +8,19 @@ from SecondStage.automaticTagging import automaticTagging
 from LearningStage.learningProgram import createRandomForestRegressorAndClassifyData as ThirdStage
 
 if __name__ == '__main__':
-    # parsingStage()
+    #parsingStage()
 
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
     # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
-    # secondStage(swedishChildrenList, israeliChildrenList, True)
+    #secondStage(swedishChildrenList, israeliChildrenList, True)
 
     bestEpsilon = 0.016
     bestFormula = 3
 
-    #automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
-    #automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
+    automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
+    automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
 
     ThirdStage(swedishChildrenList, israeliChildrenList, True)
 

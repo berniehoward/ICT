@@ -120,7 +120,7 @@ def parseSecondSet():
     for c in israeliSamples:
         id = tuple((int(x) for x in c[8].split('.')))
         child = IsraeliChild(id, getGender(c[headers.index('Sex')]),
-                             ci('BirthWeight'), NA, ci("GA"), ci('ICT'), ci('ICT'),
+                             ci('BirthWeight')*KILO, NA, ci("GA"), ci('ICT'), ci('ICT'),
                              NA, NA, NA, NA, NA, c[5],
                              int(c[5].split('/')[1]))
         secondSet.add(child)
