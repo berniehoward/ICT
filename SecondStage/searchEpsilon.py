@@ -1,5 +1,5 @@
 from simpleai.search import SearchProblem
-from Parser.auxiliary import MONTHS
+from Parser.auxiliary import MONTHS, NA
 from SecondStage.secondStageFunc import findICTWithEpsilonByFormula, createFormulaList, divideToGroups, \
     scoreEpsilonByGroupDistances
 import numpy
@@ -43,6 +43,12 @@ class SearchEpsilon(SearchProblem):
                         child_ict.append((c.id, ict))
                     for c, h in zip(self.children, self.heights_groups):
                         child_height.append((c.id, h))
+                    for i in child_ict:  # for removal of NA's
+                        if (i[1] == NA):
+                            c = [c[0] for c in child_height]
+                            idx = c.index(i[0])
+                            child_height = child_height[:idx] + child_height[idx + 1:]
+                            child_ict.remove(i)
                     new_scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)), \
                                                                    sorted(child_height, key=itemgetter(1)), 2))
 

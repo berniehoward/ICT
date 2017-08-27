@@ -103,8 +103,8 @@ class Child:
                 ((y.age + z.age) / 2, ((w.height - y.height) / z.height) - ((z.height - x.height) / y.height)))
         for a, b, c, d, e in zip(goodSamples, goodSamples[1:], goodSamples[2:],
                                               goodSamples[3:], goodSamples[4:]):
-            m1 = (e.height - c.height) / (e.age - c.age)
-            m2 = (c.height - a.height) / (c.age - a.age)
+            m2 = (e.height - c.height) / (e.age - c.age)
+            m1 = (c.height - a.height) / (c.age - a.age)
             midage = (((e.age + c.age) / 2) + ((c.age + a.age) / 2)) / 2
             self.heightToAgeBurstFormula4.append((midage, m2-m1))
 
