@@ -1,14 +1,15 @@
+from Parser.auxiliary import NA
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import KFold
+from sklearn.preprocessing import Imputer
 from sklearn.tree import export_graphviz
 from pydotplus import graph_from_dot_data
-import six, os, glob
-from sklearn.preprocessing import Imputer
 from sklearn import tree
+import six, os, time
 import numpy as np
-from Parser.auxiliary import NA
-
+from math import ceil
+from joblib import Parallel
 
 """  
 http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor
@@ -61,12 +62,14 @@ def exportTreesFromRegressionForest(f, r_forest):
             +'.png')
 
 # If depth == None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.
-def regressionForestCreatorAux(f, X, c, msl, m):
-    crossvalidation = KFold(n_splits=2, shuffle=True, random_state=1)
+def regressionForestCreatorAux(f, X, c, k, fn, msl, m, d, s, f_time):
+    print(k, fn, msl, m, d, s, float(format((time.time()-f_time)/60, '.2f')))
+    crossvalidation = KFold(n_splits=k, shuffle=True, random_state=1)
     imputer = Imputer(strategy='mean', axis=0)
     X = imputer.fit_transform(X)  # instead of fit
-    r_forest = RandomForestRegressor(max_depth=None, max_features=m, random_state=1,
-                                     min_samples_split = 30, min_samples_leaf = msl)
+    r_forest = RandomForestRegressor(max_depth=d, max_features=m, random_state=1,
+                                     min_samples_split = s, min_samples_leaf = msl,
+                                     n_estimators=fn)
     r_forest.fit(X, c)
     score = np.mean(
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
@@ -74,11 +77,17 @@ def regressionForestCreatorAux(f, X, c, msl, m):
 
 def regressionForestCreator(f, X, c):
     bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
-    for msl in range(3, 25):
-        for m in [x/100 for x in range(30,100,10)]:
-            r_forest, score = regressionForestCreatorAux(f, X, c, msl, m)
-            if abs(score) < bestMSE:
-                bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
+    f_time = time.time()
+    for k in range(2, 11): # fold
+        for fn in range(1, 21): # tree num
+            for msl in range(10, 110, 10): # minimum samples in leaf
+                for m in [x/100 for x in range(30,100,5)]: # percent of features
+                    for d in range(3, 31): # tree depth
+                        for s in range(2, 41): # min samples split
+                            r_forest, score = \
+                                regressionForestCreatorAux(f, X, c, k, fn, msl, m, d, s, f_time)
+                            if abs(score) < bestMSE:
+                                bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
     print("Min Samples In Leaf: %i, max_features: %.2f precent, MSE: %.3f" % (best_msl, best_m, abs(bestMSE)))
     exportTreesFromRegressionForest(f, bestForest)
     return r_forest
@@ -95,10 +104,11 @@ def printVectors(f, X):
 def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
     f, X, c = getDataForClassification(swedishChildrenList, israeliChildrenList)
-    printVectors(f,X)
+    #printVectors(f,X)
     #regressionTreeCreator(f, X, c)
-
     forest = regressionForestCreator(f, X, c)
+    #print("Forest creation time took %i minutes" % (stop_forest_time - start_forest_time))/60
+
     #classifyData(forest, children)
 
 
