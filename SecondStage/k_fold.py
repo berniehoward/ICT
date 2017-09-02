@@ -68,6 +68,7 @@ def discreetMethod(experimentGroup, testChildren, testGroup, heights_groups, t_h
     if printMode:
         print("Test group ICT tagging info: ")
     printCompareToPreviousICT(testGroupICT, printMode)
+    return best_formula, best_epsilons[best_formula]
 
 
 # Perform the sequential method
@@ -131,7 +132,7 @@ def sequentialMethod(experimentGroup, testChildren, heights, testGroup, heights_
     if printMode:
         print("Test Group ICT tagging info: ")
     printCompareToPreviousICT(testGroupICT, printMode)
-
+    return best_formula, best_epsilons[best_formula]
 
 # Experiment program for second stage
 def program(experimentGroup, testGroup, printMode=False):
@@ -155,13 +156,14 @@ def program(experimentGroup, testGroup, printMode=False):
     t_h1, t_h2, t_h3, t_h4, t_h_na = divideToGroups(t_heights, t_children, -1, 0, 1)
     t_heights_groups = [t_h1, t_h2, t_h3, t_h4, t_h_na]  # (At each group there are children)
 
-    discreetMethod(children, t_children, testGroup, heights_groups, t_heights_groups, printMode)
+    best_d_formula, best_d_epsilon = discreetMethod(children, t_children, testGroup, heights_groups, t_heights_groups, printMode)
 
     if printMode:
         print("#######################################################################################################")
         print()
 
-    sequentialMethod(children, t_children, heights, testGroup, heights_groups, t_heights_groups, printMode)
+    best_s_formula, best_s_epsilon = sequentialMethod(children, t_children, heights, testGroup, heights_groups, t_heights_groups, printMode)
+    return best_d_formula+1, best_d_epsilon, best_s_formula+1, best_s_epsilon
 
 
 
