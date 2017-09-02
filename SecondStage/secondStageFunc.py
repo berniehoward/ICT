@@ -203,3 +203,4 @@ def findScore(ict, children, heights_groups, discreetMethod):
             child_height.append((c.id, h))
         return scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)),
                                             sorted(child_height, key=itemgetter(1)), 2)
+

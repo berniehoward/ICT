@@ -2,7 +2,7 @@ from statistics import stdev
 from numpy import average, median
 from Parser.auxiliary import NA, MONTHS
 from Utility import find_nearest
-import numpy, scipy
+import scipy
 
 
 # Print the first epsilon for each formula
@@ -15,6 +15,7 @@ def printFirstEpsilonPerFormula(eps1, eps2, eps3, eps4, score1, score2, score3, 
     print("third formula: epsilon: ", eps3, ", score: ", score3)
     print("fourth formula: epsilon: ", eps4, ", score: ", score4)
     print()
+
 
 # Print the details of the best formula after doing "hill-climbing" algorithm
 def printBestFormula(best_formula, best_epsilons, bestScore, mode=False):

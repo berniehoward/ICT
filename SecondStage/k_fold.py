@@ -2,10 +2,10 @@ from SecondStage.printFunc import *
 from SecondStage.searchEpsilon import SearchEpsilon
 from SecondStage.secondStageFunc import *
 from simpleai.search.local import hill_climbing
-import numpy as np
+
 
 # Perform the discreet method
-def discreetMethod(experimentGroup, testChildren, testGroup, heights_groups, t_heights_groups, printMode):
+def discreetMethod(experimentGroup, testChildren, heights_groups, t_heights_groups, printMode):
     if printMode:
         print("Discreet Method: ")
 
@@ -49,30 +49,11 @@ def discreetMethod(experimentGroup, testChildren, testGroup, heights_groups, t_h
     best_formula = best_scores.index(bestScore)
     printBestFormula(best_formula, best_epsilons, bestScore, printMode)
 
-    # Calculate new ICT:
-    newICT = calculateNewICT(experimentGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
-    printCompareToPreviousICT(newICT, printMode)
-
-    # Find the experts scores
-    z_score = findScore([c.ICT_Z for c, p in newICT if c.ICT_Z != NA], [c for c, p in newICT if c.ICT_Z != NA],
-                        heights_groups, True)
-    a_score = findScore([c.ICT_A for c, p in newICT if c.ICT_A != NA], [c for c, p in newICT if c.ICT_A != NA],
-                        heights_groups, True)
-    printExpertsScores(z_score, a_score, printMode)
-
-    # Print the new icts and heights
-    # printICTAndHeights(newICT, printMode)
-
-    # Calculate new ICT for test group children
-    testGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
-    if printMode:
-        print("Test group ICT tagging info: ")
-    printCompareToPreviousICT(testGroupICT, printMode)
     return best_formula, best_epsilons[best_formula]
 
 
 # Perform the sequential method
-def sequentialMethod(experimentGroup, testChildren, heights, testGroup, heights_groups, t_heights_groups, printMode):
+def sequentialMethod(experimentGroup, testChildren, heights, printMode):
     if printMode:
         print("Sequential Method: ")
     epsilons = [x / 1000 for x in range(15, 305, 5)]
@@ -116,36 +97,20 @@ def sequentialMethod(experimentGroup, testChildren, heights, testGroup, heights_
     best_formula = best_scores.index(bestScore)
     printBestFormula(best_formula, best_epsilons, bestScore, printMode)
 
-    # Calculate new ICT:
-    newICT = calculateNewICT(experimentGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
-    printCompareToPreviousICT(newICT, printMode)
-
-    # Find the experts scores
-    z_score = findScore([c.ICT_Z for c, p in newICT if c.ICT_Z != NA], [c for c, p in newICT if c.ICT_Z != NA],
-                        heights_groups, False)
-    a_score = findScore([c.ICT_A for c, p in newICT if c.ICT_A != NA], [c for c, p in newICT if c.ICT_A != NA],
-                        heights_groups, False)
-    printExpertsScores(z_score, a_score, printMode)
-
-    # Calculate new ICT for children in the test Group
-    testGroupICT = calculateNewICT(testGroup, best_epsilons[best_formula], best_formula + 1)  # List of (child, newICT)
-    if printMode:
-        print("Test Group ICT tagging info: ")
-    printCompareToPreviousICT(testGroupICT, printMode)
     return best_formula, best_epsilons[best_formula]
+
 
 # Experiment program for second stage
 def program(experimentGroup, testGroup, printMode=False):
 
     heights, indexes = findHeightAroundAge(experimentGroup)
     t_heights, t_indexes = findHeightAroundAge(testGroup)
+
     # Reorganized children by the order of indexes list
     children = []
     t_children = []
-
     for index in indexes:
         children.append(experimentGroup[index])
-
     for index in t_indexes:
         t_children.append(testGroup[index])
 
@@ -156,13 +121,13 @@ def program(experimentGroup, testGroup, printMode=False):
     t_h1, t_h2, t_h3, t_h4, t_h_na = divideToGroups(t_heights, t_children, -1, 0, 1)
     t_heights_groups = [t_h1, t_h2, t_h3, t_h4, t_h_na]  # (At each group there are children)
 
-    best_d_formula, best_d_epsilon = discreetMethod(children, t_children, testGroup, heights_groups, t_heights_groups, printMode)
+    best_d_formula, best_d_epsilon = discreetMethod(children, t_children, heights_groups, t_heights_groups, printMode)
 
     if printMode:
         print("#######################################################################################################")
         print()
 
-    best_s_formula, best_s_epsilon = sequentialMethod(children, t_children, heights, testGroup, heights_groups, t_heights_groups, printMode)
+    best_s_formula, best_s_epsilon = sequentialMethod(children, t_children, heights, printMode)
     return best_d_formula+1, best_d_epsilon, best_s_formula+1, best_s_epsilon
 
 

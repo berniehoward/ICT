@@ -44,7 +44,7 @@ class SearchEpsilon(SearchProblem):
                     for c, h in zip(self.children, self.heights_groups):
                         child_height.append((c.id, h))
                     for i in child_ict:  # for removal of NA's
-                        if (i[1] == NA):
+                        if i[1] == NA:
                             c = [c[0] for c in child_height]
                             idx = c.index(i[0])
                             child_height = child_height[:idx] + child_height[idx + 1:]
