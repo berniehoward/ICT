@@ -16,7 +16,7 @@ if __name__ == '__main__':
     # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
     # secondStage(swedishChildrenList, israeliChildrenList, True)
 
-    bestEpsilon = 0.016
+    bestEpsilon = 0.017083
     bestFormula = 3
 
     # automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)

@@ -1,4 +1,5 @@
 from Parser.auxiliary import NA
+from LearningStage.utility import getTenMostCommonAges
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
 from sklearn.model_selection import KFold
@@ -11,19 +12,16 @@ import numpy as np
 from math import ceil
 from joblib import Parallel
 
-"""  
-http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor
-"""
-
 def getDataForClassification(swedishChildrenList, israeliChildrenList):
     data = []
     classifications = []
     features = []
     checkFlag = False
+    common_ages = sorted(getTenMostCommonAges(israeliChildrenList, 10))
     for ch in israeliChildrenList:
         if len(ch.goodSamples) == 0:
             continue
-        f, d, c = ch.generateParametersForRegressionDecisionTree(False)
+        f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
         if not checkFlag:
             features = [i for i in f]
         if not c:
@@ -111,8 +109,8 @@ def regressionForestCreatorAux(f, X, c, msl, m):
 def regressionForestCreator(f, X, c):
     bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
     f_time = time.time()
-    for msl in range(10, 110, 10): # minimum samples in leaf
-        for m in [x/100 for x in range(30,100,5)]: # percent of features
+    for msl in range(10, 110, 25): # minimum samples in leaf
+        for m in [x/100 for x in range(30,100,25)]: # percent of features
             r_forest, score = \
                         regressionForestCreatorAux(f, X, c, msl, m)
             if abs(score) < bestMSE:
@@ -124,9 +122,9 @@ def regressionForestCreator(f, X, c):
 def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
     f, X, c = getDataForClassification(swedishChildrenList, israeliChildrenList)
-    #printVectors(f,X)
+    printVectors(f,X)
     #regressionTreeCreator(f, X, c)
-    forest = regressionForestCreator(f, X, c) #Full version is with better syntax
+    #forest = regressionForestCreator(f, X, c) #Full version is with better syntax
     #print("Forest creation time took %i minutes" % (stop_forest_time - start_forest_time))/60
 
     #classifyData(forest, children)
