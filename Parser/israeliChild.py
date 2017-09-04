@@ -2,8 +2,9 @@ from Parser.auxiliary import *
 from Parser.child import Child
 from Parser.sample import IsraeliSample
 from Utility import find_nearest
-from sklearn.feature_extraction import DictVectorizer
 import numpy as np
+from pygrowup import Calculator
+import pygrowup
 from numpy import mean as avg
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
 
@@ -122,7 +123,7 @@ class IsraeliChild(Child):
         if self.autoICT == NA:
             return [], [], 0
         for age in common_ages:
-            features += ["HC_at_%s" % str(age)]
+            features += ["HC at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamplesWithHC], age)
             if abs(self.goodSamples[i].age - age) > 5 / MONTHS:
                 data += [np.nan]
@@ -148,6 +149,30 @@ class IsraeliChild(Child):
         else:
             data += [np.nan]
 
+        features += ["avg of HCToAgeLevel1", "max of HCToAgeLevel1", "min of HCToAgeLevel1", "avg of HCToAgeLevel2",
+                     "max of HCToAgeLevel2", "min of HCToAgeLevel2", "avg of HCdivHeightLevel1",
+                     "max of HCdivHeightLevel1", "min of HCdivHeightLevel1", "avg of HCdivHeightLevel2",
+                     "max of HCdivHeightLevel2", "min of HCdivHeightLevel2", "avg of HCdivHeightSqLevel1",
+                     "max of HCdivHeightSqLevel1", "min of HCdivHeightSqLevel1", "avg of HCdivHeightSqLevel2",
+                     "max of HCdivHeightSqLevel2", "min of HCdivHeightSqLevel2", "avg of HCdivWeightLevel1",
+                     "max of HCdivWeightLevel1", "min of HCdivWeightLevel1", "avg of HCdivWeightLevel2",
+                     "max of HCdivWeightLevel2", "min of HCdivWeightLevel2", "avg of HCdivWeightSqLevel1",
+                     "max of HCdivWeightSqLevel1", "min of HCdivWeightSqLevel1", "avg of HCdivWeightSqLevel2",
+                     "max of HCdivWeightSqLevel2", "min of HCdivWeightSqLevel2"]
+
+        data += [self.avg_HCToAgeLevel1, self.max_HCToAgeLevel1, self.min_HCToAgeLevel1, self.avg_HCToAgeLevel2,
+                 self.max_HCToAgeLevel2, self.min_HCToAgeLevel2, self.avg_HCdivHeightLevel1, self.max_HCdivHeightLevel1,
+                 self.min_HCdivHeightLevel1, self.avg_HCdivHeightLevel2, self.max_HCdivHeightLevel2,
+                 self.min_HCdivHeightLevel2, self.avg_HCdivHeightSqLevel1, self.max_HCdivHeightSqLevel1,
+                 self.min_HCdivHeightSqLevel1, self.avg_HCdivHeightSqLevel2, self.max_HCdivHeightSqLevel2,
+                 self.min_HCdivHeightSqLevel2, self.avg_HCdivWeightLevel1, self.max_HCdivWeightLevel1,
+                 self.min_HCdivWeightLevel1, self.avg_HCdivWeightLevel2, self.max_HCdivWeightLevel2,
+                 self.min_HCdivWeightLevel2, self.avg_HCdivWeightSqLevel1, self.max_HCdivWeightSqLevel1,
+                 self.min_HCdivWeightSqLevel1, self.avg_HCdivWeightSqLevel2, self.max_HCdivWeightSqLevel2,
+                 self.min_HCdivWeightSqLevel2]
+
+        features, data = self.generateWHOparameters(common_ages, features, data)
+
         features += ["nation"]
         data += [Nationality.ISR.value]
 
@@ -156,6 +181,25 @@ class IsraeliChild(Child):
             data += [self.fatherAge, self.motherWeight, self.motherHeight/METER]
 
         return features, data, self.autoICT
+
+    def generateWHOparameters(self, common_ages, features, data):
+        features, data = super(IsraeliChild, self).generateWHOparameters(common_ages, features, data)
+        calculator = Calculator(adjust_height_data=False, adjust_weight_scores=False,
+                                include_cdc=False, logger_name='pygrowup',
+                                log_level='INFO')
+        common_ages = common_ages[1:8]
+        for age in common_ages:
+            i = find_nearest([a.age for a in self.goodSamples], age)
+            s = self.goodSamples[i]
+            child_age, height, hc = str(self.goodSamples[i].age * MONTHS), str(
+                self.goodSamples[i].height * METER), str(self.goodSamples[i].HC)
+            sex = 'M' if self.sex == 1 else 'F'
+            features += ["WHO hcfa z-score at %s" % str(age)]
+            try:
+                data += [calculator.hcfa(hc, child_age, sex, height)]
+            except Exception as e:
+                    data += [np.nan]
+        return features, data
 
     def setValuesOfSlopeVectors(self):
         super(IsraeliChild,self).setValuesOfSlopeVectors()

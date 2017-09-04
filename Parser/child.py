@@ -1,6 +1,8 @@
 from Parser.auxiliary import *
 from numpy import mean as avg
 from Utility import find_nearest
+from pygrowup import Calculator
+import pygrowup
 import numpy as np
 
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
@@ -209,21 +211,21 @@ class Child:
             return [], [], 0
         features = ["sex", "birthWeight (KG)", "birthHeight (M)", "gestationalAge (Weeks)",
                 "birthPosition", "birthYear", "birthMonth", "season", "preterm flag",
-                "max_weightToAgeLevel1", "max_weightDivAgeLevel1", "min_weightToAgeLevel1",
-                "min_weightDivAgeLevel1", "avg_weightToAgeLevel1", "avg_weightDivAgeLevel1",
-                "max_weightToAgeLevel2", "max_weightDivAgeLevel2", "min_weightToAgeLevel2",
-                "min_weightDivAgeLevel2", "avg_weightToAgeLevel2", "avg_weightDivAgeLevel2",
-                "max_heightToAgeLevel1", "max_heightDivAgeLevel1", "min_heightToAgeLevel1",
-                "min_heightDivAgeLevel1", "avg_heightToAgeLevel1", "avg_heightDivAgeLevel1",
-                "max_heightToAgeLevel2", "max_heightDivAgeLevel2", "min_heightToAgeLevel2",
-                "min_heightDivAgeLevel2", "avg_heightToAgeLevel2", "avg_heightDivAgeLevel2",
-                "max_BMIToAgeLevel1", "max_BMIDivAgeLevel1", "min_BMIToAgeLevel1",
-                "min_BMIDivAgeLevel1", "avg_BMIToAgeLevel1", "avg_BMIDivAgeLevel1",
-                "max_BMIToAgeLevel2", "max_BMIDivAgeLevel2", "min_BMIToAgeLevel2",
-                "min_BMIDivAgeLevel2", "avg_BMIToAgeLevel2", "avg_BMIDivAgeLevel2",
+                "max of weightToAgeLevel1", "max of weightDivAgeLevel1", "min of weightToAgeLevel1",
+                "min of weightDivAgeLevel1", "avg of weightToAgeLevel1", "avg of weightDivAgeLevel1",
+                "max of weightToAgeLevel2", "max of weightDivAgeLevel2", "min of weightToAgeLevel2",
+                "min of weightDivAgeLevel2", "avg of weightToAgeLevel2", "avg of weightDivAgeLevel2",
+                "max of heightToAgeLevel1", "max of heightDivAgeLevel1", "min of heightToAgeLevel1",
+                "min of heightDivAgeLevel1", "avg of heightToAgeLevel1", "avg of heightDivAgeLevel1",
+                "max of heightToAgeLevel2", "max of heightDivAgeLevel2", "min of heightToAgeLevel2",
+                "min of heightDivAgeLevel2", "avg of heightToAgeLevel2", "avg of heightDivAgeLevel2",
+                "max of BMIToAgeLevel1", "max of BMIDivAgeLevel1", "min of BMIToAgeLevel1",
+                "min of BMIDivAgeLevel1", "avg of BMIToAgeLevel1", "avg of BMIDivAgeLevel1",
+                "max of BMIToAgeLevel2", "max of BMIDivAgeLevel2", "min of BMIToAgeLevel2",
+                "min of BMIDivAgeLevel2", "avg of BMIToAgeLevel2", "avg of BMIDivAgeLevel2",
                 "Height at 6 months (m)", "Weight at 6 months (KG)",
                 "Height at 6 months (m) Avg'd", "Weight at 6 months (KG) Avg'd",
-                "Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)",]
+                "Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)"]
         data = [self.sex, self.birthWeight/KILO, self.birthHeight, self.gestationalAge,
                 self.position, self.birthYear, self.birthMonth, self.season, self.preterm,
                 self.max_weightToAgeLevel1, self.max_weightDivAgeLevel1, self.min_weightToAgeLevel1,
@@ -252,11 +254,34 @@ class Child:
             data += [np.nan, np.nan]
 
         for age in common_ages:
-            features += ["Height_at_%s" % str(age), "Weight_at_%s" % str(age), "BMI_at_%s" % str(age)]
+            features += ["Height at %s" % str(age), "Weight at %s" % str(age), "BMI at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamples], age)
             if abs(self.goodSamples[i].age - age) > 5 / MONTHS:
                 data += [np.nan, np.nan, np.nan]
             else:
                 data += [self.goodSamples[i].height, self.goodSamples[i].weight, self.goodSamples[i].BMI]
 
+        features, data = self.generateWHOparameters(common_ages, features, data)
         return features, data, self.autoICT
+
+    def generateWHOparameters(self, common_ages, features, data):
+        calculator = Calculator(adjust_height_data=False, adjust_weight_scores=False,
+                                include_cdc=False, logger_name='pygrowup',
+                                log_level='INFO')
+        common_ages = common_ages[1:]
+        for age in common_ages:
+            i = find_nearest([a.age for a in self.goodSamples], age)
+            s = self.goodSamples[i]
+            child_age, height, weight = str(self.goodSamples[i].age*MONTHS), str(self.goodSamples[i].height*METER), str(self.goodSamples[i].weight)
+            sex = 'M' if self.sex == 1 else 'F'
+            features += ["WHO wfa z-score at %s" % str(age), "WHO wfl z-score at age %s" % str(age),
+                         "WHO lfa z-score at age %s" % str(age)]
+            try:
+                data += [calculator.wfa(weight, child_age, sex),
+                         calculator.wfl(weight, child_age, sex, height),
+                         calculator.lhfa(height, child_age, sex)]
+            except(pygrowup.exceptions.InvalidMeasurement) as e:
+                if(str(e) == "too short"):
+                    data += [calculator.wfa(weight, age, sex),
+                             np.nan, np.nan]
+        return features, data

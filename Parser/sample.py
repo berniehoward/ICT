@@ -41,11 +41,19 @@ class IsraeliSample(Sample):
 
         self.HC = HC
 
-        if HC > 0 and weight > 0 and height > 0:
-            self.HCdivHeight = HC / height
-            self.HCdivHeightSq = HC / height ** 2
-            self.HCdivWeight = HC / weight
-            self.HCdivWeightSq = HC / weight ** 2
+        if HC > 0:
+            if height > 0:
+                self.HCdivHeight = HC / height
+                self.HCdivHeightSq = HC / height ** 2
+            else:
+                self.HCdivHeight = NA
+                self.HCdivHeightSq = NA
+            if weight > 0:
+                self.HCdivWeight = HC / weight
+                self.HCdivWeightSq = HC / weight ** 2
+            else:
+                self.HCdivWeight = NA
+                self.HCdivWeightSq = NA
         else:
             self.HC = NA
             self.HCdivHeight = NA
