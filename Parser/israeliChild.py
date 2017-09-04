@@ -6,7 +6,9 @@ import numpy as np
 from pygrowup import Calculator
 import pygrowup
 from numpy import mean as avg
+
 season = [NA, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 0, 0]  # winter, spring, summer, fall
+
 
 class IsraeliChild(Child):
     def __init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z, \
@@ -116,8 +118,8 @@ class IsraeliChild(Child):
                 self.goodSamples.append(sample)
                 self.goodSamplesWithHC.append(sample)
 
-    # parameters for regression decision tree
-    # returns features vector, data vector and ICT classification
+    # Parameters for regression decision tree
+    # Returns features vector, data vector and ICT classification
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
         features, data, self.autoICT = super(IsraeliChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
         if self.autoICT == NA:
@@ -202,7 +204,7 @@ class IsraeliChild(Child):
         return features, data
 
     def setValuesOfSlopeVectors(self):
-        super(IsraeliChild,self).setValuesOfSlopeVectors()
+        super(IsraeliChild, self).setValuesOfSlopeVectors()
         if len(self.HCToAgeLevel1) > 0:
             self.avg_HCToAgeLevel1 = avg(self.HCToAgeLevel1)
             self.max_HCToAgeLevel1 = max(self.HCToAgeLevel1)
@@ -243,7 +245,6 @@ class IsraeliChild(Child):
             self.avg_HCdivWeightSqLevel2 = avg(self.HCdivWeightSqLevel2)
             self.max_HCdivWeightSqLevel2 = max(self.HCdivWeightSqLevel2)
             self.min_HCdivWeightSqLevel2 = min(self.HCdivWeightSqLevel2)
-
 
     def __repr__(self):
         if len(self.id) == 2:
