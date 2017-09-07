@@ -210,7 +210,7 @@ class Child:
         if self.autoICT == NA:
             return [], [], 0
         features = ["sex", "birthWeight (KG)", "birthHeight (M)", "gestationalAge (Weeks)",
-                "birthPosition", "birthYear", "birthMonth", "season", "preterm flag",
+                "birthMonth", "season", "preterm flag",
                 "max of weightToAgeLevel1", "max of weightDivAgeLevel1", "min of weightToAgeLevel1",
                 "min of weightDivAgeLevel1", "avg of weightToAgeLevel1", "avg of weightDivAgeLevel1",
                 "max of weightToAgeLevel2", "max of weightDivAgeLevel2", "min of weightToAgeLevel2",
@@ -224,10 +224,9 @@ class Child:
                 "max of BMIToAgeLevel2", "max of BMIDivAgeLevel2", "min of BMIToAgeLevel2",
                 "min of BMIDivAgeLevel2", "avg of BMIToAgeLevel2", "avg of BMIDivAgeLevel2",
                 "Height at 6 months (m)", "Weight at 6 months (KG)",
-                "Height at 6 months (m) Avg'd", "Weight at 6 months (KG) Avg'd",
-                "Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)"]
+                "Height at 6 months (m) Avg'd", "Weight at 6 months (KG) Avg'd"]
         data = [self.sex, self.birthWeight/KILO, self.birthHeight, self.gestationalAge,
-                self.position, self.birthYear, self.birthMonth, self.season, self.preterm,
+                self.birthMonth, self.season, self.preterm,
                 self.max_weightToAgeLevel1, self.max_weightDivAgeLevel1, self.min_weightToAgeLevel1,
                 self.min_weightDivAgeLevel1,self.avg_weightToAgeLevel1, self.avg_weightDivAgeLevel1,
                 self.max_weightToAgeLevel2, self.max_weightDivAgeLevel2, self.min_weightToAgeLevel2,
@@ -246,21 +245,14 @@ class Child:
                      (self.goodSamples[smi]).weight,
                      ((self.goodSamples[smi-1]).height+(self.goodSamples[smi]).height+(self.goodSamples[smi+1]).height) / 3,
                      ((self.goodSamples[smi - 1]).weight + (self.goodSamples[smi]).weight + (self.goodSamples[smi + 1]).weight) / 3]
-        b_smi = [find_nearest([a.age for a in x.goodSamples], 0.5) if len(x.goodSamples) else NA for x in self.brothers]
-        if NA not in b_smi:
-            data += [np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].height for i in range(0, len(b_smi))]),
-                     np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].weight for i in range(0, len(b_smi))])]
-        else:
-            data += [np.nan, np.nan]
-
         for age in common_ages:
             features += ["Height at %s" % str(age), "Weight at %s" % str(age), "BMI at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamples], age)
-            if abs(self.goodSamples[i].age - age) > 5 / MONTHS:
+            if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
                 data += [np.nan, np.nan, np.nan]
+
             else:
                 data += [self.goodSamples[i].height, self.goodSamples[i].weight, self.goodSamples[i].BMI]
-
         features, data = self.generateWHOparameters(common_ages, features, data)
         return features, data, self.autoICT
 

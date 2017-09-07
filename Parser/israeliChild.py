@@ -127,12 +127,13 @@ class IsraeliChild(Child):
         for age in common_ages:
             features += ["HC at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamplesWithHC], age)
-            if abs(self.goodSamples[i].age - age) > 5 / MONTHS:
+            if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
                 data += [np.nan]
             else:
                 data += [self.goodSamplesWithHC[i].HC]
 
-        features += ["HC at 6 months", "HC at 6 months Avg'd"]
+        features += ["birthPosition", "birthYear", "HC at 6 months", "HC at 6 months Avg'd"]
+        data += [self.position, self.birthYear]
         if self.goodSamplesWithHC:
             smi_HC = find_nearest([a.age for a in self.goodSamplesWithHC], 0.5)
             data += [(self.goodSamplesWithHC[smi_HC]).HC]
@@ -150,6 +151,14 @@ class IsraeliChild(Child):
             data += [np.mean([list(self.brothers)[i].goodSamplesWithHC[b_smi_HC[i]].HC for i in range(0, len(b_smi_HC))])]
         else:
             data += [np.nan]
+
+        features += ["Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)"]
+        b_smi = [find_nearest([a.age for a in x.goodSamples], 0.5) if len(x.goodSamples) else NA for x in self.brothers]
+        if NA not in b_smi:
+            data += [np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].height for i in range(0, len(b_smi))]),
+                     np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].weight for i in range(0, len(b_smi))])]
+        else:
+            data += [np.nan, np.nan]
 
         features += ["avg of HCToAgeLevel1", "max of HCToAgeLevel1", "min of HCToAgeLevel1", "avg of HCToAgeLevel2",
                      "max of HCToAgeLevel2", "min of HCToAgeLevel2", "avg of HCdivHeightLevel1",
@@ -189,10 +198,9 @@ class IsraeliChild(Child):
         calculator = Calculator(adjust_height_data=False, adjust_weight_scores=False,
                                 include_cdc=False, logger_name='pygrowup',
                                 log_level='INFO')
-        common_ages = common_ages[1:8]
+        common_ages = common_ages[1:-2]
         for age in common_ages:
             i = find_nearest([a.age for a in self.goodSamples], age)
-            s = self.goodSamples[i]
             child_age, height, hc = str(self.goodSamples[i].age * MONTHS), str(
                 self.goodSamples[i].height * METER), str(self.goodSamples[i].HC)
             sex = 'M' if self.sex == 1 else 'F'
