@@ -11,8 +11,9 @@ from sklearn import tree
 import six, os, time, itertools
 import numpy as np
 from math import ceil
-from joblib import Parallel
 
+
+# TODO - Delete this function - I moved it to the file expProg
 def getDataForClassification(children):
     data = []
     classifications = []
@@ -32,6 +33,7 @@ def getDataForClassification(children):
         checkFlag = True
     return features, data, classifications
 
+
 def regressionTreeCreator(f, X, c):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     for depth in range(1, 10):
@@ -50,6 +52,7 @@ def regressionTreeCreator(f, X, c):
             cross_val_score(regression_tree, X, c, scoring='neg_mean_squared_error', cv=crossvalidation, n_jobs=1))
         print("Depth: %i MSE: %.3f" % (depth, abs(score)))
 
+
 def exportTreesFromRegressionForest(f, r_forest):
     rf_path = os.path.join(os.getcwd(), "RegressionForest")
     os.system("del /f /q "+rf_path+"\\*")
@@ -60,7 +63,9 @@ def exportTreesFromRegressionForest(f, r_forest):
             graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
             +'.png')
 
-# If depth == None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.
+
+# If depth == None, then nodes are expanded until all leaves are pure or until all leaves contain less than
+#  min_samples_split samples.
 def regressionForestCreatorAux_FULL(f, X, c, k, fn, msl, m, d, s, f_time):
     print(k, fn, msl, m, d, s, float(format((time.time()-f_time)/60, '.2f')))
     crossvalidation = KFold(n_splits=k, shuffle=True, random_state=1)
@@ -114,6 +119,7 @@ def svrAux(f, X, c, msl, m):
         cross_val_score(classifier, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return classifier, score
 
+
 # Random Forest Regressor function example
 def regressionForestCreatorAux(f, X, c, msl, m):
     crossvalidation = KFold(n_splits=5, shuffle=True, random_state=1)
@@ -127,6 +133,7 @@ def regressionForestCreatorAux(f, X, c, msl, m):
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return r_forest, score
 
+
 # wrapper function for learning subfunctions
 def regressionForestCreator(f, X, c, function):
     bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
@@ -138,8 +145,9 @@ def regressionForestCreator(f, X, c, function):
         if abs(score) < bestMSE:
             bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
     print("Min Samples In Leaf: %i, max_features: %.2f precent, MSE: %.3f" % (best_msl, best_m, abs(bestMSE)))
-    #exportTreesFromRegressionForest(f, bestForest)
+    # exportTreesFromRegressionForest(f, bestForest)
     return r_forest
+
 
 def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/' #for plotting trees

@@ -121,7 +121,7 @@ class IsraeliChild(Child):
     # Parameters for regression decision tree
     # Returns features vector, data vector and ICT classification
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
-        features, data, self.autoICT = super(IsraeliChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
+        features, data, c = super(IsraeliChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
         if self.autoICT == NA:
             return [], [], 0
         for age in common_ages:
