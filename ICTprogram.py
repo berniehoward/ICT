@@ -21,8 +21,7 @@ if __name__ == '__main__':
     bestEpsilon = 0.016
     bestFormula = 3
 
-    # automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
-    # automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
+    automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
+    automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
     # ThirdStage(swedishChildrenList, israeliChildrenList, True)
     thirdStageProg(israeliChildrenList)
-

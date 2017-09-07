@@ -1,5 +1,6 @@
 from Parser.auxiliary import NA
 from LearningStage.utility import getTenMostCommonAges
+from LearningStage.expProg import getDataForClassification
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
 from sklearn.model_selection import KFold
@@ -12,14 +13,12 @@ import six, os, time, itertools
 import numpy as np
 from math import ceil
 
-
-# TODO - Delete this function - I moved it to the file expProg
 def getDataForClassification(children):
     data = []
     classifications = []
     features = []
     checkFlag = False
-    common_ages = sorted(getTenMostCommonAges(children, 10))
+    common_ages = sorted(getTenMostCommonAges(children, 8))
     for ch in children:
         if len(ch.goodSamples) == 0:
             continue
@@ -33,13 +32,12 @@ def getDataForClassification(children):
         checkFlag = True
     return features, data, classifications
 
-
 def regressionTreeCreator(f, X, c):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     for depth in range(1, 10):
         imputer = Imputer(strategy='mean', axis=0)
         X = imputer.fit_transform(X)  # instead of fit
-        regression_tree = tree.DecisionTreeRegressor(depth = None, random_state=0, min_samples_split=30,
+        regression_tree = tree.DecisionTreeRegressor(random_state=0, min_samples_split=30,
                                                      min_samples_leaf=10)
         regression_tree.fit(X, c)
         if depth == 9:
@@ -52,7 +50,6 @@ def regressionTreeCreator(f, X, c):
             cross_val_score(regression_tree, X, c, scoring='neg_mean_squared_error', cv=crossvalidation, n_jobs=1))
         print("Depth: %i MSE: %.3f" % (depth, abs(score)))
 
-
 def exportTreesFromRegressionForest(f, r_forest):
     rf_path = os.path.join(os.getcwd(), "RegressionForest")
     os.system("del /f /q "+rf_path+"\\*")
@@ -62,36 +59,6 @@ def exportTreesFromRegressionForest(f, r_forest):
             tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
             graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
             +'.png')
-
-
-# If depth == None, then nodes are expanded until all leaves are pure or until all leaves contain less than
-#  min_samples_split samples.
-def regressionForestCreatorAux_FULL(f, X, c, k, fn, msl, m, d, s, f_time):
-    print(k, fn, msl, m, d, s, float(format((time.time()-f_time)/60, '.2f')))
-    crossvalidation = KFold(n_splits=k, shuffle=True, random_state=1)
-    imputer = Imputer(strategy='mean', axis=0)
-    X = imputer.fit_transform(X)  # instead of fit
-    r_forest = RandomForestRegressor(max_depth=d, max_features=m, random_state=1,
-                                     min_samples_split = s, min_samples_leaf = msl,
-                                     n_estimators=fn)
-    r_forest.fit(X, c)
-    score = np.mean(
-        cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
-    return r_forest, score
-
-def regressionForestCreator_FULL(f, X, c):
-    bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
-    f_time = time.time()
-    s = [range(2, 11), range(1, 21), range(10, 110, 10),
-         [x/100 for x in range(30,100,5)], range(3, 31), range(2, 41)]
-    permutations = list(itertools.product(*s)) #all permutations
-    for k,fn,msl,m,d,s in permutations:
-        r_forest, score = regressionForestCreatorAux_FULL(f, X, c, k, fn, msl, m, d, s, f_time)
-        if abs(score) < bestMSE:
-            bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
-    print("Min Samples In Leaf: %i, max_features: %.2f precent, MSE: %.3f" % (best_msl, best_m, abs(bestMSE)))
-    exportTreesFromRegressionForest(f, bestForest)
-    return r_forest
 
 def printVectors(f, X):
     for x in X:
@@ -110,7 +77,7 @@ def adaBoostCreatorAux(f, X, c, msl, m):
 
 # SVR (Epsilon-Support Vector Regression) function example
 def svrAux(f, X, c, msl, m):
-    crossvalidation = KFold(n_splits=5, shuffle=True, random_state=1)
+    crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     imputer = Imputer(strategy='mean', axis=0)
     X = imputer.fit_transform(X)  # instead of fit
     classifier = SVR(C=1.0, epsilon = 0.2)
@@ -119,43 +86,53 @@ def svrAux(f, X, c, msl, m):
         cross_val_score(classifier, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return classifier, score
 
-
 # Random Forest Regressor function example
-def regressionForestCreatorAux(f, X, c, msl, m):
-    crossvalidation = KFold(n_splits=5, shuffle=True, random_state=1)
-    imputer = Imputer(strategy='mean', axis=0)
+def regressionForestCreatorAux(f, X, c, args):
+    crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
+    imputer = Imputer(strategy='median', axis=0)
+    fn, msl, m, d, s = args
     X = imputer.fit_transform(X)  # instead of fit
-    r_forest = RandomForestRegressor(max_features=m, random_state=1,
-                                     min_samples_split = 20, min_samples_leaf = msl,
-                                     n_estimators=20)
+    r_forest = RandomForestRegressor(max_depth=d, max_features=m, random_state=1,
+                                     min_samples_split = s, min_samples_leaf = msl,
+                                     n_estimators=fn)
     r_forest.fit(X, c)
     score = np.mean(
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return r_forest, score
 
-
 # wrapper function for learning subfunctions
-def regressionForestCreator(f, X, c, function):
+def regressionForestCreator(f, X, c, function, usePerm = False):
     bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
-    f_time = time.time()
-    s = [range(10, 110, 15), [x/100 for x in range(10,100,10)]]
-    permutations = list(itertools.product(*s)) #all permutations
-    for msl,m in permutations:
-        r_forest, score = function(f, X, c, msl, m)
-        if abs(score) < bestMSE:
-            bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
-    print("Min Samples In Leaf: %i, max_features: %.2f precent, MSE: %.3f" % (best_msl, best_m, abs(bestMSE)))
-    # exportTreesFromRegressionForest(f, bestForest)
+    s = [range(1, 21), range(10, 110, 10),
+         [x/100 for x in range(30,100,5)], range(3, 31), range(2, 41)]
+    if usePerm:
+        permutations = list(itertools.product(*s)) #all permutations
+        for fn,msl,m,d,s in permutations:
+            args = [fn, msl, m, d, s]
+            r_forest, score = function(f, X, c, args)
+            if abs(score) < bestMSE:
+                bestForest, best_m, best_msl, bestMSE = r_forest, m, msl, abs(score)
+    else:
+        # fn, msl, m, d, s
+        args = [10, 1, 1.0, 100, 2] #n_est, min_samples_leaf, features, depth, n_split
+        for arg in s:
+            for i in arg:
+                args[s.index(arg)] = i
+                r_forest, score = function(f, X, c, args)
+                if abs(score) < bestMSE:
+                    bestForest, best_m, best_msl, bestMSE = r_forest, args[2], args[1], abs(score)
+            args = [10, 1, "auto", None, 2]
+            print("Min Samples In Leaf: %i, max_features: %.2f precent, MSE: %.3f" % (best_msl, best_m, abs(bestMSE)))
+            bestForest, best_m, best_msl, bestMSE = None, 0, 0, 1.0
+    #exportTreesFromRegressionForest(f, bestForest)
     return r_forest
-
 
 def createRandomForestRegressorAndClassifyData(swedishChildrenList, israeliChildrenList, printFlag = True):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/' #for plotting trees
     f, X, c = getDataForClassification(israeliChildrenList)
-    printVectors(f,X)
+    #printVectors(f,X)
     # regressionTreeCreator(f, X, c)
-    forest = regressionForestCreator(f, X, c, svrAux)
-
+    forest = regressionForestCreator(f, X, c, regressionForestCreatorAux, False)
     #classifyData(forest, children)
 
 
