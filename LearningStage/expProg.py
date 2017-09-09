@@ -1,4 +1,5 @@
 from LearningStage.utility import getTenMostCommonAges
+from LearningStage.utility import printVectors
 from Parser.auxiliary import NA
 from LearningStage.regressionRandomForest import *
 import numpy as np
@@ -28,11 +29,12 @@ def getDataForClassification(children):
 
 
 # Perform the experiment of the third stage
-def program(israeliChildrenList):
+def program(swedishChildrenList ,israeliChildrenList):
     # Get feature vectors and classification
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    f, X, c = getDataForClassification(israeliChildrenList)
-
+    # f, X, c = getDataForClassification(israeliChildrenList)
+    f, X, c = getDataForClassification(swedishChildrenList)
+    # printVectors(f, X)
     # Binary trees
     # TODO - complete
 

@@ -40,12 +40,6 @@ def exportTreesFromRegressionForest(f, r_forest):
             graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
             +'.png')
 
-
-def printVectors(f, X):
-    for x in X:
-        print("feature number:", len(x),[(fe,x) for fe, x in zip(f,x)])
-
-
 # AdaBoost function example
 def adaBoostCreatorAux(f, X, c, msl, m):
     crossvalidation = KFold(n_splits=4, shuffle=True, random_state=1)

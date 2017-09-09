@@ -75,7 +75,7 @@ def manageLatterSampleSets(children, samples, str):
             else:
                 with open(getpath(SWEDISH_NEW_GIRLS_P_FILE), 'r') as f:
                     sp = list(csv.reader(f))[1:]
-            for i in [s for s in sp if s[0] == sc.id]:
+            for i in [j for j in sp if float(j[0]) == sc.id]:
                 sc.setParentHeights(i)
             children.add(sc)
             addLatterSamplesToChild(sc, samples)
