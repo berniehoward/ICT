@@ -1,7 +1,6 @@
 from Parser.child import Child
 from Parser.sample import SwedishSample
-from Parser.auxiliary import NA, METER
-
+from Parser.auxiliary import NA, METER, Nationality
 
 class SwedishChild(Child):
 
@@ -26,3 +25,21 @@ class SwedishChild(Child):
 
     def __repr__(self):
         return 'SwedishChild(id=%s)' % (self.id)
+
+    def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
+        features, data, c = super(SwedishChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
+        if self.autoICT == NA:
+            return [], [], 0
+
+        features += ["farther Height (M)", "motherHeight (M)"]
+        data += [self.fHeight / METER, self.mHeight / METER]
+
+        features, data = self.generateWHOparameters(common_ages, features, data)
+
+        features += ["nation"]
+        data += [Nationality.SWE.value]
+
+
+    def generateWHOparameters(self, common_ages, features, data):
+        features, data = super(SwedishChild, self).generateWHOparameters(common_ages, features, data)
+        return features, data
