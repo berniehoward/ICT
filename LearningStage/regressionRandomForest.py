@@ -13,12 +13,14 @@ def determineRanges(f, X, c, function):
     default_parameters = [10, "auto", None, 1, 2]
     headers = ["Number of trees:", "Percentage of features:", "Max depth:", "Min samples in leaf:", "Min samples to split:"]
 
-    for r in ranges:
-        for i in r:
+    for r in range(0, len(ranges)):
+        for i in ranges[r]:
+            if r < 4:
+                continue
             args = default_parameters
-            args[ranges.index(r)] = i
+            args[r] = i
             r_forest, score = function(f, X, c, args)
-            print(headers[ranges.index(r)], " %i, MSE: %.3f" % (i, abs(score)))
+            print(headers[r], " %.2f, MSE: %.3f" % (i, abs(score)))
 
 
 # Create "Random Forest" Regressor by given arguments
