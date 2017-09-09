@@ -1,7 +1,8 @@
 from LearningStage.utility import getTenMostCommonAges
 from Parser.auxiliary import NA
-from LearningStage.regressionRandomForest import determineRanges
+from LearningStage.regressionRandomForest import *
 import numpy as np
+import os
 
 
 # Return features(list of all the features' names) , data(list of all the features) and
@@ -28,5 +29,12 @@ def getDataForClassification(children):
 
 # Perform the experiment of the third stage
 def program(israeliChildrenList):
+    # Get feature vectors and classification
+    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     f, X, c = getDataForClassification(israeliChildrenList)
-    determineRanges(X, c)
+
+    # Binary trees
+    # TODO - complete
+
+    # Regression trees
+    determineRanges(f, X, c, regressionForestCreator)

@@ -5,7 +5,7 @@ from Parser.parsingStage import parsingStage
 from SecondStage.childrenStatistics import printSampleListStatistics
 from SecondStage.fullExperiment import fullProg as secondStage
 from SecondStage.automaticTagging import automaticTagging
-from LearningStage.learningProgram import createRandomForestRegressorAndClassifyData as ThirdStage
+# from LearningStage.learningProgram import createRandomForestRegressorAndClassifyData as ThirdStage
 from LearningStage.expProg import program as thirdStageProg
 
 if __name__ == '__main__':
