@@ -250,7 +250,6 @@ class Child:
             i = find_nearest([a.age for a in self.goodSamples], age)
             if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
                 data += [np.nan, np.nan, np.nan]
-
             else:
                 data += [self.goodSamples[i].height, self.goodSamples[i].weight, self.goodSamples[i].BMI]
         features, data = self.generateWHOparameters(common_ages, features, data)
@@ -263,17 +262,20 @@ class Child:
         common_ages = common_ages[1:]
         for age in common_ages:
             i = find_nearest([a.age for a in self.goodSamples], age)
-            s = self.goodSamples[i]
-            child_age, height, weight = str(self.goodSamples[i].age*MONTHS), str(self.goodSamples[i].height*METER), str(self.goodSamples[i].weight)
-            sex = 'M' if self.sex == 1 else 'F'
-            features += ["WHO wfa z-score at %s" % str(age), "WHO wfl z-score at age %s" % str(age),
-                         "WHO lfa z-score at age %s" % str(age)]
-            try:
-                data += [calculator.wfa(weight, child_age, sex),
-                         calculator.wfl(weight, child_age, sex, height),
-                         calculator.lhfa(height, child_age, sex)]
-            except(pygrowup.exceptions.InvalidMeasurement) as e:
-                if(str(e) == "too short"):
-                    data += [calculator.wfa(weight, age, sex),
-                             np.nan, np.nan]
+            if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
+                data += [np.nan, np.nan, np.nan]
+            else:
+                s = self.goodSamples[i]
+                child_age, height, weight = str(self.goodSamples[i].age*MONTHS), str(self.goodSamples[i].height*METER), str(self.goodSamples[i].weight)
+                sex = 'M' if self.sex == 1 else 'F'
+                features += ["WHO wfa z-score at %s" % str(age), "WHO wfl z-score at age %s" % str(age),
+                             "WHO lfa z-score at age %s" % str(age)]
+                try:
+                    data += [calculator.wfa(weight, child_age, sex),
+                             calculator.wfl(weight, child_age, sex, height),
+                             calculator.lhfa(height, child_age, sex)]
+                except(pygrowup.exceptions.InvalidMeasurement) as e:
+                    if(str(e) == "too short"):
+                        data += [calculator.wfa(weight, age, sex),
+                                 np.nan, np.nan]
         return features, data

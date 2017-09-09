@@ -201,14 +201,17 @@ class IsraeliChild(Child):
         common_ages = common_ages[1:-2]
         for age in common_ages:
             i = find_nearest([a.age for a in self.goodSamples], age)
-            child_age, height, hc = str(self.goodSamples[i].age * MONTHS), str(
-                self.goodSamples[i].height * METER), str(self.goodSamples[i].HC)
-            sex = 'M' if self.sex == 1 else 'F'
-            features += ["WHO hcfa z-score at %s" % str(age)]
-            try:
-                data += [calculator.hcfa(hc, child_age, sex, height)]
-            except Exception as e:
-                    data += [np.nan]
+            if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
+                data += [np.nan]
+            else:
+                child_age, height, hc = str(self.goodSamples[i].age * MONTHS), str(
+                    self.goodSamples[i].height * METER), str(self.goodSamples[i].HC)
+                sex = 'M' if self.sex == 1 else 'F'
+                features += ["WHO hcfa z-score at %s" % str(age)]
+                try:
+                    data += [calculator.hcfa(hc, child_age, sex, height)]
+                except Exception as e:
+                        data += [np.nan]
         return features, data
 
     def setValuesOfSlopeVectors(self):
