@@ -8,6 +8,7 @@ class SwedishChild(Child):
 
         Child.__init__(self, id, sex, birthWeight, birthHeight, gestationalAge, ICT_A, ICT_Z,
                        birthDate, birthMonth)
+        self.birthWeight = self.birthWeight * KILO
         self.mHeight = NA
         self.fHeight = NA
 
@@ -30,7 +31,6 @@ class SwedishChild(Child):
         if self.autoICT == NA:
             return [], [], 0
 
-        data[features.index("birthWeight (KG)")] = data[features.index("birthWeight (KG)")] * KILO
         features += ["fatherHeight (M)", "motherHeight (M)"]
         data += [self.fHeight, self.mHeight]
 
