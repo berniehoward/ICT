@@ -37,6 +37,6 @@ def regressionForestCreator(f, X, c, args):
     return r_forest, score
 
 
-def parametersTuning():
+def parametersTuning(f, X, c, function, ranges):
     pass
 
