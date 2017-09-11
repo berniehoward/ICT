@@ -39,4 +39,6 @@ class Nationality(Enum):
     ISR = 0
     SWE = 1
 
-
+class Gender(Enum):
+    MALE = 1
+    FEMALE = 2

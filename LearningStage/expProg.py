@@ -1,4 +1,4 @@
-from LearningStage.utility import getTenMostCommonAges, mergeChildren
+from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender
 from LearningStage.utility import printVectors
 from Parser.auxiliary import NA
 from LearningStage.regressionRandomForest import *
@@ -24,21 +24,32 @@ def getDataForClassification(children):
         classifications.append(c)
     return features, data, classifications
 
+
+def runOnSeperateGenders(children):
+    males, females = splitByGender
+    f, X, c = getDataForClassification(males)
+    determineRanges(f, X, c, regressionForestCreator)
+    f, X, c = getDataForClassification(females)
+    determineRanges(f, X, c, regressionForestCreator)
+
 # Perform the experiment of the third stage
 def program(swedishChildrenList ,israeliChildrenList):
     # Get feature vectors and classification
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
+
     # f, X, c = getDataForClassification(israeliChildrenList)
     # determineRanges(f, X, c, regressionForestCreator)
-    # f, X, c = getDataForClassification(swedishChildrenList)
-    # determineRanges(f, X, c, regressionForestCreator)
 
-    # printVectors(f, X)
+    f, X, c = getDataForClassification(swedishChildrenList)
+    determineRanges(f, X, c, regressionForestCreator)
+
     # Binary trees
     # TODO - complete
 
-    allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
-    f, X, c = getDataForClassification(allChildren)
+    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
+    # f, X, c = getDataForClassification(allChildren)
+
+    # runOnSeperateGenders(israeliChildrenList)
 
     # Regression trees
-    determineRanges(f, X, c, regressionForestCreator)
+    # determineRanges(f, X, c, regressionForestCreator)

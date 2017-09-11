@@ -1,7 +1,7 @@
 from numpy import around
 from collections import Counter
 from Parser.child import Child
-
+from Parser.auxiliary import Gender
 def getTenMostCommonAges(children, n):
     allSamples = []
     for x in children:
@@ -26,3 +26,9 @@ def mergeChildren(israeliChildrenList, swedishChildrenList):
         i.__class__ = Child
         children.append(i)
     return children
+
+# split children into separate groups by gender
+def splitByGender(children):
+    males = [i for i in children if i.sex == Gender.MALE.value]
+    females = [i for i in children if i.sex == Gender.FEMALE.value]
+    return males, females
