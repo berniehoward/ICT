@@ -11,9 +11,11 @@ class Sample:
         self.weight = weight
         if weight == '' or height == '' or weight == 0 or height == 0:
             self.height = NA
+            self.weight = NA
             self.BMI = NA
         else:
             self.height = height / METER if height != NA else NA
+            self.weight = weight / METER if height != NA else NA
             self.BMI = BMI(self.weight, self.height)
 
     def __repr__(self):

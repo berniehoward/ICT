@@ -14,8 +14,8 @@ class Child:
         # General info:
         self.id = id
         self.sex = sex
-        self.birthWeight = birthWeight
-        self.birthHeight = birthHeight
+        self.birthWeight = birthWeight if birthWeight != '' else NA
+        self.birthHeight = birthHeight if birthHeight != '' else NA
         self.gestationalAge = gestationalAge
         self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
@@ -240,9 +240,12 @@ class Child:
         if self.goodSamples:
             smi = find_nearest([a.age for a in self.goodSamples], 0.5)
             data += [(self.goodSamples[smi]).height,
-                     (self.goodSamples[smi]).weight,
-                     ((self.goodSamples[smi-1]).height+(self.goodSamples[smi]).height+(self.goodSamples[smi+1]).height) / 3,
+                     (self.goodSamples[smi]).weight]
+            if smi > 0:
+                data += [((self.goodSamples[smi-1]).height+(self.goodSamples[smi]).height+(self.goodSamples[smi+1]).height) / 3,
                      ((self.goodSamples[smi - 1]).weight + (self.goodSamples[smi]).weight + (self.goodSamples[smi + 1]).weight) / 3]
+            else:
+                data += [self.goodSamples[smi].height, self.goodSamples[smi].weight]
         for age in common_ages:
             features += ["Height at %s" % str(age), "Weight at %s" % str(age), "BMI at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamples], age)
