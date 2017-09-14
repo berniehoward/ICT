@@ -9,27 +9,6 @@ from sklearn import tree
 import six, os, time, itertools
 import numpy as np
 
-
-# TODO - is this relevant or we should delete it?
-# def regressionTreeCreator(f, X, c):
-#     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
-#     for depth in range(1, 10):
-#         imputer = Imputer(strategy='mean', axis=0)
-#         X = imputer.fit_transform(X)  # instead of fit
-#         regression_tree = tree.DecisionTreeRegressor(random_state=0, min_samples_split=30,
-#                                                      min_samples_leaf=10)
-#         regression_tree.fit(X, c)
-#         if depth == 9:
-#             dotfile = six.StringIO()
-#             tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
-#             graph_from_dot_data(dotfile.getvalue()).write_png('tree' + str(depth) + '.png')
-#         if regression_tree.fit(X, c).tree_.max_depth < depth:
-#             break
-#         score = np.mean(
-#             cross_val_score(regression_tree, X, c, scoring='neg_mean_squared_error', cv=crossvalidation, n_jobs=1))
-#         print("Depth: %i MSE: %.3f" % (depth, abs(score)))
-
-
 def exportTreesFromRegressionForest(f, r_forest):
     rf_path = os.path.join(os.getcwd(), "RegressionForest")
     os.system("del /f /q "+rf_path+"\\*")
