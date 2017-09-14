@@ -2,6 +2,8 @@ from numpy import around
 from collections import Counter
 from Parser.child import Child
 from Parser.auxiliary import Gender
+
+
 def getTenMostCommonAges(children, n):
     allSamples = []
     for x in children:
@@ -12,9 +14,11 @@ def getTenMostCommonAges(children, n):
 
     return [x[0] for x in Counter(r).most_common(n)]
 
+
 def printVectors(f, X):
     for x in X:
         print("feature number:", len(x),[(fe,x) for fe, x in zip(f,x)])
+
 
 # merge all children for merged regression tree
 def mergeChildren(israeliChildrenList, swedishChildrenList):
@@ -26,6 +30,7 @@ def mergeChildren(israeliChildrenList, swedishChildrenList):
         i.__class__ = Child
         children.append(i)
     return children
+
 
 # split children into separate groups by gender
 def splitByGender(children):

@@ -1,62 +1,46 @@
 from simpleai.search import SearchProblem
-from Parser.auxiliary import MONTHS, NA
-from SecondStage.secondStageFunc import findICTWithEpsilonByFormula, createFormulaList, divideToGroups, \
-    scoreEpsilonByGroupDistances
-import numpy
-from operator import itemgetter
-
+import random
 
 # Aid class for hill_climbing created by the 'simpleai' algorithm demands
 
+
 class ParametersTuningLocalSearch(SearchProblem):
-    def __init__(self, epsilon, score, formulaNum, children, heights_groups):
-        self.first_state = epsilon, score
-        self.initial_state = epsilon, score
-        self.formula_nam = formulaNum
-        self.children = children
-        self.heights_groups = heights_groups
-        self.IsSequential = IsSequential
+    def __init__(self, ranges, f, X, c, hops, function):
+        # State is ([n_est, max_features, max_depth, min_samples_leaf], score)
+        self.f = f
+        self.X = X
+        self.c = c
+        self.ranges = ranges
+        self.hops = hops
+        self.function = function
+        params = []
+        for i in range(0, len(self.ranges)):
+            params.append(random.choice(self.ranges[i]))
+        r_forest, score = self.function(self.f, self.X, self.c, params)
+        self.initial_state = params, score
 
     def initial_state(self):
-        return self.first_state
+        return self.initial_state
 
     def actions(self, state):
-        epsilon1, score1 = state
-        first_epsilon, first_score = self.first_state
-        new_epsilons = [x / 1000 for x in range(int((epsilon1 * 1000) - 10), int((epsilon1 * 1000) + 10), 1)]
-        new_epsilons = [x for x in new_epsilons if (first_epsilon - 0.01) <= x <= (first_epsilon + 0.01) and x > 0]
-        new_scores = []
-        for e in new_epsilons:
-            icts = [findICTWithEpsilonByFormula(e, createFormulaList(self.formula_nam, c)) for c in self.children]
-            icts_without_na = [p for p in icts if p > 0]
-            median = numpy.median(icts_without_na)
-            if not (5 / MONTHS <= median <= 11 / MONTHS):
-                new_scores.append(0)
-            else:
-                if self.IsSequential:
-                    g1, g2, g3, g4, g_na = divideToGroups(icts, self.children, 6.5 / MONTHS, 9.5 / MONTHS, 11 / MONTHS)
-                    new_scores.append(scoreEpsilonByGroupDistances([g1, g2, g3, g4], self.heights_groups))
-                else:
-                    child_ict = []
-                    child_height = []
-                    for c, ict in zip(self.children, icts):
-                        child_ict.append((c.id, ict))
-                    for c, h in zip(self.children, self.heights_groups):
-                        child_height.append((c.id, h))
-                    for i in child_ict:  # for removal of NA's
-                        if i[1] == NA:
-                            c = [c[0] for c in child_height]
-                            idx = c.index(i[0])
-                            child_height = child_height[:idx] + child_height[idx + 1:]
-                            child_ict.remove(i)
-                    new_scores.append(scoreEpsilonByGroupDistances(sorted(child_ict, key=itemgetter(1)), \
-                                                                   sorted(child_height, key=itemgetter(1)), 2))
-
-        return [(x, y) for x, y in zip(new_epsilons, new_scores)]
+        actions = []
+        for i in range(0, len(state)):
+            new_action, score = state
+            if (new_action[i] + self.hops[i]) in self.ranges[i]:
+                new_action[i] += self.hops[i]
+                actions.append(new_action)
+                new_action[i] -= self.hops[i]
+            if (new_action[i] - self.hops[i]) in self.ranges[i]:
+                new_action[i] -= self.hops[i]
+                actions.append(new_action)
+        return actions
 
     def result(self, state, action):
-        return action
+        r_forest, score = self.function(self.f, self.X, self.c, action)
+        return action, score
 
     def value(self, state):
-        epsilon1, score1 = state
-        return score1
+        x = 5
+        action, score = state
+        # The algorithm return the state with the higher score but we want the minimum.
+        return score * -1

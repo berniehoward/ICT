@@ -1,5 +1,4 @@
 from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender
-from LearningStage.utility import printVectors
 from Parser.auxiliary import NA
 from LearningStage.regressionRandomForest import *
 import numpy as np
@@ -25,31 +24,37 @@ def getDataForClassification(children):
     return features, data, classifications
 
 
-def runOnSeperateGenders(children):
-    males, females = splitByGender
-    f, X, c = getDataForClassification(males)
-    determineRanges(f, X, c, regressionForestCreator)
-    f, X, c = getDataForClassification(females)
-    determineRanges(f, X, c, regressionForestCreator)
+# Return data and classification separated by gender:
+def seperateGenders(children):
+    males, females = splitByGender(children)
+    m_f, m_X, m_c = getDataForClassification(males)
+    f_f, f_X, f_c = getDataForClassification(females)
+    return m_f, m_X, m_c, f_f, f_X, f_c
+
 
 # Perform the experiment of the third stage
-def program(swedishChildrenList ,israeliChildrenList):
+def program(swedishChildrenList, israeliChildrenList):
+
     # Get feature vectors and classification
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-
-    # f, X, c = getDataForClassification(israeliChildrenList)
-    # determineRanges(f, X, c, regressionForestCreator)
-
-    f, X, c = getDataForClassification(swedishChildrenList)
-    determineRanges(f, X, c, regressionForestCreator)
+    # is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
+    # sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
+    # mix_f, mix_X, mix_c = getDataForClassification(allChildren)
+    is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
+    sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
+    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(swedishChildrenList)
 
     # Binary trees
     # TODO - complete
 
-    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
-    # f, X, c = getDataForClassification(allChildren)
+    # Regression trees:
+    print("Regression trees: ")
+    print("Mix genders: ")
+    # regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
+    print("Males: ")
+    regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
+    print("Females: ")
+    regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
-    # runOnSeperateGenders(israeliChildrenList)
 
-    # Regression trees
-    # determineRanges(f, X, c, regressionForestCreator)
