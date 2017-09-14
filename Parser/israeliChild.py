@@ -122,8 +122,6 @@ class IsraeliChild(Child):
     # Returns features vector, data vector and ICT classification
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
         features, data, c = super(IsraeliChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
-        if self.autoICT == NA:
-            return [], [], 0
         for age in common_ages:
             features += ["HC at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamplesWithHC], age)
@@ -190,6 +188,9 @@ class IsraeliChild(Child):
         if first:
             features += ["fatherAge (Years)", "motherWeight (KG)", "motherHeight (M)"]
             data += [self.fatherAge, self.motherWeight, self.motherHeight/METER]
+
+        if self.autoICT == NA:
+            return features, data, 0
 
         return features, data, self.autoICT
 

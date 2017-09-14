@@ -207,8 +207,6 @@ class Child:
         return self.id < other.id
 
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
-        if self.autoICT == NA:
-            return [], [], 0
         features = ["sex", "birthWeight (KG)", "birthHeight (M)", "gestationalAge (Weeks)",
                 "birthMonth", "season", "preterm flag",
                 "max of weightToAgeLevel1", "max of weightDivAgeLevel1", "min of weightToAgeLevel1",
@@ -253,6 +251,8 @@ class Child:
             else:
                 data += [self.goodSamples[i].height, self.goodSamples[i].weight, self.goodSamples[i].BMI]
         features, data = self.generateWHOparameters(common_ages, features, data)
+        if self.autoICT == NA:
+            return features, data, 0
         return features, data, self.autoICT
 
     def generateWHOparameters(self, common_ages, features, data):

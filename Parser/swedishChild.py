@@ -28,8 +28,6 @@ class SwedishChild(Child):
 
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
         features, data, c = super(SwedishChild, self).generateParametersForRegressionDecisionTree(common_ages, first)
-        if self.autoICT == NA:
-            return [], [], 0
 
         features += ["fatherHeight (M)", "motherHeight (M)"]
         data += [self.fHeight, self.mHeight]
@@ -38,6 +36,9 @@ class SwedishChild(Child):
 
         features += ["nation"]
         data += [Nationality.SWE.value]
+
+        if self.autoICT == NA:
+            return features, data, 0
 
         return features, data, self.autoICT
 
