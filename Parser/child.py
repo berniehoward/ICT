@@ -207,6 +207,8 @@ class Child:
         return self.id < other.id
 
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
+        if self.id == (2,30,9727):
+            print()
         features = ["sex", "birthWeight (KG)", "birthHeight (M)", "gestationalAge (Weeks)",
                 "birthMonth", "season", "preterm flag",
                 "max of weightToAgeLevel1", "max of weightDivAgeLevel1", "min of weightToAgeLevel1",
@@ -265,20 +267,18 @@ class Child:
         common_ages = common_ages[1:]
         for age in common_ages:
             i = find_nearest([a.age for a in self.goodSamples], age)
+            features += ["WHO wfa z-score at %s" % str(age), "WHO wfl z-score at age %s" % str(age),
+                         "WHO lfa z-score at age %s" % str(age)]
             if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
                 data += [np.nan, np.nan, np.nan]
             else:
                 s = self.goodSamples[i]
-                child_age, height, weight = str(self.goodSamples[i].age*MONTHS), str(self.goodSamples[i].height*METER), str(self.goodSamples[i].weight)
+                child_age, height, weight = str(self.goodSamples[i].age*MONTHS), str(self.goodSamples[i].height), str(self.goodSamples[i].weight)
                 sex = 'M' if self.sex == 1 else 'F'
-                features += ["WHO wfa z-score at %s" % str(age), "WHO wfl z-score at age %s" % str(age),
-                             "WHO lfa z-score at age %s" % str(age)]
                 try:
                     data += [calculator.wfa(weight, child_age, sex),
                              calculator.wfl(weight, child_age, sex, height),
                              calculator.lhfa(height, child_age, sex)]
-                except(pygrowup.exceptions.InvalidMeasurement) as e:
-                    if(str(e) == "too short"):
-                        data += [calculator.wfa(weight, age, sex),
-                                 np.nan, np.nan]
+                except Exception as e:
+                        data += [np.nan, np.nan, np.nan]
         return features, data

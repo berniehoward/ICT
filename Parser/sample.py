@@ -1,7 +1,7 @@
 from Parser.auxiliary import *
 from functools import total_ordering
 
-BMI = lambda w, h: w / h ** 2
+BMI = lambda w, h: w / (h/METER) ** 2
 
 
 @total_ordering
@@ -14,8 +14,8 @@ class Sample:
             self.weight = NA
             self.BMI = NA
         else:
-            self.height = height / METER if height != NA else NA
-            self.weight = weight / METER if height != NA else NA
+            self.height = height if height != NA else NA
+            self.weight = weight if height != NA else NA
             self.BMI = BMI(self.weight, self.height)
 
     def __repr__(self):

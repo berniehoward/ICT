@@ -149,7 +149,6 @@ class IsraeliChild(Child):
             data += [np.mean([list(self.brothers)[i].goodSamplesWithHC[b_smi_HC[i]].HC for i in range(0, len(b_smi_HC))])]
         else:
             data += [np.nan]
-
         features += ["Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)"]
         b_smi = [find_nearest([a.age for a in x.goodSamples], 0.5) if len(x.goodSamples) else NA for x in self.brothers]
         if NA not in b_smi:
@@ -201,14 +200,14 @@ class IsraeliChild(Child):
                                 log_level='INFO')
         common_ages = common_ages[1:-2]
         for age in common_ages:
+            features += ["WHO hcfa z-score at %s" % str(age)]
             i = find_nearest([a.age for a in self.goodSamples], age)
             if abs(self.goodSamples[i].age - age) > 2 / MONTHS:
                 data += [np.nan]
             else:
                 child_age, height, hc = str(self.goodSamples[i].age * MONTHS), str(
-                    self.goodSamples[i].height * METER), str(self.goodSamples[i].HC)
+                    self.goodSamples[i].height), str(self.goodSamples[i].HC)
                 sex = 'M' if self.sex == 1 else 'F'
-                features += ["WHO hcfa z-score at %s" % str(age)]
                 try:
                     data += [calculator.hcfa(hc, child_age, sex, height)]
                 except Exception as e:
