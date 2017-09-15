@@ -5,22 +5,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
-
-
-# Print information about all the parameters in order to determine the wanted ranges
-def determineRanges(f, X, c, function):
-
-    # Parameters: n_est, max_features, max_depth, min_samples_leaf, min_samples_split
-    ranges = [range(1, 201), np.arange(0.1, 1.05, 0.05), range(1, 90), range(5, 100, 5), range(10, 200, 10)]
-    default_parameters = [10, "auto", None, 1, 2]
-    headers = ["Number of trees:", "Percentage of features:", "Max depth:", "Min samples in leaf:", "Min samples to split:"]
-
-    for r in range(0, len(ranges)):
-        for i in ranges[r]:
-            args = default_parameters
-            args[r] = i
-            r_forest, score = function(f, X, c, args)
-            print(headers[r], " %.2f, MSE: %.3f" % (i, abs(score)))
+from LearningStage.expProg import determineRanges
 
 
 # Create "Random Forest" Regressor by given arguments
