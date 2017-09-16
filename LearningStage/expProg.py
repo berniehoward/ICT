@@ -5,9 +5,6 @@ from LearningStage.booleanRandomForest import *
 import numpy as np
 import os
 
-
-# Return features(list of all the features' names) , data(list of all the features) and
-# classifications (list of boolean tags - the child has ICT or not)
 def getDataForBooleanClassification(children):
     data = []
     classifications = []
@@ -50,21 +47,14 @@ def seperateGenders(children):
     f_f, f_X, f_c = getDataForClassification(females)
     return m_f, m_X, m_c, f_f, f_X, f_c
 
-def seperateGendersForBooleanTrees(children):
-    males, females = splitByGender(children)
-    m_f, m_X, m_c = getDataForBooleanClassification(males)
-    f_f, f_X, f_c = getDataForBooleanClassification(females)
-    return m_f, m_X, m_c, f_f, f_X, f_c
-
 def createRegressionClassification(swedishChildrenList, israeliChildrenList):
-	# Get feature vectors and classification
-    is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
-    sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
-    allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
-    mix_f, mix_X, mix_c = getDataForClassification(allChildren)
+    # is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
+    # sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
+    # mix_f, mix_X, mix_c = getDataForClassification(allChildren)
     is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
     sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
-    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
+    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(swedishChildrenList)
 
     # Regression trees:
     print("Regression trees: ")
@@ -76,7 +66,6 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
 def createBoolClassification(swedishChildrenList, israeliChildrenList):
-    # Get feature vectors and classification
     is_f, is_X, is_c = getDataForBooleanClassification(israeliChildrenList)
     printVectors(is_f, is_X)
     # sw_f, sw_X, sw_c = getDataForBooleanClassification(swedishChildrenList)
@@ -86,6 +75,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
     # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(swedishChildrenList)
 
+    # Boolean trees:
     print("Boolean trees: ")
     print("Mix genders: ")
     # booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
@@ -94,10 +84,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # print("Females: ")
     # booleanTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
-
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     createBoolClassification(swedishChildrenList, israeliChildrenList)
-    # createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    #createRegressionClassification(swedishChildrenList, israeliChildrenList)
