@@ -99,11 +99,19 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     print("Boolean trees: ")
     print("Mix genders: ")
-    # booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
+    # booleanTreesExp(is_f, is_X, is_c, "Israeli")
+    # booleanTreesExp(sw_f, sw_X, sw_c, "Swedish")
+    # booleanTreesExp(mix_f, mix_X, mix_c, "Mixed")
+
     # print("Males: ")
-    # booleanTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
+    # booleanTreesExp(is_m_f, is_m_X, is_m_c, "Israeli Males")
+    # booleanTreesExp(sw_m_f, sw_m_X, sw_m_c, "Swedish  Males")
+    # booleanTreesExp(mix_m_f, mix_m_X, mix_m_c, "Mixed  Males")
+
     # print("Females: ")
-    # booleanTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
+    # booleanTreesExp(is_f_f, is_f_X, is_f_c, "Israeli Females")
+    # booleanTreesExp(sw_f_f, sw_f_X, sw_f_c, "Swedish  Females")
+    # booleanTreesExp(mix_f_f, mix_f_X, mix_f_c, "Mixed  Females")
 
 
 # Perform the experiment of the third stage

@@ -26,12 +26,17 @@ def randomForestCreator(f, X, c, args):
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return r_forest, score
 
+# Perform the experiment for boolean trees:
+def booleanTreesExp(f, X, c, experiment):
+    print("%s ranges: " % experiment)
+    determineRanges(f, X, c, randomForestCreator)
+
 
 # Perform the experiment for boolean trees:
-def booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):
-    print("Israeli ranges: ")
-    determineRanges(is_f, is_X, is_c, randomForestCreator)
-    print("Swedish ranges: ")
-    determineRanges(sw_f, sw_X, sw_c, randomForestCreator)
-    print("Mix ranges: ")
-    determineRanges(mix_f, mix_X, mix_c, randomForestCreator)
+# def booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):
+#     print("Israeli ranges: ")
+#     determineRanges(is_f, is_X, is_c, randomForestCreator)
+#     print("Swedish ranges: ")
+#     determineRanges(sw_f, sw_X, sw_c, randomForestCreator)
+#     print("Mix ranges: ")
+#     determineRanges(mix_f, mix_X, mix_c, randomForestCreator)
