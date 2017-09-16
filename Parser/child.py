@@ -207,8 +207,6 @@ class Child:
         return self.id < other.id
 
     def generateParametersForRegressionDecisionTree(self, common_ages, first=True):
-        if self.id == (2,30,9727):
-            print()
         features = ["sex", "birthWeight (KG)", "birthHeight (M)", "gestationalAge (Weeks)",
                 "birthMonth", "season", "preterm flag",
                 "max of weightToAgeLevel1", "max of weightDivAgeLevel1", "min of weightToAgeLevel1",
