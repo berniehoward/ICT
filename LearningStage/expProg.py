@@ -5,6 +5,9 @@ from LearningStage.booleanRandomForest import *
 import numpy as np
 import os
 
+
+# Return features(list of all the features' names) , data(list of all the features) and
+# classifications (list of boolean tags - the child has ICT or not)
 def getDataForBooleanClassification(children):
     data = []
     classifications = []
@@ -47,25 +50,44 @@ def seperateGenders(children):
     f_f, f_X, f_c = getDataForClassification(females)
     return m_f, m_X, m_c, f_f, f_X, f_c
 
+
+# Print information about all the parameters in order to determine the wanted ranges
+def determineRanges(f, X, c, function):
+
+    # Parameters: n_est, max_features, max_depth, min_samples_leaf, min_samples_split
+    ranges = [range(1, 201), np.arange(0.1, 1.05, 0.05), range(1, 90), range(5, 100, 5), range(10, 200, 10)]
+    default_parameters = [10, "auto", None, 1, 2]
+    headers = ["Number of trees:", "Percentage of features:", "Max depth:", "Min samples in leaf:", "Min samples to split:"]
+
+    for r in range(0, len(ranges)):
+        for i in ranges[r]:
+            args = default_parameters
+            args[r] = i
+            r_forest, score = function(f, X, c, args)
+            print(headers[r], " %.2f, MSE: %.3f" % (i, abs(score)))
+
+
 def createRegressionClassification(swedishChildrenList, israeliChildrenList):
-    # is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
-    # sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
-    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
-    # mix_f, mix_X, mix_c = getDataForClassification(allChildren)
+    # Get feature vectors and classification
+    is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
+    sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
+    mix_f, mix_X, mix_c = getDataForClassification(allChildren)
     is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
     sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
-    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(swedishChildrenList)
+    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
 
-    # Regression trees:
     print("Regression trees: ")
     print("Mix genders: ")
-    # regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
+    regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
     print("Males: ")
     regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
     print("Females: ")
     regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
+
 def createBoolClassification(swedishChildrenList, israeliChildrenList):
+    # Get feature vectors and classification
     is_f, is_X, is_c = getDataForBooleanClassification(israeliChildrenList)
     printVectors(is_f, is_X)
     # sw_f, sw_X, sw_c = getDataForBooleanClassification(swedishChildrenList)
@@ -75,7 +97,6 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
     # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(swedishChildrenList)
 
-    # Boolean trees:
     print("Boolean trees: ")
     print("Mix genders: ")
     # booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
@@ -84,9 +105,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # print("Females: ")
     # booleanTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
+
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
-    # Get feature vectors and classification
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     createBoolClassification(swedishChildrenList, israeliChildrenList)
-    #createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # createRegressionClassification(swedishChildrenList, israeliChildrenList)
