@@ -26,6 +26,7 @@ def randomForestCreator(f, X, c, args):
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
     return r_forest, score
 
+
 # Perform the experiment for boolean trees:
 def booleanTreesExp(f, X, c, experiment):
     print("%s ranges: " % experiment)

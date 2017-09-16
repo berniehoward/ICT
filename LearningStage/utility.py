@@ -15,12 +15,13 @@ def getTenMostCommonAges(children, n):
     return [x[0] for x in Counter(r).most_common(n)]
 
 
+# print (feature, value) aux function
 def printVectors(f, X):
     for x in X:
         print("feature number:", len(x),[(fe,x) for fe, x in zip(f,x)])
 
 
-# merge all children for merged regression tree
+# merge all children for merged regression or boolean tree
 def mergeChildren(israeliChildrenList, swedishChildrenList):
     children = []
     for i in israeliChildrenList:
