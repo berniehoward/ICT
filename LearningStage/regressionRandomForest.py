@@ -22,6 +22,7 @@ def determineRanges(f, X, c, function):
             r_forest, score = function(f, X, c, args)
             print(headers[r], " %.2f, MSE: %.3f" % (i, abs(score)))
 
+
 # Create "Random Forest" Regressor by given arguments
 def regressionForestCreator(f, X, c, args):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
@@ -61,11 +62,11 @@ def regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, 
         sw_ranges = [range(39, 60), np.arange(0.25, 0.95, 0.05), range(3, 17), range(15, 35, 5)]
         mix_ranges = [range(56, 75), np.arange(0.25, 0.9, 0.05), range(3, 9), range(15, 45, 5)]
     if flag == 'M':
-        is_ranges = [range(94, 114), np.arange(0.1, 0.1, 0.05), range(12, 32), range(5, 20, 5)]
-        sw_ranges = [range(48, 68), np.arange(0.1, 0.1, 0.05), range(5, 25), range(5, 30, 5)]
-        mix_ranges = [range(83, 103), np.arange(0.1, 0.1, 0.05), range(5,25), range(5, 35, 5)]
+        is_ranges = [range(94, 114), range(0), range(12, 32), range(5, 20, 5)]
+        sw_ranges = [range(48, 68),  range(0), range(5, 25), range(5, 30, 5)]
+        mix_ranges = [range(83, 103),  range(0), range(5, 25), range(5, 35, 5)]
     if flag == 'F':
-        is_ranges = [range(80, 95), np.arange(0.1, 0.5, 0.05), range(1, 1), range(5, 25, 5)]
+        is_ranges = [range(80, 95), np.arange(0.1, 0.5, 0.05),  range(0), range(5, 25, 5)]
         sw_ranges = [range(31, 51), np.arange(0.2, 1, 0.05), range(6, 26), range(5, 20, 5)]
         mix_ranges = [range(79, 99), np.arange(0.25, 1, 0.05), range(5, 25), range(5, 25, 5)]
 

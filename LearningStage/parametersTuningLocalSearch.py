@@ -13,9 +13,13 @@ class ParametersTuningLocalSearch(SearchProblem):
         self.ranges = ranges
         self.hops = hops
         self.function = function
+        self.default_parameters = [10, "auto", None, 1, 2]
         params = []
         for i in range(0, len(self.ranges)):
-            params.append(random.choice(self.ranges[i]))
+            if self.ranges[i] == range(0):
+                params.append(self.default_parameters[i])
+            else:
+                params.append(random.choice(self.ranges[i]))
         r_forest, score = self.function(self.f, self.X, self.c, params)
         self.initial_state = params, score
 
@@ -26,6 +30,8 @@ class ParametersTuningLocalSearch(SearchProblem):
         actions = []
         for i in range(0, len(state)):
             new_action, score = state
+            if self.ranges[i] == range(0):
+                continue
             if (new_action[i] + self.hops[i]) in self.ranges[i]:
                 new_action[i] += self.hops[i]
                 actions.append(new_action)
@@ -40,7 +46,6 @@ class ParametersTuningLocalSearch(SearchProblem):
         return action, score
 
     def value(self, state):
-        x = 5
         action, score = state
         # The algorithm return the state with the higher score but we want the minimum.
         return score * -1
