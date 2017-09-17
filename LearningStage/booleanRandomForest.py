@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
 from LearningStage.utility import printVectors
-from LearningStage.expProg import determineRanges
+from LearningStage.regressionRandomForest import determineRanges
 
 
 # Create boolean "Random Forest" by given arguments

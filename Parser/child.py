@@ -14,7 +14,7 @@ class Child:
         # General info:
         self.id = id
         self.sex = sex
-        self.birthWeight = birthWeight if birthWeight != '' else NA
+        self.birthWeight = float(birthWeight) if birthWeight != '' else NA
         self.birthHeight = birthHeight if birthHeight != '' else NA
         self.gestationalAge = gestationalAge
         self.ICT_A = NA if ICT_A == NA else ICT_A / MONTHS
@@ -225,10 +225,11 @@ class Child:
                 "min of BMIDivAgeLevel2", "avg of BMIToAgeLevel2", "avg of BMIDivAgeLevel2",
                 "Height at 6 months (m)", "Weight at 6 months (KG)",
                 "Height at 6 months (m) Avg'd", "Weight at 6 months (KG) Avg'd"]
-        data = [self.sex, self.birthWeight/KILO, self.birthHeight, self.gestationalAge,
+        birthWeight = NA if self.birthWeight == NA else float(self.birthWeight)/KILO
+        data = [self.sex, birthWeight, self.birthHeight, self.gestationalAge,
                 self.birthMonth, self.season, self.preterm,
                 self.max_weightToAgeLevel1, self.max_weightDivAgeLevel1, self.min_weightToAgeLevel1,
-                self.min_weightDivAgeLevel1,self.avg_weightToAgeLevel1, self.avg_weightDivAgeLevel1,
+                self.min_weightDivAgeLevel1, self.avg_weightToAgeLevel1, self.avg_weightDivAgeLevel1,
                 self.max_weightToAgeLevel2, self.max_weightDivAgeLevel2, self.min_weightToAgeLevel2,
                 self.min_weightDivAgeLevel2, self.avg_weightToAgeLevel2, self.avg_weightDivAgeLevel2,
                 self.max_heightToAgeLevel1, self.max_heightDivAgeLevel1, self.min_heightToAgeLevel1,

@@ -1,6 +1,6 @@
 from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender
 from Parser.auxiliary import NA
-from LearningStage.regressionRandomForest import *
+from LearningStage.regressionRandomForest import regressionTreesExp
 from LearningStage.booleanRandomForest import *
 import numpy as np
 import os
@@ -51,40 +51,24 @@ def seperateGenders(children):
     return m_f, m_X, m_c, f_f, f_X, f_c
 
 
-# Print information about all the parameters in order to determine the wanted ranges
-def determineRanges(f, X, c, function):
-
-    # Parameters: n_est, max_features, max_depth, min_samples_leaf, min_samples_split
-    ranges = [range(1, 201), np.arange(0.1, 1.05, 0.05), range(1, 90), range(5, 100, 5), range(10, 200, 10)]
-    default_parameters = [10, "auto", None, 1, 2]
-    headers = ["Number of trees:", "Percentage of features:", "Max depth:", "Min samples in leaf:", "Min samples to split:"]
-
-    for r in range(0, len(ranges)):
-        for i in ranges[r]:
-            args = default_parameters
-            args[r] = i
-            r_forest, score = function(f, X, c, args)
-            print(headers[r], " %.2f, MSE: %.3f" % (i, abs(score)))
-
-
 # Regression classificator of israeli, swedish or mixed children
 def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification
     # is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
     # sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
-    # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
+    allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
     # mix_f, mix_X, mix_c = getDataForClassification(allChildren)
-    # is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
-    # sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
-    # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
+    is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
+    sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
+    mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
 
     print("Regression trees: ")
     print("Mix genders: ")
     # regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
     print("Males: ")
-    # regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
+    regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
     print("Females: ")
-    # regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
+    regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
 
 # Boolean classification of israeli, swedish or mixed children
@@ -118,5 +102,5 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    createBoolClassification(swedishChildrenList, israeliChildrenList)
-    # createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # createBoolClassification(swedishChildrenList, israeliChildrenList)
+    createRegressionClassification(swedishChildrenList, israeliChildrenList)
