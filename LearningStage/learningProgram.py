@@ -9,6 +9,7 @@ from sklearn import tree
 import six, os, time, itertools
 import numpy as np
 
+
 def exportTreesFromRegressionForest(f, r_forest):
     rf_path = os.path.join(os.getcwd(), "RegressionForest")
     os.system("del /f /q "+rf_path+"\\*")
