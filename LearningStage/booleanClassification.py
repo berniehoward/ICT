@@ -50,7 +50,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # booleanTreesExp(sw_f_f, sw_f_X, sw_f_c, "Swedish  Females")
     # booleanTreesExp(mix_f_f, mix_f_X, mix_f_c, "Mixed  Females")
 
-    isr_ranges = [range(56,105), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 30, 5)]
+    isr_ranges = [range(56,77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
     swe_ranges = [range(80,101), np.arange(0.5, 1.05, 0.05), range(39, 60), range(15, 20, 5)]
     mixed_ranges = [range(40,61), np.arange(0.6, 0.65, 0.05), range(4, 10), range(5, 10, 5)]
     hops = [1, 0.05, 1, 5]

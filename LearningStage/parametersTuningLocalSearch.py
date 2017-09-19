@@ -46,7 +46,7 @@ class ParametersTuningLocalSearch(SearchProblem):
         r_forest, score = self.function(self.f, self.X, self.c, action)
         return action, abs(score)
 
-    def value(self, state,):
+    def value(self, state):
         action, score = state
         # The algorithm return the state with the higher score but we want the minimum.
         if self.booleanClassification:
