@@ -145,13 +145,13 @@ class IsraeliChild(Child):
         features += ["Avg brothers HC at 6 months (m)"]
         b_smi_HC = [find_nearest([a.age for a in x.goodSamplesWithHC], 0.5) if len(x.goodSamplesWithHC) else NA for x in
                     self.brothers] #when refactoring stayes here
-        if NA not in b_smi_HC:
+        if NA not in b_smi_HC and len(b_smi_HC) > 0:
             data += [np.mean([list(self.brothers)[i].goodSamplesWithHC[b_smi_HC[i]].HC for i in range(0, len(b_smi_HC))])]
         else:
             data += [np.nan]
         features += ["Avg brothers Height at 6 months (m)" , "Avg brothers Weight at 6 months (m)"]
         b_smi = [find_nearest([a.age for a in x.goodSamples], 0.5) if len(x.goodSamples) else NA for x in self.brothers]
-        if NA not in b_smi:
+        if NA not in b_smi and len(b_smi) > 0:
             data += [np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].height for i in range(0, len(b_smi))]),
                      np.mean([list(self.brothers)[i].goodSamples[b_smi[i]].weight for i in range(0, len(b_smi))])]
         else:
