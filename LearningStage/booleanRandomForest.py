@@ -32,6 +32,10 @@ def booleanTreesExp(f, X, c, experiment):
     print("%s ranges: " % experiment)
     determineRanges(f, X, c, randomForestCreator)
 
+def booleanParametersTuning(f, X, c, function, ranges, hops):
+    boolClass = True # boolean classification
+    problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, boolClass)
+    return hill_climbing(problem, 1000).state
 
 # Perform the experiment for boolean trees:
 # def booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):

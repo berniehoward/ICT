@@ -5,7 +5,7 @@ import random
 
 
 class ParametersTuningLocalSearch(SearchProblem):
-    def __init__(self, ranges, f, X, c, hops, function):
+    def __init__(self, ranges, f, X, c, hops, function, booleanClassification = False):
         # State is ([n_est, max_features, max_depth, min_samples_leaf], score)
         self.f = f
         self.X = X
@@ -14,6 +14,7 @@ class ParametersTuningLocalSearch(SearchProblem):
         self.hops = hops
         self.function = function
         self.default_parameters = [10, "auto", None, 1, 2]
+        self.booleanClassification = booleanClassification
         params = []
         for i in range(0, len(self.ranges)):
             if self.ranges[i] == range(0):
@@ -45,7 +46,10 @@ class ParametersTuningLocalSearch(SearchProblem):
         r_forest, score = self.function(self.f, self.X, self.c, action)
         return action, abs(score)
 
-    def value(self, state):
+    def value(self, state,):
         action, score = state
         # The algorithm return the state with the higher score but we want the minimum.
-        return score * -1
+        if self.booleanClassification:
+            return score
+        else:
+            return score * -1
