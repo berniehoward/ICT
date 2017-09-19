@@ -8,6 +8,7 @@ import os
 from LearningStage.featureSelection import *
 from sklearn.ensemble import RandomForestRegressor
 
+
 # Return features(list of all the features' names) , data(list of all the features) and
 # classifications (list of ICT tags for every child)
 def getDataForClassification(children):
@@ -38,14 +39,19 @@ def seperateGenders(children):
 # Regression classificator of israeli, swedish or mixed children
 def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification
+    imputer = Imputer(strategy='median', axis=0)
     is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
-    # sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    is_X = imputer.fit_transform(is_X)
+    sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    sw_X = imputer.fit_transform(sw_X)
     # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
     # mix_f, mix_X, mix_c = getDataForClassification(allChildren)
+    # mix_X = imputer.fit_transform(mix_X)
+    #
     # is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
     # sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
     # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
-
+    #
     # print("Regression trees: ")
     # print("Mix genders: ")
     # regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
@@ -53,25 +59,20 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
     # print("Females: ")
     # regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
+
     is_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
                                       min_samples_leaf=10, n_estimators=143)
     sw_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
                                       min_samples_leaf=30, n_estimators=45)
-    # print("selectKBestFeatures: ")
-    # print("Israeli: ")
-    # best_X, best_k, min_score = selectKBestFeatures(is_X, is_c, is_forest, "f_regression: ")
-    # print("k: ", best_k, "mse: ", min_score)
-    # best_X, best_k, min_score = selectKBestFeatures(is_X, is_c, is_forest, "scoring function: ", scoringIsraeliRegressorFunction)
-    # print("k: ", best_k, "mse: ", min_score)
-    print("Swedish: ")
-    best_X, best_k, min_score = selectKBestFeatures(sw_X, sw_c, sw_forest, "f_regression: ")
-    print("k: ", best_k, "mse: ", min_score)
-    best_X, best_k, min_score = selectKBestFeatures(sw_X, sw_c, sw_forest, "scoring function: ", scoringSwedishRegressorFunction)
-    print("k: ", best_k, "mse: ", min_score)
+
+    # Feature selection:
+    # performSelectKBestFeatures(is_X, is_c, is_forest, sw_X, sw_c, sw_forest)
+    performREF(is_X, is_c, is_forest, sw_X, sw_c, sw_forest)
+
 
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    createBoolClassification(swedishChildrenList, israeliChildrenList)
-    # createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # createBoolClassification(swedishChildrenList, israeliChildrenList)
+    createRegressionClassification(swedishChildrenList, israeliChildrenList)
