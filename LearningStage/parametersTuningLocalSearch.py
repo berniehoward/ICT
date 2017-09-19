@@ -21,7 +21,7 @@ class ParametersTuningLocalSearch(SearchProblem):
             else:
                 params.append(random.choice(self.ranges[i]))
         r_forest, score = self.function(self.f, self.X, self.c, params)
-        self.initial_state = params, score
+        self.initial_state = params, abs(score)
 
     def initial_state(self):
         return self.initial_state
@@ -43,7 +43,7 @@ class ParametersTuningLocalSearch(SearchProblem):
 
     def result(self, state, action):
         r_forest, score = self.function(self.f, self.X, self.c, action)
-        return action, score
+        return action, abs(score)
 
     def value(self, state):
         action, score = state
