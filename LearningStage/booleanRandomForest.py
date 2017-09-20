@@ -1,6 +1,7 @@
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
+from Parser.auxiliary import NA
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from simpleai.search.local import hill_climbing
@@ -48,6 +49,7 @@ def booleanParametersTuning(f, X, c, function, ranges):
     hops = [1, 0.05, 1, 5]
     problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, boolClass)
     return hill_climbing(problem, 1000).state
+
 
 # Return features(list of all the features' names) , data(list of all the features) and
 # classifications (list of boolean tags - the child has ICT or not)

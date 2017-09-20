@@ -7,6 +7,7 @@ from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGe
 from Parser.auxiliary import NA
 from LearningStage.regressionRandomForest import regressionTreesExp
 
+
 # Regression classificator of israeli, swedish or mixed children
 def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification
@@ -25,7 +26,7 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     #
     # print("Regression trees: ")
     # print("Mix genders: ")
-    # regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
+    regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, "mix")
     # print("Males: ")
     # regressionTreesExp(is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c, "M")
     # print("Females: ")
