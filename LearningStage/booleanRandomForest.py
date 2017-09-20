@@ -7,6 +7,15 @@ from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
 from LearningStage.utility import printVectors
 from LearningStage.regressionRandomForest import determineRanges
+from LearningStage.utility import getTenMostCommonAges, splitByGender
+
+
+# Return data and classification separated by gender:
+def seperateGenders(children):
+    males, females = splitByGender(children)
+    m_f, m_X, m_c = getDataForBooleanClassification(males)
+    f_f, f_X, f_c = getDataForBooleanClassification(females)
+    return m_f, m_X, m_c, f_f, f_X, f_c
 
 
 # Create boolean "Random Forest" by given arguments
@@ -32,17 +41,27 @@ def booleanTreesExp(f, X, c, experiment):
     print("%s ranges: " % experiment)
     determineRanges(f, X, c, randomForestCreator)
 
+
+# boolean parameter Tuning
 def booleanParametersTuning(f, X, c, function, ranges):
     boolClass = False # boolean classification
     hops = [1, 0.05, 1, 5]
     problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, boolClass)
     return hill_climbing(problem, 1000).state
 
-# Perform the experiment for boolean trees:
-# def booleanTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):
-#     print("Israeli ranges: ")
-#     determineRanges(is_f, is_X, is_c, randomForestCreator)
-#     print("Swedish ranges: ")
-#     determineRanges(sw_f, sw_X, sw_c, randomForestCreator)
-#     print("Mix ranges: ")
-#     determineRanges(mix_f, mix_X, mix_c, randomForestCreator)
+# Return features(list of all the features' names) , data(list of all the features) and
+# classifications (list of boolean tags - the child has ICT or not)
+def getDataForBooleanClassification(children):
+    data = []
+    classifications = []
+    features = []
+    common_ages = sorted(getTenMostCommonAges(children, 8))
+    for ch in children:
+        if len(ch.goodSamples) == 0:
+            continue
+        f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
+        features = [i for i in f]
+        c = 1 if c != 0 else 0
+        data.append([x if x != NA else np.NaN for x in d])
+        classifications.append(c)
+    return features, data, classifications

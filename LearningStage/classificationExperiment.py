@@ -7,30 +7,6 @@ from Parser.auxiliary import Nationality
 from LearningStage.featureSelection import *
 
 
-# Return features(list of all the features' names) , data(list of all the features) and
-# classifications (list of boolean tags - the child has ICT or not)
-def getDataForBooleanClassification(children):
-    data = []
-    classifications = []
-    features = []
-    common_ages = sorted(getTenMostCommonAges(children, 8))
-    for ch in children:
-        if len(ch.goodSamples) == 0:
-            continue
-        f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
-        features = [i for i in f]
-        c = 1 if c != 0 else 0
-        data.append([x if x != NA else np.NaN for x in d])
-        classifications.append(c)
-    return features, data, classifications
-
-# Return data and classification separated by gender:
-def seperateGenders(children):
-    males, females = splitByGender(children)
-    m_f, m_X, m_c = getDataForBooleanClassification(males)
-    f_f, f_X, f_c = getDataForBooleanClassification(females)
-    return m_f, m_X, m_c, f_f, f_X, f_c
-
 # Boolean classification of israeli, swedish or mixed children
 def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification

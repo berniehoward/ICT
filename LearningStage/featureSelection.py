@@ -44,6 +44,7 @@ def performSelectKBestFeatures(X, c, forest, origin):
         best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_regression: ")
     print("K: ", best_k, "MSE: ", min_score)
 
+    # nested function designed to be passed to selectKBestFeatures
     def scoringFunction(X, c):
         forest.fit(X, c)
         return forest.feature_importances_
@@ -51,24 +52,6 @@ def performSelectKBestFeatures(X, c, forest, origin):
     best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "scoring function: ",
                                                     scoringFunction)
     print("K: ", best_k, "MSE: ", min_score)
-
-
-#################################### scoring function for different database ####################################
-# def scoringIsraeliRegressorFunction(X, c):
-#     r_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
-#                                      min_samples_leaf=10, n_estimators=143)
-#     r_forest.fit(X, c)
-#     return r_forest.feature_importances_
-#
-#
-# def scoringSwedishRegressorFunction(X, c):
-#     r_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
-#                                      min_samples_leaf=30, n_estimators=45)
-#     r_forest.fit(X, c)
-#     return r_forest.feature_importances_
-
-#######################################################################################################################
-
 
 # Perform recursive feature selection and remain with k best features
 # Return the best k and the best mse after the feature selection

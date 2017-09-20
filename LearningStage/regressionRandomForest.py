@@ -5,6 +5,8 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
+from LearningStage.utility import getTenMostCommonAges, splitByGender
+from Parser.auxiliary import NA
 
 
 # Print information about all the parameters in order to determine the wanted ranges
@@ -77,3 +79,29 @@ def regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, 
     print("Swedish: ", " params: ", sw_params, " score: ", sw_score * (-1))
     mix_params, mix_score = parametersTuning(mix_f, mix_X, mix_c, regressionForestCreator, mix_ranges, hops)
     print("Mix: ", " params: ", mix_params, " score: ", mix_score * (-1))
+
+# Return features(list of all the features' names) , data(list of all the features) and
+# classifications (list of ICT tags for every child)
+def getDataForClassification(children):
+    data = []
+    classifications = []
+    features = []
+    common_ages = sorted(getTenMostCommonAges(children, 8))
+    for ch in children:
+        if len(ch.goodSamples) == 0:
+            continue
+        f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
+        features = [i for i in f]
+        if not c:
+            continue
+        data.append([x if x != NA else np.NaN for x in d])
+        classifications.append(c)
+    return features, data, classifications
+
+
+# Return data and classification separated by gender:
+def seperateGenders(children):
+    males, females = splitByGender(children)
+    m_f, m_X, m_c = getDataForClassification(males)
+    f_f, f_X, f_c = getDataForClassification(females)
+    return m_f, m_X, m_c, f_f, f_X, f_c
