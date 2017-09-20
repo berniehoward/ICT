@@ -17,7 +17,7 @@ def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regress
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     imputer = Imputer(strategy='median', axis=0)
     X = imputer.fit_transform(X)
-    print("range of k : [10, ", len(X[0]), "]")
+    print("Range of K : [10, %i]" % len(X[0]))
     scores = []
     min_score = 1000
     for k in range(10, len(X[0])):
@@ -38,31 +38,34 @@ def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regress
 def performSelectKBestFeatures(X, c, forest, origin):
     print("selectKBestFeatures: ")
     print("%s: " % origin)
-    if set(c) == {0,1}:
+    if set(c) == {0,1}: # check if boolean classification or regression
         best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_classif: ", f_classif)
     else:
         best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_regression: ")
-    print("k: ", best_k, "mse: ", min_score)
-    forest.fit(X, c)
-    scoringIsraeliRegressorFunction = forest.feature_importances_
+    print("K: ", best_k, "MSE: ", min_score)
+
+    def scoringFunction(X, c):
+        forest.fit(X, c)
+        return forest.feature_importances_
+
     best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "scoring function: ",
-                                                    scoringIsraeliRegressorFunction)
-    print("k: ", best_k, "mse: ", min_score)
+                                                    scoringFunction)
+    print("K: ", best_k, "MSE: ", min_score)
 
 
 #################################### scoring function for different database ####################################
-def scoringIsraeliRegressorFunction(X, c):
-    r_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
-                                     min_samples_leaf=10, n_estimators=143)
-    r_forest.fit(X, c)
-    return r_forest.feature_importances_
-
-
-def scoringSwedishRegressorFunction(X, c):
-    r_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
-                                     min_samples_leaf=30, n_estimators=45)
-    r_forest.fit(X, c)
-    return r_forest.feature_importances_
+# def scoringIsraeliRegressorFunction(X, c):
+#     r_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
+#                                      min_samples_leaf=10, n_estimators=143)
+#     r_forest.fit(X, c)
+#     return r_forest.feature_importances_
+#
+#
+# def scoringSwedishRegressorFunction(X, c):
+#     r_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
+#                                      min_samples_leaf=30, n_estimators=45)
+#     r_forest.fit(X, c)
+#     return r_forest.feature_importances_
 
 #######################################################################################################################
 

@@ -1,4 +1,4 @@
-from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender
+from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender, removeNationFeature
 from Parser.auxiliary import NA
 from LearningStage.booleanRandomForest import *
 import numpy as np
@@ -61,9 +61,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     ######## LOCAL SEARCH ########
     # print("Local Search: ")
-    isr_ranges = [range(56,77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
-    swe_ranges = [range(80,101), np.arange(0.5, 1.05, 0.05), range(39, 60), range(15, 20, 5)]
-    mixed_ranges = [range(40,61), np.arange(0.6, 0.65, 0.05), range(4, 10), range(5, 10, 5)]
+    # isr_ranges = [range(56,77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
+    # swe_ranges = [range(80,101), np.arange(0.5, 1.05, 0.05), range(39, 60), range(15, 20, 5)]
+    # mixed_ranges = [range(40,61), np.arange(0.6, 0.65, 0.05), range(4, 10), range(5, 10, 5)]
 
     # isr_params, isr_score = booleanParametersTuning(is_f, is_X, is_c, randomForestCreator, isr_ranges)
     # print("Israeli: ", " params: ", isr_params, " score: ", 1 - isr_score)
@@ -74,9 +74,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     ######## LOCAL SEARCH - Divided to MALES AND FEMALES ########
     # print("Local Search, Males: ")
-    isr_m_ranges = [range(47, 76), np.arange(0.15, 0.45, 0.05), range(1, 4), range(10, 45, 5)]
-    swe_m_ranges = [range(9, 30), np.arange(0.15, 1.05, 0.05), range(8, 29), range(5, 30, 5)]
-    mixed_m_ranges = [range(130, 151), np.arange(0.1, 0.25, 0.05), range(3, 9), range(35, 40, 5)]
+    # isr_m_ranges = [range(47, 76), np.arange(0.15, 0.45, 0.05), range(1, 4), range(10, 45, 5)]
+    # swe_m_ranges = [range(9, 30), np.arange(0.15, 1.05, 0.05), range(8, 29), range(5, 30, 5)]
+    # mixed_m_ranges = [range(130, 151), np.arange(0.1, 0.25, 0.05), range(3, 9), range(35, 40, 5)]
 
     # isr_params, isr_score = booleanParametersTuning(is_m_f, is_m_X, is_m_c, randomForestCreator, isr_m_ranges)
     # print("Israeli Males: ", " params: ", isr_params, " score: ", 1 - isr_score)
@@ -86,9 +86,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # print("Mixed Males: ", " params: ", mix_params, " score: ", 1 - mix_score)
 
     # print("Local Search, Females: ")
-    isr_f_ranges = [range(163, 201), np.arange(0.35, 0.45, 0.05), range(2, 6), range(5, 10, 5)]
-    swe_f_ranges = [range(171, 201), np.arange(0.7, 1.05, 0.05), range(2, 6), range(5, 15, 5)]
-    mixed_f_ranges = [range(190, 201), np.arange(0.15, 0.2, 0.05), range(5, 8), range(10, 15, 5)]
+    # isr_f_ranges = [range(163, 201), np.arange(0.35, 0.45, 0.05), range(2, 6), range(5, 10, 5)]
+    # swe_f_ranges = [range(171, 201), np.arange(0.7, 1.05, 0.05), range(2, 6), range(5, 15, 5)]
+    # mixed_f_ranges = [range(190, 201), np.arange(0.15, 0.2, 0.05), range(5, 8), range(10, 15, 5)]
 
     # isr_params, isr_score = booleanParametersTuning(is_f_f, is_f_X, is_f_c, randomForestCreator, isr_f_ranges)
     # print("Israeli Females: ", " params: ", isr_params, " score: ", 1 - isr_score)
@@ -97,6 +97,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # mix_params, mix_score = booleanParametersTuning(mix_f_f, mix_f_X, mix_f_c, randomForestCreator, mixed_f_ranges)
     # print("Mixed Females: ", " params: ", mix_params, " score: ", 1 - mix_score)
 
+    # Best chosen forests
     isr_forest = RandomForestClassifier(max_depth=20, max_features=0.1, random_state=1,
                                     min_samples_leaf=5, n_estimators=57)
     swe_forest = RandomForestClassifier(max_depth=42, max_features=0.55, random_state=1,
@@ -104,16 +105,13 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     # Feature selection:
     print("Feature selection: ")
-    X, f = removeNation(is_X, is_f)
-    performSelectKBestFeatures(X, is_c, isr_forest, Nationality.ISR.name)
-    X, f = removeNation(sw_X, sw_f)
+    imputer = Imputer(strategy='median', axis=0)
+    # X, f = removeNationFeature(is_X, is_f)
+    # X = imputer.fit_transform(X)
+    # performSelectKBestFeatures(X, is_c, isr_forest, Nationality.ISR.name)
+    X, f = removeNationFeature(sw_X, sw_f)
+    X = imputer.fit_transform(X)
     performSelectKBestFeatures(X, sw_c, swe_forest, Nationality.SWE.name)
     # performREF(isr_forest, swe_forest, is_forest, sw_X, sw_c, sw_forest)
 
-def removeNation(X, f):
-    i = f.index('nation')
-    new_f = f[:i] + f[i + 1:]
-    new_X = []
-    for x in X:
-        new_X.append(x[:i] + x[i + 1:])
-    return new_X, new_f
+
