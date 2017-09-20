@@ -2,6 +2,10 @@ from numpy import around
 from collections import Counter
 from Parser.child import Child
 from Parser.auxiliary import Gender
+from sklearn.tree import export_graphviz
+from pydotplus import graph_from_dot_data
+from sklearn import tree
+import six, os, time, itertools
 
 
 def getTenMostCommonAges(children, n):
@@ -48,3 +52,15 @@ def removeNationFeature(X, f):
     for x in X:
         new_X.append(x[:i] + x[i + 1:])
     return new_X, new_f
+
+
+# Export forest into png files
+def exportTreesFromRegressionForest(f, r_forest):
+    rf_path = os.path.join(os.getcwd(), "RegressionForest")
+    os.system("del /f /q "+rf_path+"\\*")
+    os.chdir(rf_path)
+    for regression_tree in r_forest.estimators_:
+            dotfile = six.StringIO()
+            tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
+            graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
+            +'.png')

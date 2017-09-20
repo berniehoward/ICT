@@ -3,22 +3,8 @@ from sklearn.ensemble import AdaBoostRegressor
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
 from sklearn.svm import SVR, NuSVR
-from sklearn.tree import export_graphviz
-from pydotplus import graph_from_dot_data
-from sklearn import tree
-import six, os, time, itertools
 import numpy as np
 
-
-def exportTreesFromRegressionForest(f, r_forest):
-    rf_path = os.path.join(os.getcwd(), "RegressionForest")
-    os.system("del /f /q "+rf_path+"\\*")
-    os.chdir(rf_path)
-    for regression_tree in r_forest.estimators_:
-            dotfile = six.StringIO()
-            tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
-            graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
-            +'.png')
 
 # AdaBoost function example
 def adaBoostCreatorAux(f, X, c, msl, m):
