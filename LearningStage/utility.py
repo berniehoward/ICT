@@ -38,3 +38,4 @@ def splitByGender(children):
     males = [i for i in children if i.sex == Gender.MALE.value]
     females = [i for i in children if i.sex == Gender.FEMALE.value]
     return males, females
+

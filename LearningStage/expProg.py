@@ -1,13 +1,12 @@
 from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender
 from Parser.auxiliary import NA
 from LearningStage.regressionRandomForest import regressionTreesExp
-from LearningStage.booleanRandomForest import *
-from LearningStage.booleanClassification import *
+from LearningStage.booleanClassificationFunctions import createBoolClassification
 import numpy as np
 import os
 from LearningStage.featureSelection import *
 from sklearn.ensemble import RandomForestRegressor
-
+from Parser.auxiliary import Nationality
 
 # Return features(list of all the features' names) , data(list of all the features) and
 # classifications (list of ICT tags for every child)
@@ -60,19 +59,19 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # print("Females: ")
     # regressionTreesExp(is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c, "F")
 
-    is_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
+    isr_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
                                       min_samples_leaf=10, n_estimators=143)
-    sw_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
+    swe_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state=1, min_samples_split=2,
                                       min_samples_leaf=30, n_estimators=45)
 
     # Feature selection:
-    # performSelectKBestFeatures(is_X, is_c, is_forest, sw_X, sw_c, sw_forest)
-    performREF(is_X, is_c, is_forest, sw_X, sw_c, sw_forest)
+    performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
+    performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
+    performREF(is_X, is_c, isr_forest, sw_X, sw_c, swe_forest)
 
 
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
-    warnings.filterwarnings("ignore", category=RuntimeWarning)
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    # createBoolClassification(swedishChildrenList, israeliChildrenList)
+    createBoolClassification(swedishChildrenList, israeliChildrenList)
     createRegressionClassification(swedishChildrenList, israeliChildrenList)

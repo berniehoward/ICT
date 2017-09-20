@@ -1,4 +1,5 @@
-from sklearn.feature_selection import SelectKBest, f_regression, RFE
+from Parser.auxiliary import Nationality
+from sklearn.feature_selection import SelectKBest, f_regression, f_classif, RFE
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import Imputer
@@ -10,8 +11,9 @@ from sklearn.svm import SVR
 
 # Perform feature selection and remain with k best features
 # Return the best k features, the best k and the best mse
-def selectKBestFeatures(X, c, forest, string, scoringFunction=f_regression):
-    warnings.filterwarnings("ignore", category=RuntimeWarning)
+def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regression):
+    warnings.simplefilter("error")
+    warnings.filterwarnings("ignore", category=UserWarning)
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     imputer = Imputer(strategy='median', axis=0)
     X = imputer.fit_transform(X)
@@ -27,27 +29,24 @@ def selectKBestFeatures(X, c, forest, string, scoringFunction=f_regression):
             min_score = score
             best_X = new_X
             best_k = k
-    print(string, " mse: ")
+    print(classifier_type, " mse: ")
     print(scores)
     return best_X, best_k, min_score
 
 
 # Perform feature selection by "select k best features" strategy
-def performSelectKBestFeatures(is_X, is_c, is_forest, sw_X, sw_c, sw_forest):
+def performSelectKBestFeatures(X, c, forest, origin):
     print("selectKBestFeatures: ")
-
-    print("Israeli: ")
-    best_X, best_k, min_score = selectKBestFeatures(is_X, is_c, is_forest, "f_regression: ")
+    print("%s: " % origin)
+    if set(c) == {0,1}:
+        best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_classif: ", f_classif)
+    else:
+        best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_regression: ")
     print("k: ", best_k, "mse: ", min_score)
-    best_X, best_k, min_score = selectKBestFeatures(is_X, is_c, is_forest, "scoring function: ",
+    forest.fit(X, c)
+    scoringIsraeliRegressorFunction = forest.feature_importances_
+    best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "scoring function: ",
                                                     scoringIsraeliRegressorFunction)
-    print("k: ", best_k, "mse: ", min_score)
-
-    print("Swedish: ")
-    best_X, best_k, min_score = selectKBestFeatures(sw_X, sw_c, sw_forest, "f_regression: ")
-    print("k: ", best_k, "mse: ", min_score)
-    best_X, best_k, min_score = selectKBestFeatures(sw_X, sw_c, sw_forest, "scoring function: ",
-                                                    scoringSwedishRegressorFunction)
     print("k: ", best_k, "mse: ", min_score)
 
 
