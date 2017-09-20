@@ -72,7 +72,7 @@ def performSelectKBestFeatures(X, c, forest, origin):
 
 # Perform recursive feature selection and remain with k best features
 # Return the best k and the best mse after the feature selection
-def ref(X, c, estimator, forest):
+def rfe(X, c, estimator, forest):
     scores = []
     min_score = 1000
     for k in range(10, len(X[0])):
@@ -88,21 +88,15 @@ def ref(X, c, estimator, forest):
     return best_k, min_score
 
 
-# Perform feature selection by "REF" strategy
-def performREF(is_X, is_c, is_forest, sw_X, sw_c, sw_forest):
+# Perform feature selection by "REF" strategy(
+def performRFE(X, c, forest, origin):
     print("REF: ")
     estimator = SVR(kernel="linear")
 
-    print("Israeli: ")
-    best_k, min_score = ref(is_X, is_c, is_forest, is_forest)
+    print("%s: " % origin)
+    best_k, min_score = rfe(X, c, forest, forest)
     print("RF - k: ", best_k, "mse: ", min_score)
-    best_k, min_score = ref(is_X, is_c, estimator, is_forest)
+    best_k, min_score = rfe(X, c, estimator, forest)
     print("SVR - k: ", best_k, "mse: ", min_score)
-
-    print("Swedish: ")
-    best_k, min_score = ref(sw_X, sw_c, sw_forest, sw_forest)
-    print("k: ", best_k, "mse: ", min_score)
-    best_k, min_score = ref(sw_X, sw_c, estimator, sw_forest)
-    print("k: ", best_k, "mse: ", min_score)
 
 

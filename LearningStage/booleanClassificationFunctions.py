@@ -106,12 +106,15 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # Feature selection:
     print("Feature selection: ")
     imputer = Imputer(strategy='median', axis=0)
-    # X, f = removeNationFeature(is_X, is_f)
-    # X = imputer.fit_transform(X)
-    # performSelectKBestFeatures(X, is_c, isr_forest, Nationality.ISR.name)
-    X, f = removeNationFeature(sw_X, sw_f)
-    X = imputer.fit_transform(X)
-    performSelectKBestFeatures(X, sw_c, swe_forest, Nationality.SWE.name)
-    # performREF(isr_forest, swe_forest, is_forest, sw_X, sw_c, sw_forest)
+    is_X, f = removeNationFeature(is_X, is_f)
+    is_X = imputer.fit_transform(is_X)
+    # performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
+
+    sw_X, f = removeNationFeature(sw_X, sw_f)
+    sw_X = imputer.fit_transform(sw_X)
+    # performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
+
+    performRFE(is_X, is_c, isr_forest, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_forest, Nationality.SWE.name)
 
 

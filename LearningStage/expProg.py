@@ -67,11 +67,12 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
     # Feature selection:
     performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
     performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
-    performREF(is_X, is_c, isr_forest, sw_X, sw_c, swe_forest)
+    performRFE(is_X, is_c, isr_forest, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_forest, Nationality.SWE.name)
 
 
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     createBoolClassification(swedishChildrenList, israeliChildrenList)
-    createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # createRegressionClassification(swedishChildrenList, israeliChildrenList)
