@@ -38,14 +38,14 @@ def createRegressionClassification(swedishChildrenList, israeliChildrenList):
                                        min_samples_leaf=30, n_estimators=45)
 
     # Feature selection:
-    performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
-    performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
-    performRFE(is_X, is_c, isr_forest, Nationality.ISR.name)
+    # performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
+    # performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
+    # performRFE(is_X, is_c, isr_forest, Nationality.ISR.name)
     performRFE(sw_X, sw_c, swe_forest, Nationality.SWE.name)
     is_k = 17
     sw_k = 13
 
     # create final regression forest :
-    is_f, is_final_RF = createFinalRegressionForest(is_X, is_c, is_f, is_k, isr_forest, True)
-    sw_f, sw_final_RF = createFinalRegressionForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
+    # is_f, is_final_RF = createFinalRegressionForest(is_X, is_c, is_f, is_k, isr_forest, True)
+    # sw_f, sw_final_RF = createFinalRegressionForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
     return is_f, is_final_RF, sw_f, sw_final_RF

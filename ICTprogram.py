@@ -23,5 +23,4 @@ if __name__ == '__main__':
 
     automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
     automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
-    # ThirdStage(swedishChildrenList, israeliChildrenList, True)
     thirdStageProg(swedishChildrenList, israeliChildrenList)
