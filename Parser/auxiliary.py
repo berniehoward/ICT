@@ -31,7 +31,7 @@ ISRAELI_FMLY_ICT_FILE = "ILS_LargeFamiliesICT.csv"
 PICKLE_FILE = "ChildrenParsedData.pkl"
 
 # Lambdas
-getGender = lambda g: 1 if g == 'M' else 2
+getGender = lambda g: Gender.MALE.value if g == 'M' else Gender.FEMALE.value
 getpath = lambda file: os.path.join(os.getcwd(), "ICTData", file)
 picklepath = lambda file: os.path.join(os.getcwd(), "Parser", file)
 
