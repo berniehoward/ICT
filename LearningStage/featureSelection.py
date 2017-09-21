@@ -38,20 +38,19 @@ def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regress
 def performSelectKBestFeatures(X, c, forest, origin):
     print("selectKBestFeatures: ")
     print("%s: " % origin)
-    if set(c) == {0,1}: # check if boolean classification or regression
+    if set(c) == {0, 1}:  # Check if boolean classification or regression
         best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_classif: ", f_classif)
     else:
         best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "f_regression: ")
-    print("K: ", best_k, "MSE: ", min_score)
+    print("K: ", best_k, "MSE/ACC: ", min_score)
 
     # nested function designed to be passed to selectKBestFeatures
     def scoringFunction(X, c):
         forest.fit(X, c)
         return forest.feature_importances_
 
-    best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "scoring function: ",
-                                                    scoringFunction)
-    print("K: ", best_k, "MSE: ", min_score)
+    best_X, best_k, min_score = selectKBestFeatures(X, c, forest, "scoring function: ", scoringFunction)
+    print("K: ", best_k, "MSE/ACC: ", min_score)
 
 
 # Perform recursive feature selection and remain with k best features

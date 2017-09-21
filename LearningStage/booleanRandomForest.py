@@ -45,7 +45,7 @@ def booleanTreesExp(f, X, c, experiment):
 
 # boolean parameter Tuning
 def booleanParametersTuning(f, X, c, function, ranges):
-    boolClass = False # boolean classification
+    boolClass = False  # Boolean classification
     hops = [1, 0.05, 1, 5]
     problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, boolClass)
     return hill_climbing(problem, 1000).state

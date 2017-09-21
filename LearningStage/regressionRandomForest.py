@@ -7,7 +7,7 @@ from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
 from LearningStage.utility import getTenMostCommonAges, splitByGender
 from Parser.auxiliary import NA
-
+from sklearn.feature_selection import RFE
 
 # Print information about all the parameters in order to determine the wanted ranges
 def determineRanges(f, X, c, function):
@@ -106,3 +106,23 @@ def seperateGenders(children):
     m_f, m_X, m_c = getDataForClassification(males)
     f_f, f_X, f_c = getDataForClassification(females)
     return m_f, m_X, m_c, f_f, f_X, f_c
+
+
+# Return the recommended regression classifier
+def createFinalRegressionForest(X, c, f, k, forest, printMode=False):
+    selector = RFE(forest, k, step=1)
+    new_X = selector.fit_transform(X, c)
+    selector = selector.fit(X, c)
+    new_f = []
+    i = 0
+    for b in selector.get_support():
+        if b:
+            new_f.append(f[i])
+        i += 1
+
+    if printMode:
+        print(k, " best features are: ", new_f)
+
+    forest.fit(new_X, c)
+    return new_f, forest
+
