@@ -6,7 +6,7 @@ from sklearn.preprocessing import Imputer
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 import warnings
-from sklearn.svm import SVR
+from sklearn.svm import SVR, SVC
 
 
 # Perform feature selection and remain with k best features
@@ -59,6 +59,7 @@ def rfe(X, c, estimator, forest):
     scores = []
     min_score = 1000
     for k in range(10, len(X[0])):
+        print(k)
         crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
         new_X = RFE(estimator, k, step=1).fit_transform(X, c)
         forest.fit(new_X, c)
@@ -71,15 +72,23 @@ def rfe(X, c, estimator, forest):
     return best_k, min_score
 
 
-# Perform feature selection by "REF" strategy(
+# Perform feature selection by "RFE" strategy
 def performRFE(X, c, forest, origin):
-    print("REF: ")
-    estimator = SVR(kernel="linear")
+    print("RFE: ")
 
     print("%s: " % origin)
-    # best_k, min_score = rfe(X, c, forest, forest)
-    # print("RF - k: ", best_k, "mse: ", min_score)
-    best_k, min_score = rfe(X, c, estimator, forest)
-    print("SVR - k: ", best_k, "mse: ", min_score)
+    best_k, min_score = rfe(X, c, forest, forest)
+    print("RF - k: ", best_k, "mse: ", min_score)
+    return
+    if set(c) == {0,1}:
+        print("SVC: ")
+        estimator = SVC(kernel="linear")
+        best_k, min_score = rfe(X, c, estimator, forest)
+        print("SVC - k: ", best_k, "mse: ", min_score)
+    else:
+        print("SVR: ")
+        estimator = SVR(kernel="linear")
+        best_k, min_score = rfe(X, c, estimator, forest)
+        print("SVR - k: ", best_k, "mse: ", min_score)
 
 
