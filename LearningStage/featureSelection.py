@@ -79,14 +79,13 @@ def performRFE(X, c, forest, origin):
     print("%s: " % origin)
     best_k, min_score = rfe(X, c, forest, forest)
     print("RF - k: ", best_k, "mse: ", min_score)
-    return
-    if set(c) == {0,1}:
+    if set(c) == {0,1}: # SVM
         print("SVC: ")
         estimator = SVC(kernel="linear")
         best_k, min_score = rfe(X, c, estimator, forest)
         print("SVC - k: ", best_k, "mse: ", min_score)
     else:
-        print("SVR: ")
+        print("SVR: ") # SVR
         estimator = SVR(kernel="linear")
         best_k, min_score = rfe(X, c, estimator, forest)
         print("SVR - k: ", best_k, "mse: ", min_score)

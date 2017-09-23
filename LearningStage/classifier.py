@@ -11,11 +11,11 @@ NO_CLASSIFICATION = 0
 class LearningAlgorithm():
 
     def __init__(self, data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args):
-        X, c = data
-        self.isr_classificator = self.createForest(X, c, isr_class_args, RandomForestClassifier)
-        self.swe_classificator = self.createForest(X, c, swe_class_args, RandomForestClassifier)
-        self.isr_regressor = self.createForest(X, c, isr_reg_args, RandomForestRegressor)
-        self.swe_regressor = self.createForest(X, c, swe_reg_args, RandomForestRegressor)
+        X_isr, c_isr, X_swe, c_swe = data
+        self.isr_classificator = self.createForest(X_isr, c_isr, isr_class_args, RandomForestClassifier)
+        self.swe_classificator = self.createForest(X_swe, c_swe, swe_class_args, RandomForestClassifier)
+        self.isr_regressor = self.createForest(X_isr, c_isr, isr_reg_args, RandomForestRegressor)
+        self.swe_regressor = self.createForest(X_swe, c_swe, swe_reg_args, RandomForestRegressor)
 
     def createForest(self, X, c, args, forestType):
         crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
@@ -31,7 +31,7 @@ class LearningAlgorithm():
         r_forest.fit(X, c)
         return r_forest
 
-    def classifyChild(self, forest, ch):
+    def classifyChild(self, ch):
         if len(ch.goodSamples) == 0:
             return NA
 

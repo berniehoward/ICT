@@ -1,14 +1,14 @@
+from sklearn.feature_selection import SelectKBest, f_regression, f_classif, RFE
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
-from Parser.auxiliary import NA
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
 from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
-from LearningStage.utility import printVectors
 from LearningStage.regressionRandomForest import determineRanges
-from LearningStage.utility import getTenMostCommonAges, splitByGender
+from LearningStage.utility import getTenMostCommonAges, splitByGender, printVectors
+from Parser.auxiliary import NA
+import numpy as np
 
 
 # Return data and classification separated by gender:
@@ -67,3 +67,23 @@ def getDataForBooleanClassification(children):
         data.append([x if x != NA else np.NaN for x in d])
         classifications.append(c)
     return features, data, classifications
+
+
+# Return the recommended classifier
+def createFinalClassificationForest(X, c, f, k, forest, printMode=False):
+    selector = RFE(forest, k, step=1)
+    # selector = SelectKBest(f_classif, k=k)
+    new_X = selector.fit_transform(X, c)
+    selector = selector.fit(X, c)
+    new_f = []
+    i = 0
+    for b in selector.get_support():
+        if b:
+            new_f.append(f[i])
+        i += 1
+
+    if printMode:
+        print(k, " best features are: ", new_f)
+
+    forest.fit(new_X, c)
+    return new_f, forest
