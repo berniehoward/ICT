@@ -55,7 +55,7 @@ def removeNationFeature(X, f):
 
 
 # Export forest into png files
-def exportTreesFromRegressionForest(f, r_forest, nationality):
+def exportTreesFromForest(f, r_forest, nationality):
     rf_path = os.path.join(os.getcwd(), "RF results", nationality, "RegressionForest")
     os.chdir(rf_path)
     for regression_tree in r_forest.estimators_:
