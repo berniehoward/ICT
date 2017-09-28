@@ -24,7 +24,6 @@ class RegressionForestAlgorithm:
                                                                    RandomForestRegressor, swe_regress_f)
 
     def createForest(self, X, c, args, forestType, f):
-        crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
         imputer = Imputer(strategy='median', axis=0)
         if len(args) == 6:
             N, P, D, L, S, K = args
@@ -36,8 +35,8 @@ class RegressionForestAlgorithm:
                               min_samples_leaf=L, n_estimators=N)
         r_forest.fit(X, c)
 
-    def scoringFunction(X, c):
-        r_forest.fit(X, c)
+        def scoringFunction(X, c):
+            r_forest.fit(X, c)
             return r_forest.feature_importances_
 
         if len(set(c)) == 2:  # Classifier
@@ -55,9 +54,6 @@ class RegressionForestAlgorithm:
 
         r_forest.fit(new_X, c)
         return r_forest, new_f
-=======
-        return r_forest
->>>>>>> Stashed changes
 
     def classifyChild(self, ch):
         if len(ch.goodSamples) == 0:

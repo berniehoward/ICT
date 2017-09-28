@@ -1,13 +1,13 @@
-from LearningStage.classificationExperiment import createBoolClassification
-from LearningStage.utility import exportTreesFromForest
+from LearningStage.utility import exportTreesFromForest, removeNationFeature
 from LearningStage.classificationExperiment import createBoolClassification,getDataForBooleanClassification
+from LearningStage.regressionExperiment import createRegressionClassification, getDataForClassification
 from LearningStage.utility import exportTreesFromForest, TreeType
 from Parser.auxiliary import Nationality
 import os
 from LearningStage.classifier import RegressionForestAlgorithm
 
 # Perform the experiment of the third stage
-def program(swedishChiladrenList, israeliChildrenList, printMode=False):
+def program(swedishChildrenList, israeliChildrenList, printMode=False):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     #isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
     createBoolClassification(swedishChildrenList, israeliChildrenList)
