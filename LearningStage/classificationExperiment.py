@@ -21,7 +21,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
 
     print("Boolean trees: ")
-    # booleanTreesExp(is_f, is_X, is_c, "Israeli")
+    booleanTreesExp(is_f, is_X, is_c, "Israeli")
     # booleanTreesExp(sw_f, sw_X, sw_c, "Swedish")
     # booleanTreesExp(mix_f, mix_X, mix_c, "Mixed")
 
@@ -75,9 +75,9 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     # Best chosen forests
     isr_forest = RandomForestClassifier(max_depth=20, max_features=0.1, random_state=1,
-                                    min_samples_leaf=5, n_estimators=57)
+                                        min_samples_leaf=5, n_estimators=57)
     swe_forest = RandomForestClassifier(max_depth=42, max_features=0.55, random_state=1,
-                                    min_samples_leaf=15, n_estimators=84)
+                                        min_samples_leaf=15, n_estimators=84)
 
     # Feature selection:
     print("Feature selection: ")
@@ -85,7 +85,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
 
     is_X, f = removeNationFeature(is_X, is_f)
     is_X = imputer.fit_transform(is_X)
-    # performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
+    performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
 
     sw_X, f = removeNationFeature(sw_X, sw_f)
     sw_X = imputer.fit_transform(sw_X)
@@ -99,7 +99,7 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     is_k = 26 #14
     sw_k = 11 #12
 #
-    # isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
+    isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
     # swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
     # return isr_f, isr_final_RF, swe_f, swe_final_RF
 

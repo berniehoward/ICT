@@ -9,6 +9,7 @@ from LearningStage.utility import getTenMostCommonAges, splitByGender
 from Parser.auxiliary import NA
 from sklearn.feature_selection import RFE
 
+
 # Print information about all the parameters in order to determine the wanted ranges
 def determineRanges(f, X, c, function):
 

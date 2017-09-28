@@ -7,6 +7,7 @@ from SecondStage.fullExperiment import fullProg as secondStage
 from SecondStage.automaticTagging import automaticTagging
 # from LearningStage.learningProgram import createRandomForestRegressorAndClassifyData as ThirdStage
 from LearningStage.experimentProgram import program as thirdStageProg
+from LearningStage.experimentProgram import createFinalRF
 
 if __name__ == '__main__':
     # parsingStage()
@@ -23,4 +24,5 @@ if __name__ == '__main__':
 
     automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
     automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
-    thirdStageProg(swedishChildrenList, israeliChildrenList)
+    #thirdStageProg(swedishChildrenList, israeliChildrenList)
+    createFinalRF(israeliChildrenList, swedishChildrenList)

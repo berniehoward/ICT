@@ -150,6 +150,7 @@ class Child:
 
     def generateParametersForRegressionTree(self, first = True):
         pass
+    # TODO - delete?
 
     def setValuesOfSlopeVectors(self):
         #### weight slopes ####
