@@ -9,6 +9,7 @@ import numpy as np
 
 NO_CLASSIFICATION = 0
 
+
 class RegressionForestAlgorithm:
 
     def __init__(self, data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args):
@@ -87,23 +88,21 @@ class RegressionForestAlgorithm:
 
     def _predict_swedish(self, X_class, X_regress):
         if self.swe_classificator.predict(X_class) != NO_CLASSIFICATION:
-            if len(X_regress) != self.swe_regressor.n_features_ :
+            if X_regress is None:
                 return NA
-            return self.swe_regressor.predict(X_regress) * MONTHS
+            return self.swe_regressor.predict(X_regress)[0] * MONTHS
         return NA
 
     def _predict_israeli(self, X_class, X_regress):
         if self.isr_classificator.predict(X_class) != NO_CLASSIFICATION:
-            if len(X_regress) != self.isr_regressor.n_features_ :
+            if X_regress is None:
                 return NA
-            return self.isr_regressor.predict(X_regress) * MONTHS
+            return self.isr_regressor.predict(X_regress)[0] * MONTHS
         return NA
 
     def fit(self, X):
-        imputer = Imputer(strategy='median', axis=0)
-        for i in range(len(X)):
-            if X[i] == np.NAN:
-                print(i, len(X))
+        for f in X:
+            if f is np.NAN:
+                return None  # The child doesn't have all the feature
         X = np.asarray(X)
-        X = X.reshape(1, -1)
-        return imputer.fit_transform(X)
+        return X.reshape(1, -1)

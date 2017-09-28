@@ -6,6 +6,7 @@ from Parser.auxiliary import Nationality
 import os
 from LearningStage.classifier import RegressionForestAlgorithm
 
+
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
@@ -42,6 +43,7 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     print("Predicted tagging: ")
     print(predicted_ICC)
 
+    # TODO - what is this part?  we need to move it to the function "program"
     """
     isr_f, isr_classification_RF, swe_f, swe_classification_RF =\
         createBoolClassification(swedishChildrenList, israeliChildrenList)
