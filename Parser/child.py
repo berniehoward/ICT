@@ -22,6 +22,9 @@ class Child:
         self.preterm = NA
 
         self.autoICT = NA  # value is set at end of second stage
+        self.regICT = NA
+        self.adaboostICT = NA
+        self.svdICT = NA
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0

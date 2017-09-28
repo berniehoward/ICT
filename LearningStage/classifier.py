@@ -9,8 +9,7 @@ import numpy as np
 
 NO_CLASSIFICATION = 0
 
-
-class LearningAlgorithm:
+class RegressionForestAlgorithm:
 
     def __init__(self, data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args):
         X_classi_isr, c_classi_isr, isr_classi_f, X_regress_isr, c_regress_isr, isr_regress_f, X_classi_swe, \
@@ -25,6 +24,7 @@ class LearningAlgorithm:
                                                                    RandomForestRegressor, swe_regress_f)
 
     def createForest(self, X, c, args, forestType, f):
+        crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
         imputer = Imputer(strategy='median', axis=0)
         if len(args) == 6:
             N, P, D, L, S, K = args
@@ -36,8 +36,8 @@ class LearningAlgorithm:
                               min_samples_leaf=L, n_estimators=N)
         r_forest.fit(X, c)
 
-        def scoringFunction(X, c):
-            r_forest.fit(X, c)
+    def scoringFunction(X, c):
+        r_forest.fit(X, c)
             return r_forest.feature_importances_
 
         if len(set(c)) == 2:  # Classifier
@@ -55,6 +55,9 @@ class LearningAlgorithm:
 
         r_forest.fit(new_X, c)
         return r_forest, new_f
+=======
+        return r_forest
+>>>>>>> Stashed changes
 
     def classifyChild(self, ch):
         if len(ch.goodSamples) == 0:

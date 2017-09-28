@@ -1,11 +1,10 @@
 from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender, removeNationFeature
-from Parser.auxiliary import NA
 from LearningStage.booleanRandomForest import *
+from LearningStage.featureSelection import *
+from LearningStage.classifier import *
 import numpy as np
 import os
-from Parser.auxiliary import Nationality
-from LearningStage.featureSelection import *
-
+from Parser.auxiliary import Nationality, NA
 
 # Boolean classification of israeli, swedish or mixed children
 def createBoolClassification(swedishChildrenList, israeliChildrenList):
@@ -96,11 +95,11 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # performRFE(sw_X, sw_c, swe_forest, Nationality.SWE.name)
 
     # create final regression forest :
-    is_k = 26 #14
-    sw_k = 11 #12
+    is_k = 14
+    sw_k = 12
 #
     isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
-    # swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
-    # return isr_f, isr_final_RF, swe_f, swe_final_RF
+    swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
+    return isr_f, isr_final_RF, swe_f, swe_final_RF
 
 
