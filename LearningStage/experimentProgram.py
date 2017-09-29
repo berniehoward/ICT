@@ -1,10 +1,11 @@
 from LearningStage.utility import exportTreesFromForest, removeNationFeature
 from LearningStage.classificationExperiment import createBoolClassification,getDataForBooleanClassification
 from LearningStage.regressionExperiment import createRegressionClassification, getDataForClassification
-from LearningStage.utility import exportTreesFromForest, TreeType
+from LearningStage.utility import *
 from Parser.auxiliary import Nationality
 import os
 from Parser.auxiliary import MONTHS, NA
+import pickle as pkl
 from LearningStage.classifier import RegressionForestAlgorithm
 from statistics import stdev
 from numpy import average, median
@@ -14,10 +15,13 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     #isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
     createBoolClassification(swedishChildrenList, israeliChildrenList)
-    isr_f, isr_regression_RF, swe_f, swe_regression_RF = createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList)
     #if printMode:
     #    exportTreesFromForest(isr_f, isr_regression_RF, "Israeli")
     #    exportTreesFromForest(swe_f, swe_regression_RF, "Swedish")
+	#    exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, TreeType.CLASSIFICATION.value)
+    #    exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, TreeType.CLASSIFICATION.value)
 
 
 def createFinalRF(israeliChildrenList, swedishChildrenList):
@@ -34,6 +38,15 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     swe_class_args = 84, 0.55, 42, 15, 12
     swe_reg_args = 45, 0.85, 16, 30, 13
     rf_classifier = RegressionForestAlgorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
+
+    with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "wb") as pklfile:
+        pkl.dump(rf_classifier, pklfile)
+
+def tagChildren(israeliChildrenList, swedishChildrenList):
+    with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
+        rf_classifier = pkl.load(pklfile)
+
+    orig_ICT = []
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
         predicted_ICT.append(rf_classifier.classifyChild(c))
@@ -50,17 +63,3 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     print("median: ", median(diff))
     print("avg: ", average(diff))
     print("stdev: ", stdev(diff))
-
-    # TODO - what is this part?  we need to move it to the function "program"
-    """
-    isr_f, isr_classification_RF, swe_f, swe_classification_RF =\
-        createBoolClassification(swedishChildrenList, israeliChildrenList)
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList)
-    if printMode:
-        # exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.value, TreeType.REGRESSION.value)
-        # exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.value, TreeType.REGRESSION.value)
-        exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, TreeType.CLASSIFICATION.value)
-        exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, TreeType.CLASSIFICATION.value)
-
-    """

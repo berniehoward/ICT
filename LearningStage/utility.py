@@ -8,6 +8,8 @@ from sklearn import tree
 from enum import Enum
 import six, os, time, itertools
 
+randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
+PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
 
 class TreeType(Enum):
     CLASSIFICATION = 0
