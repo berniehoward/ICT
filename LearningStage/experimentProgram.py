@@ -4,8 +4,10 @@ from LearningStage.regressionExperiment import createRegressionClassification, g
 from LearningStage.utility import exportTreesFromForest, TreeType
 from Parser.auxiliary import Nationality
 import os
+from Parser.auxiliary import MONTHS, NA
 from LearningStage.classifier import RegressionForestAlgorithm
-
+from statistics import stdev
+from numpy import average, median
 
 # Perform the experiment of the third stage
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
@@ -19,7 +21,6 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
 
 
 def createFinalRF(israeliChildrenList, swedishChildrenList):
-                 # isr_class_args, isr_reg_args, swe_class_args, swe_reg_args # lets not do things hardcoded pleeaaaseeeee =]]]]
     isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
     swe_classi_f, X_classi_swe, c_classi_swe = getDataForBooleanClassification(swedishChildrenList)
     isr_regress_f, X_regress_isr, c_regress_isr = getDataForClassification(israeliChildrenList)
@@ -33,15 +34,22 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     swe_class_args = 84, 0.55, 42, 15, 12
     swe_reg_args = 45, 0.85, 16, 30, 13
     rf_classifier = RegressionForestAlgorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
-    orig_ICT = []
-    predicted_ICC = []
+    predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
-        orig_ICT.append(c.autoICT)
-        predicted_ICC.append(rf_classifier.classifyChild(c))
+        predicted_ICT.append(rf_classifier.classifyChild(c))
+        #predicted_ICT.append((rf_classifier.classifyChild(c), c))
+    #sorted_predicted_ICT = sorted(predicted_ICT, key=lambda tup: tup[0])
+    orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList + swedishChildrenList)]
     print("Original tagging: ")
     print(orig_ICT)
     print("Predicted tagging: ")
-    print(predicted_ICC)
+    print(predicted_ICT)
+    print("Differences in days: ")
+    diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
+    print([diff.count(x) for x in range(-30, 30)])
+    print("median: ", median(diff))
+    print("avg: ", average(diff))
+    print("stdev: ", stdev(diff))
 
     # TODO - what is this part?  we need to move it to the function "program"
     """

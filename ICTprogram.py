@@ -22,7 +22,9 @@ if __name__ == '__main__':
     bestEpsilon = 0.016
     bestFormula = 3
 
+    # TODO - is this part of the pkl now?  if yes, we don't need this here(maybe in comment)
     automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
     automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
-    #thirdStageProg(swedishChildrenList, israeliChildrenList)
+
+    # thirdStageProg(swedishChildrenList, israeliChildrenList)
     createFinalRF(israeliChildrenList, swedishChildrenList)
