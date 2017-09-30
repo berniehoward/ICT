@@ -22,9 +22,9 @@ class Child:
         self.preterm = NA
 
         self.autoICT = NA  # value is set at end of second stage
-        self.regICT = NA
-        self.adaboostICT = NA
-        self.svdICT = NA
+        self.regICT = NA   # value is set at end of RF stage
+        self.adaboostICT = NA # value is set at end of AdaBoost stage
+        self.svmICT = NA      # value is set at end of SVM stage
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0
@@ -150,10 +150,6 @@ class Child:
         sorted(self.goodSamples)
         sorted(self.badSamples)
         sorted(self.goodSamplesWithHC)
-
-    def generateParametersForRegressionTree(self, first = True):
-        pass
-    # TODO - delete?
 
     def setValuesOfSlopeVectors(self):
         #### weight slopes ####

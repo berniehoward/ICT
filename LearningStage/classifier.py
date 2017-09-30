@@ -9,7 +9,7 @@ import numpy as np
 
 NO_CLASSIFICATION = 0
 
-
+# Black box algorithm for ICT tagging of ISR and SWE children
 class RegressionForestAlgorithm:
 
     def __init__(self, data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args):

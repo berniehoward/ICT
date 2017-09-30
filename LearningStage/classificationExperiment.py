@@ -6,6 +6,7 @@ import numpy as np
 import os
 from Parser.auxiliary import Nationality, NA
 
+
 # Boolean classification of israeli, swedish or mixed children
 def createBoolClassification(swedishChildrenList, israeliChildrenList):
     # Get feature vectors and classification

@@ -15,6 +15,7 @@ class TreeType(Enum):
     CLASSIFICATION = 0
     REGRESSION = 1
 
+
 def getTenMostCommonAges(children, n):
     allSamples = []
     for x in children:
