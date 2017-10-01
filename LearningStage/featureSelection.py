@@ -1,7 +1,5 @@
-from Parser.auxiliary import Nationality
 from sklearn.feature_selection import SelectKBest, f_regression, f_classif, RFE
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score

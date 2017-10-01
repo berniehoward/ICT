@@ -53,12 +53,12 @@ def parametersTuning(f, X, c, function, ranges, hops):
 
 # Perform the experiment for regression trees:
 def regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):
-    # print("Israeli ranges: ")
-    # determineRanges(is_f, is_X, is_c, regressionForestCreator)
-    # print("Swedish ranges: ")
-    # determineRanges(sw_f, sw_X, sw_c, regressionForestCreator)
-    # print("Mix ranges: ")
-    # determineRanges(mix_f, mix_X, mix_c, regressionForestCreator)
+    print("Israeli ranges: ")
+    determineRanges(is_f, is_X, is_c, regressionForestCreator)
+    print("Swedish ranges: ")
+    determineRanges(sw_f, sw_X, sw_c, regressionForestCreator)
+    print("Mix ranges: ")
+    determineRanges(mix_f, mix_X, mix_c, regressionForestCreator)
 
     if flag == 'mix':
         is_ranges = [range(128, 149), np.arange(0.1, 1.05, 0.05), range(20, 41), range(10, 30, 5)]

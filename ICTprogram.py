@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     automaticTagging(swedishChildrenList, bestFormula, bestEpsilon)
     automaticTagging(israeliChildrenList, bestFormula, bestEpsilon)
-    #thirdStageProg(swedishChildrenList, israeliChildrenList)
+    thirdStageProg(swedishChildrenList, israeliChildrenList)
 
-    createFinalRF(israeliChildrenList, swedishChildrenList)
-    tagChildren(israeliChildrenList, swedishChildrenList)
+    # createFinalRF(israeliChildrenList, swedishChildrenList)
+    # tagChildren(israeliChildrenList, swedishChildrenList)

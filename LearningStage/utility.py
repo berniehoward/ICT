@@ -11,6 +11,7 @@ import six, os, time, itertools
 randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
 PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
 
+
 class TreeType(Enum):
     CLASSIFICATION = 0
     REGRESSION = 1
@@ -75,5 +76,5 @@ def exportTreesFromForest(f, r_forest, nationality, type):
             dotfile = six.StringIO()
             tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
             graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
-            +'.png')
+                                                              +'.png')
     os.chdir(cwd)

@@ -9,6 +9,12 @@ from LearningStage.regressionRandomForest import determineRanges
 from LearningStage.utility import getTenMostCommonAges, splitByGender, printVectors
 from Parser.auxiliary import NA
 import numpy as np
+from LearningStage.featureSelection import *
+from LearningStage.classifier import *
+import numpy as np
+import os
+from Parser.auxiliary import Nationality, NA
+from LearningStage.utility import removeNationFeature
 
 
 # Return data and classification separated by gender:
@@ -30,7 +36,7 @@ def randomForestCreator(f, X, c, args):
         S = 2  # default value
     X = imputer.fit_transform(X)  # instead of fit
     r_forest = RandomForestClassifier(max_depth=D, max_features=P, random_state=1, min_samples_split=S,
-                                     min_samples_leaf=L, n_estimators=N)
+                                      min_samples_leaf=L, n_estimators=N)
     r_forest.fit(X, c)
     score = np.mean(
         cross_val_score(r_forest, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
@@ -44,7 +50,7 @@ def booleanTreesExp(f, X, c, experiment):
 
 
 # boolean parameter Tuning
-def booleanParametersTuning(f, X, c, function, ranges):
+def booleanTreesTuning(f, X, c, function, ranges):
     boolClass = False  # Boolean classification
     hops = [1, 0.05, 1, 5]
     problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, boolClass)
@@ -86,3 +92,33 @@ def createFinalClassificationForest(X, c, f, k, forest, printMode=False):
 
     forest.fit(new_X, c)
     return new_f, forest
+
+
+def booleanTreesFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, sw_c):
+    # Best chosen forests
+    isr_forest = RandomForestClassifier(max_depth=20, max_features=0.1, random_state=1,
+                                        min_samples_leaf=5, n_estimators=57)
+    swe_forest = RandomForestClassifier(max_depth=42, max_features=0.55, random_state=1,
+                                        min_samples_leaf=15, n_estimators=84)
+
+    # Feature selection:
+    print("Feature selection: ")
+    imputer = Imputer(strategy='median', axis=0)
+
+    is_X, f = removeNationFeature(is_X, is_f)
+    is_X = imputer.fit_transform(is_X)
+    performSelectKBestFeatures(is_X, is_c, isr_forest, Nationality.ISR.name)
+
+    sw_X, f = removeNationFeature(sw_X, sw_f)
+    sw_X = imputer.fit_transform(sw_X)
+    performSelectKBestFeatures(sw_X, sw_c, swe_forest, Nationality.SWE.name)
+    performRFE(is_X, is_c, isr_forest, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_forest, Nationality.SWE.name)
+
+    # create final classification forest :
+    is_k = 14
+    sw_k = 12
+
+    isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
+    swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
+    return isr_f, isr_final_RF, swe_f, swe_final_RF
