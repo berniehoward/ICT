@@ -24,7 +24,7 @@ def AdaBoostCreator(f, X, c, args):
     classifier.fit(X, c)
     score = np.mean(
         cross_val_score(classifier, X, c, cv=crossvalidation, scoring='neg_mean_squared_error'))
-    return classifier, 1 - score
+    return classifier, (1 - abs(score))
 
 
 # Print information about all the parameters in order to determine the wanted ranges
