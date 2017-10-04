@@ -1,5 +1,5 @@
 from LearningStage.utility import getTenMostCommonAges, mergeChildren, splitByGender, removeNationFeature
-from LearningStage.booleanRandomForest import *
+from LearningStage.classificationRandomForest import *
 from LearningStage.featureSelection import *
 from LearningStage.classifier import *
 import numpy as np

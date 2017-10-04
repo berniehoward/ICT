@@ -12,9 +12,10 @@ randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
 PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
 
 
-class TreeType(Enum):
+class DecisionAlgorithmType(Enum):
     CLASSIFICATION = 0
     REGRESSION = 1
+    ADABOOST = 2
 
 
 def getTenMostCommonAges(children, n):
@@ -66,7 +67,7 @@ def removeNationFeature(X, f):
 # Export forest into png files
 def exportTreesFromForest(f, r_forest, nationality, type):
     cwd = os.getcwd()
-    if type == TreeType.REGRESSION.name:
+    if type == DecisionAlgorithmType.REGRESSION.name:
         rf_path = os.path.join(cwd, "RegressionResults", str(nationality), "RegressionForest")
     else:
         rf_path = os.path.join(cwd, "ClassificationResults", str(nationality), "ClassificationForest")

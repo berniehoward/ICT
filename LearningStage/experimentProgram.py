@@ -9,7 +9,7 @@ import pickle as pkl
 from LearningStage.classifier import RegressionForestAlgorithm
 from statistics import stdev
 from numpy import average, median
-from LearningStage.booleanRandomForest import booleanTreesExp, booleanTreesTuning, \
+from LearningStage.classificationRandomForest import booleanTreesExp, booleanTreesTuning, \
     booleanTreesFeatureSelectionAndFinalClassifier
 from LearningStage.boolAdaBoost import booleanAdaExp, booleanAdaTuning, booleanAdaFeatureSelectionAndFinalClassifier
 import numpy as np
@@ -40,26 +40,40 @@ RAB_PARM = isr_ranges, swe_ranges, mixed_ranges
 
 #######################################################################################################################
 
-
-# Perform experiment for the third stage
-def program(swedishChildrenList, israeliChildrenList, printMode=False):
-    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
+def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
     # Random forest :
-    # isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
-    # createBoolClassification(swedishChildrenList, israeliChildrenList, booleanTreesExp, booleanTreesTuning,
-    #                          booleanTreesFeatureSelectionAndFinalClassifier, BRF_PARM)
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList)
-    # if printMode:
-    #     exportTreesFromForest(isr_f, isr_regression_RF, "Israeli")
-    #     exportTreesFromForest(swe_f, swe_regression_RF, "Swedish")
-    #     exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, TreeType.CLASSIFICATION.value)
-    #     exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, TreeType.CLASSIFICATION.value)
+    isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
+    createBoolClassification(swedishChildrenList, israeliChildrenList, booleanTreesExp, booleanTreesTuning,
+                             booleanTreesFeatureSelectionAndFinalClassifier, BRF_PARM)
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    if printMode:
+        exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
+        exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
+        exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
+        exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
 
-    # AdaBoost:
+def adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
+    # Adaboost :
     isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
         createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
                                  booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+    #     createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # if printMode:
+    #     exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
+    #     exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
+    #     exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
+    #     exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
+
+
+# Perform experiment for the third stage
+def program(swedishChildrenList, israeliChildrenList, printMode=False):
+    printMode = True
+    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
+    # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode)
+
 
 
 # Create random forest learning algorithm by parameters found in the experiment
@@ -83,7 +97,7 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
 
 
 # Tag children with found RF
-def tagChildren(israeliChildrenList, swedishChildrenList):
+def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList):
     with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
         rf_classifier = pkl.load(pklfile)
 
