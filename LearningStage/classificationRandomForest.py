@@ -82,7 +82,7 @@ def createFinalClassificationForest(X, c, f, k, forest, printMode=False):
         forest.fit(X, c)
         return forest.feature_importances_
 
-    selector = SelectKBest(f_classif, k=k)
+    selector = SelectKBest(scoringFunction, k=k)
     new_X = selector.fit_transform(X, c)
     selector = selector.fit(X, c)
     new_f = []
