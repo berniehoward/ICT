@@ -16,25 +16,25 @@ def createBoolClassification(swedishChildrenList, israeliChildrenList, expFunc, 
 
     sw_f, sw_X, sw_c = getDataForBooleanClassification(swedishChildrenList)
     sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
-
+#
     allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
     mix_f, mix_X, mix_c = getDataForBooleanClassification(allChildren)
     mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
 
     print("Boolean trees: ")
-    expFunc(is_f, is_X, is_c, "Israeli")
-    expFunc(sw_f, sw_X, sw_c, "Swedish")
-    expFunc(mix_f, mix_X, mix_c, "Mixed")
+    # expFunc(is_f, is_X, is_c, "Israeli")
+    # expFunc(sw_f, sw_X, sw_c, "Swedish")
+    # expFunc(mix_f, mix_X, mix_c, "Mixed")
 
-    print("Males: ")
+    # print("Males: ")
     expFunc(is_m_f, is_m_X, is_m_c, "Israeli Males")
-    expFunc(sw_m_f, sw_m_X, sw_m_c, "Swedish  Males")
-    expFunc(mix_m_f, mix_m_X, mix_m_c, "Mixed  Males")
-
-    print("Females: ")
+    expFunc(sw_m_f, sw_m_X, sw_m_c, "Swedish Males")
+    # expFunc(mix_m_f, mix_m_X, mix_m_c, "Mixed Males")
+#
+    # print("Females: ")
     expFunc(is_f_f, is_f_X, is_f_c, "Israeli Females")
-    expFunc(sw_f_f, sw_f_X, sw_f_c, "Swedish  Females")
-    expFunc(mix_f_f, mix_f_X, mix_f_c, "Mixed  Females")
+    expFunc(sw_f_f, sw_f_X, sw_f_c, "Swedish Females")
+    expFunc(mix_f_f, mix_f_X, mix_f_c, "Mixed Females")
 
     ####### LOCAL SEARCH ########
     # print("Local Search: ")

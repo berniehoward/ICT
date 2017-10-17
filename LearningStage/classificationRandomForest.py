@@ -77,6 +77,11 @@ def getDataForBooleanClassification(children):
 
 # Return the recommended classifier
 def createFinalClassificationForest(X, c, f, k, forest, printMode=False):
+
+    def scoringFunction(X, c):
+        forest.fit(X, c)
+        return forest.feature_importances_
+
     selector = SelectKBest(f_classif, k=k)
     new_X = selector.fit_transform(X, c)
     selector = selector.fit(X, c)
