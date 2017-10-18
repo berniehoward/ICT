@@ -12,8 +12,11 @@ from numpy import average, median
 from LearningStage.classificationRandomForest import booleanTreesExp, booleanTreesTuning, \
     booleanTreesFeatureSelectionAndFinalClassifier
 from LearningStage.boolAdaBoost import booleanAdaExp, booleanAdaTuning, booleanAdaFeatureSelectionAndFinalClassifier
+from LearningStage.regressionAdaBoost import regressionAdaExp, regressionAdaTuning, \
+    regressionAdaFeatureSelectionAndFinalClassifier
 import numpy as np
 
+# TODO - put the definitions in their own file
 ######################################## Definitions ##################################3
 # Boolean Random Forest:
 isr_ranges = [range(56, 77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
@@ -28,10 +31,21 @@ mixed_f_ranges = [range(190, 201), np.arange(0.15, 0.2, 0.05), range(5, 8), rang
 BRF_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
            swe_f_ranges, mixed_f_ranges
 
-# TODO - fill the rest of the parameters for regression RF and for AdaBoost
 # Regression Random Forest:
-RRF_PARM = isr_ranges, swe_ranges, mixed_ranges
+isr_ranges = [range(128, 149), np.arange(0.1, 1.05, 0.05), range(20, 41), range(10, 30, 5)]
+sw_ranges = [range(39, 60), np.arange(0.25, 0.95, 0.05), range(3, 17), range(15, 35, 5)]
+mix_ranges = [range(56, 75), np.arange(0.25, 0.9, 0.05), range(3, 9), range(15, 45, 5)]
+isr_m_ranges = [range(94, 114), range(0), range(12, 32), range(5, 20, 5)]
+swe_m_ranges = [range(48, 68), range(0), range(5, 25), range(5, 30, 5)]
+mixed_m_ranges = [range(83, 103), range(0), range(5, 25), range(5, 35, 5)]
+isr_f_ranges = [range(80, 95), np.arange(0.1, 0.5, 0.05), range(0), range(5, 25, 5)]
+swe_f_ranges = [range(31, 51), np.arange(0.2, 1, 0.05), range(6, 26), range(5, 20, 5)]
+mixed_f_ranges = [range(79, 99), np.arange(0.25, 1, 0.05), range(5, 25), range(5, 25, 5)]
+hops = [1, 0.05, 1, 5]  # Todo - check if it needed or delete it.
+RRF_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
+           swe_f_ranges, mixed_f_ranges
 
+# TODO - fill the rest of the parameters for AdaBoost
 # Boolean AdaBoost:
 BAB_PARM = isr_ranges, swe_ranges, mixed_ranges
 
@@ -40,11 +54,16 @@ RAB_PARM = isr_ranges, swe_ranges, mixed_ranges
 
 #######################################################################################################################
 
+# TODO - Does all the functions really belong to this file? or we need to move some? maybe file for RF general
+# function and file to AdaBoost?
+
+
 def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    # Random forest :
+    print("Boolean trees: ")
     isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanTreesExp, booleanTreesTuning,
                              booleanTreesFeatureSelectionAndFinalClassifier, BRF_PARM)
+    print("Regression trees: ")
     isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
         createRegressionClassification(swedishChildrenList, israeliChildrenList)
     if printMode:
@@ -53,13 +72,16 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
         exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
         exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
 
+
 def adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    # Adaboost :
-    isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
-        createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
-                                 booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList)
+    # print("Boolean AdaBoost: ")
+    # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
+    #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
+    #                              booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    print("Regression AdaBoost: ")
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
+                                       regressionAdaFeatureSelectionAndFinalClassifier, RAB_PARM)
     # if printMode:
     #     exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
     #     exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
@@ -73,7 +95,6 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
     adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode)
-
 
 
 # Create random forest learning algorithm by parameters found in the experiment

@@ -7,7 +7,7 @@ import numpy as np
 
 
 # Create boolean "AdaBoost" by given arguments
-def AdaBoostCreator(f, X, c, args):
+def booleanAdaBoostCreator(f, X, c, args):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     imputer = Imputer(strategy='median', axis=0)
     X = imputer.fit_transform(X)
@@ -48,7 +48,7 @@ def determineRanges(f, X, c, function):
 # Perform the experiment for boolean AdaBoost:
 def booleanAdaExp(f, X, c, experiment):
     print("%s ranges: " % experiment)
-    determineRanges(f, X, c, AdaBoostCreator)
+    determineRanges(f, X, c, booleanAdaBoostCreator)
 
 
 def booleanAdaTuning():

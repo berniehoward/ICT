@@ -1,5 +1,4 @@
 import pickle as pkl
-
 from Parser.auxiliary import picklepath, PICKLE_FILE
 from Parser.parsingStage import parsingStage
 from SecondStage.childrenStatistics import printSampleListStatistics
@@ -11,7 +10,6 @@ from LearningStage.experimentProgram import createFinalRF, tagChildrenValueWithR
 
 if __name__ == '__main__':
     # parsingStage() # First stage
-
     # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
     # secondStage(swedishChildrenList, israeliChildrenList, True) # Second stage
 
@@ -22,7 +20,7 @@ if __name__ == '__main__':
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    thirdStageProg(swedishChildrenList, israeliChildrenList) # Learning Stage - Random Forest, Adaboost and SVM
+    thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest, Adaboost and SVM
 
     # createFinalRF(israeliChildrenList, swedishChildrenList)
     # tagChildren(israeliChildrenList, swedishChildrenList)
