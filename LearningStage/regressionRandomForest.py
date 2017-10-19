@@ -7,7 +7,8 @@ from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
 from LearningStage.utility import getTenMostCommonAges, splitByGender
 from Parser.auxiliary import NA
-from sklearn.feature_selection import RFE
+from LearningStage.featureSelection import *
+from Parser.auxiliary import Nationality
 
 
 # Print information about all the parameters in order to determine the wanted ranges
@@ -138,7 +139,10 @@ def createFinalRegressionForest(X, c, f, k, forest, printMode=False):
     return new_f, forest
 
 
-def regressionForestFeatureSelectionAndFinalClassifier():
-    # TODO - complete
-    pass
+def regressionRFFinalClassifier(is_X, is_c, is_f, is_k, sw_X, sw_c, sw_f, sw_k, classifiers):
+    isr_RF, swe_RF, isr_AB, swe_AB = classifiers
+    is_f, is_final_RF = createFinalRegressionForest(is_X, is_c, is_f, is_k, isr_RF, True)
+    sw_f, sw_final_RF = createFinalRegressionForest(sw_X, sw_c, sw_f, sw_k, swe_RF, True)
+    return is_f, is_final_RF, sw_f, sw_final_RF
+
 

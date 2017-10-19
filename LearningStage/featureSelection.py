@@ -10,6 +10,7 @@ from sklearn.svm import SVR, SVC
 # Perform feature selection and remain with k best features
 # Return the best k features, the best k and the best mse
 def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regression):
+    # TODO - try to run without the lines of warnings.
     warnings.simplefilter("error")
     warnings.filterwarnings("ignore", category=UserWarning)
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
@@ -77,13 +78,13 @@ def performRFE(X, c, forest, origin):
     print("%s: " % origin)
     best_k, min_score = rfe(X, c, forest, forest)
     print("RF - k: ", best_k, "mse: ", min_score)
-    if set(c) == {0,1}: # SVM
+    if set(c) == {0, 1}:  # SVM
         print("SVC: ")
         estimator = SVC(kernel="linear")
         best_k, min_score = rfe(X, c, estimator, forest)
         print("SVC - k: ", best_k, "mse: ", min_score)
     else:
-        print("SVR: ") # SVR
+        print("SVR: ")  # SVR
         estimator = SVR(kernel="linear")
         best_k, min_score = rfe(X, c, estimator, forest)
         print("SVR - k: ", best_k, "mse: ", min_score)

@@ -6,6 +6,8 @@ from sklearn.ensemble import RandomForestRegressor
 from LearningStage.boolAdaBoost import determineRanges
 from LearningStage.regressionRandomForest import parametersTuning
 import numpy as np
+from LearningStage.featureSelection import *
+from Parser.auxiliary import Nationality
 
 
 # Create regression "AdaBoost" by given arguments
@@ -70,7 +72,13 @@ def regressionAdaTuning(params, vectors):
     regressionAdaLocalSearch(F_vectors, F_ranges)
 
 
-def regressionAdaFeatureSelectionAndFinalClassifier():
-    # TODO - complete
-    pass
+def regressionAdaFinalClassifier(is_X, is_c, is_f, is_k, sw_X, sw_c, sw_f, sw_k, classifiers):
+    isr_RF, swe_RF, isr_AB, swe_AB = classifiers
+    is_f, is_final_AB = createFinalRegressionAda(is_X, is_c, is_f, is_k, isr_RF, True)
+    sw_f, sw_final_AB = createFinalRegressionAda(sw_X, sw_c, sw_f, sw_k, swe_RF, True)
+    return is_f, is_final_AB, sw_f, sw_final_AB
 
+
+def createFinalRegressionAda(is_X, is_c, is_f, is_k, isr_RF, printMode):
+    # TODO - to complete  - look at "createFinalRegressionForest"
+    pass
