@@ -46,40 +46,50 @@ def regressionForestCreator(f, X, c, args):
 
 # Perform parameters tuning in order to get the parameters which give as the best classifier
 # Return bet_params, best_score
-def parametersTuning(f, X, c, function, ranges, hops):
-    problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function)
+def parametersTuning(f, X, c, function, ranges, hops, flag):
+    problem = ParametersTuningLocalSearch(ranges, f, X, c, hops, function, flag)
     return hill_climbing(problem, 1000).state
 
 
-# Perform the experiment for regression trees:
-def regressionTreesExp(is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, flag):
-    print("Israeli ranges: ")
-    determineRanges(is_f, is_X, is_c, regressionForestCreator)
-    print("Swedish ranges: ")
-    determineRanges(sw_f, sw_X, sw_c, regressionForestCreator)
-    print("Mix ranges: ")
-    determineRanges(mix_f, mix_X, mix_c, regressionForestCreator)
+# Perform the experiment of determine ranges for regression RF
+def regressionForestExp(f, X, c, experiment):
+    print("%s ranges: " % experiment)
+    determineRanges(f, X, c, regressionForestCreator)
 
-    if flag == 'mix':
-        is_ranges = [range(128, 149), np.arange(0.1, 1.05, 0.05), range(20, 41), range(10, 30, 5)]
-        sw_ranges = [range(39, 60), np.arange(0.25, 0.95, 0.05), range(3, 17), range(15, 35, 5)]
-        mix_ranges = [range(56, 75), np.arange(0.25, 0.9, 0.05), range(3, 9), range(15, 45, 5)]
-    if flag == 'M':
-        is_ranges = [range(94, 114), range(0), range(12, 32), range(5, 20, 5)]
-        sw_ranges = [range(48, 68),  range(0), range(5, 25), range(5, 30, 5)]
-        mix_ranges = [range(83, 103),  range(0), range(5, 25), range(5, 35, 5)]
-    if flag == 'F':
-        is_ranges = [range(80, 95), np.arange(0.1, 0.5, 0.05),  range(0), range(5, 25, 5)]
-        sw_ranges = [range(31, 51), np.arange(0.2, 1, 0.05), range(6, 26), range(5, 20, 5)]
-        mix_ranges = [range(79, 99), np.arange(0.25, 1, 0.05), range(5, 25), range(5, 25, 5)]
 
-    hops = [1, 0.05, 1, 5]
-    is_params, is_score = parametersTuning(is_f, is_X, is_c, regressionForestCreator, is_ranges, hops)
+# Aid function for local search
+def regressionForestLocalSearch(vectors, ranges):
+    is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c = vectors
+    isr_ranges, swe_ranges, mixed_ranges, hops = ranges
+    is_params, is_score = parametersTuning(is_f, is_X, is_c, regressionForestCreator, isr_ranges, hops, "RF")
     print("Israeli: ", " params: ", is_params, " score: ", is_score * (-1))
-    sw_params, sw_score = parametersTuning(sw_f, sw_X, sw_c, regressionForestCreator, sw_ranges, hops)
+    sw_params, sw_score = parametersTuning(sw_f, sw_X, sw_c, regressionForestCreator, swe_ranges, hops, "RF")
     print("Swedish: ", " params: ", sw_params, " score: ", sw_score * (-1))
-    mix_params, mix_score = parametersTuning(mix_f, mix_X, mix_c, regressionForestCreator, mix_ranges, hops)
+    mix_params, mix_score = parametersTuning(mix_f, mix_X, mix_c, regressionForestCreator, mixed_ranges, hops, "RF")
     print("Mix: ", " params: ", mix_params, " score: ", mix_score * (-1))
+
+
+# Perform local search for regression RF
+def regressionForestTuning(params, vectors):
+    print("Regression RF local search: ")
+
+    isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, swe_f_ranges, \
+    mixed_f_ranges, hops = params
+    is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, \
+    mix_m_X, mix_m_c, is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c = vectors
+
+    print("Bout Genders: ")
+    BG_ranges = isr_ranges, swe_ranges, mixed_ranges, hops
+    BG_vectors = is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c
+    regressionForestLocalSearch(BG_vectors, BG_ranges)
+    print("Males: ")
+    M_ranges = isr_m_ranges, swe_m_ranges, mixed_m_ranges, hops
+    M_vectors = is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c
+    regressionForestLocalSearch(M_vectors, M_ranges)
+    print("Females: ")
+    F_ranges = isr_f_ranges, swe_f_ranges, mixed_f_ranges, hops
+    F_vectors = is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c
+    regressionForestLocalSearch(F_vectors, F_ranges)
 
 
 # Return features(list of all the features' names) , data(list of all the features) and
@@ -126,4 +136,9 @@ def createFinalRegressionForest(X, c, f, k, forest, printMode=False):
 
     forest.fit(new_X, c)
     return new_f, forest
+
+
+def regressionForestFeatureSelectionAndFinalClassifier():
+    # TODO - complete
+    pass
 

@@ -5,7 +5,7 @@ import random
 
 
 class ParametersTuningLocalSearch(SearchProblem):
-    def __init__(self, ranges, f, X, c, hops, function, booleanClassification = False):
+    def __init__(self, ranges, f, X, c, hops, function, flag, booleanClassification = False):
         # State is ([n_est, max_features, max_depth, min_samples_leaf], score)
         self.f = f
         self.X = X
@@ -13,7 +13,11 @@ class ParametersTuningLocalSearch(SearchProblem):
         self.ranges = ranges
         self.hops = hops
         self.function = function
-        self.default_parameters = [10, "auto", None, 1, 2]
+        if flag == 'RF':
+            self.default_parameters = [10, "auto", None, 1, 2]
+        else:
+            self.default_parameters = [50, 10, "auto", None, 1, 2]
+
         self.booleanClassification = booleanClassification
         params = []
         for i in range(0, len(self.ranges)):

@@ -14,10 +14,14 @@ from LearningStage.classificationRandomForest import booleanTreesExp, booleanTre
 from LearningStage.boolAdaBoost import booleanAdaExp, booleanAdaTuning, booleanAdaFeatureSelectionAndFinalClassifier
 from LearningStage.regressionAdaBoost import regressionAdaExp, regressionAdaTuning, \
     regressionAdaFeatureSelectionAndFinalClassifier
+from LearningStage.regressionRandomForest import regressionForestExp, regressionForestTuning, \
+     regressionForestFeatureSelectionAndFinalClassifier
 import numpy as np
 
 # TODO - put the definitions in their own file
 ######################################## Definitions ##################################3
+
+RF_hops = [1, 0.05, 1, 5]
 # Boolean Random Forest:
 isr_ranges = [range(56, 77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
 swe_ranges = [range(80, 101), np.arange(0.5, 1.05, 0.05), range(39, 60), range(15, 20, 5)]
@@ -29,7 +33,7 @@ isr_f_ranges = [range(163, 201), np.arange(0.35, 0.45, 0.05), range(2, 6), range
 swe_f_ranges = [range(171, 201), np.arange(0.7, 1.05, 0.05), range(2, 6), range(5, 15, 5)]
 mixed_f_ranges = [range(190, 201), np.arange(0.15, 0.2, 0.05), range(5, 8), range(10, 15, 5)]
 BRF_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
-           swe_f_ranges, mixed_f_ranges
+           swe_f_ranges, mixed_f_ranges, RF_hops
 
 # Regression Random Forest:
 isr_ranges = [range(128, 149), np.arange(0.1, 1.05, 0.05), range(20, 41), range(10, 30, 5)]
@@ -41,16 +45,36 @@ mixed_m_ranges = [range(83, 103), range(0), range(5, 25), range(5, 35, 5)]
 isr_f_ranges = [range(80, 95), np.arange(0.1, 0.5, 0.05), range(0), range(5, 25, 5)]
 swe_f_ranges = [range(31, 51), np.arange(0.2, 1, 0.05), range(6, 26), range(5, 20, 5)]
 mixed_f_ranges = [range(79, 99), np.arange(0.25, 1, 0.05), range(5, 25), range(5, 25, 5)]
-hops = [1, 0.05, 1, 5]  # Todo - check if it needed or delete it.
 RRF_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
-           swe_f_ranges, mixed_f_ranges
+           swe_f_ranges, mixed_f_ranges, RF_hops
 
 # TODO - fill the rest of the parameters for AdaBoost
+AB_hops = [1, 1, 0.05, 1, 5]
 # Boolean AdaBoost:
-BAB_PARM = isr_ranges, swe_ranges, mixed_ranges
+isr_ranges = []
+sw_ranges = []
+mix_ranges = []
+isr_m_ranges = []
+swe_m_ranges = []
+mixed_m_ranges = []
+isr_f_ranges = []
+swe_f_ranges = []
+mixed_f_ranges = []
+BAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
+           swe_f_ranges, mixed_f_ranges, AB_hops
 
 # Regression AdaBoost:
-RAB_PARM = isr_ranges, swe_ranges, mixed_ranges
+isr_ranges = []
+sw_ranges = []
+mix_ranges = []
+isr_m_ranges = []
+swe_m_ranges = []
+mixed_m_ranges = []
+isr_f_ranges = []
+swe_f_ranges = []
+mixed_f_ranges = []
+RAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
+           swe_f_ranges, mixed_f_ranges, AB_hops
 
 #######################################################################################################################
 
@@ -65,7 +89,9 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
                              booleanTreesFeatureSelectionAndFinalClassifier, BRF_PARM)
     print("Regression trees: ")
     isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-        createRegressionClassification(swedishChildrenList, israeliChildrenList)
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionForestExp,
+                                       regressionForestTuning, regressionForestFeatureSelectionAndFinalClassifier,
+                                       RRF_PARM)
     if printMode:
         exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
         exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
@@ -73,7 +99,7 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
         exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
 
 
-def adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
+def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
     # print("Boolean AdaBoost: ")
     # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
     #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
@@ -82,11 +108,6 @@ def adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode=False
     isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
         createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
                                        regressionAdaFeatureSelectionAndFinalClassifier, RAB_PARM)
-    # if printMode:
-    #     exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
-    #     exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
-    #     exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
-    #     exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
 
 
 # Perform experiment for the third stage
@@ -94,7 +115,7 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
     printMode = True
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
     # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
-    adaboostExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 
 # Create random forest learning algorithm by parameters found in the experiment

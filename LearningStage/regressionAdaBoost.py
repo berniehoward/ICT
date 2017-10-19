@@ -4,6 +4,7 @@ from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestRegressor
 from LearningStage.boolAdaBoost import determineRanges
+from LearningStage.regressionRandomForest import parametersTuning
 import numpy as np
 
 
@@ -28,15 +29,45 @@ def regressionAdaBoostCreator(f, X, c, args):
     return classifier, abs(score)
 
 
-# Perform the experiment for boolean AdaBoost:
+# Perform the experiment for regression AdaBoost:
 def regressionAdaExp(f, X, c, experiment):
     print("%s ranges: " % experiment)
     determineRanges(f, X, c, regressionAdaBoostCreator)
 
 
-def regressionAdaTuning():
-    # TODO - complete
-    pass
+# Aid function for local search
+def regressionAdaLocalSearch(vectors, ranges):
+    is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c = vectors
+    isr_ranges, swe_ranges, mixed_ranges, hops = ranges
+    is_params, is_score = parametersTuning(is_f, is_X, is_c, regressionAdaExp, isr_ranges, hops, "AB")
+    print("Israeli: ", " params: ", is_params, " score: ", is_score * (-1))
+    sw_params, sw_score = parametersTuning(sw_f, sw_X, sw_c, regressionAdaExp, swe_ranges, hops, "AB")
+    print("Swedish: ", " params: ", sw_params, " score: ", sw_score * (-1))
+    mix_params, mix_score = parametersTuning(mix_f, mix_X, mix_c, regressionAdaExp, mixed_ranges, hops, "AB")
+    print("Mix: ", " params: ", mix_params, " score: ", mix_score * (-1))
+
+
+# Perform local search for regression AB
+def regressionAdaTuning(params, vectors):
+    print("Regression AB local search: ")
+
+    isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, swe_f_ranges, \
+    mixed_f_ranges, hops = params
+    is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, \
+    mix_m_X, mix_m_c, is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c = vectors
+
+    print("Bout Genders: ")
+    BG_ranges = isr_ranges, swe_ranges, mixed_ranges, hops
+    BG_vectors = is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c
+    regressionAdaLocalSearch(BG_vectors, BG_ranges)
+    print("Males: ")
+    M_ranges = isr_m_ranges, swe_m_ranges, mixed_m_ranges, hops
+    M_vectors = is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, mix_m_X, mix_m_c
+    regressionAdaLocalSearch(M_vectors, M_ranges)
+    print("Females: ")
+    F_ranges = isr_f_ranges, swe_f_ranges, mixed_f_ranges, hops
+    F_vectors = is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c
+    regressionAdaLocalSearch(F_vectors, F_ranges)
 
 
 def regressionAdaFeatureSelectionAndFinalClassifier():
