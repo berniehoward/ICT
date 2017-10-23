@@ -7,7 +7,7 @@ import os
 from LearningStage.constants import *
 from Parser.auxiliary import MONTHS, NA
 import pickle as pkl
-from LearningStage.classifier import RegressionForestAlgorithm
+from LearningStage.RFclassifier import RandomForestAlgorithm
 from statistics import stdev
 from numpy import average, median
 from LearningStage.classificationRandomForest import booleanTreesExp, booleanTreesTuning, \
