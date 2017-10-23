@@ -6,7 +6,8 @@ from SecondStage.fullExperiment import fullProg as secondStage
 from SecondStage.automaticTagging import tagSecondStage
 # from LearningStage.learningProgram import createRandomForestRegressorAndClassifyData as ThirdStage
 from LearningStage.experimentProgram import program as thirdStageProg
-from LearningStage.experimentProgram import createFinalRF, tagChildrenValueWithRegressionForest
+from LearningStage.experimentProgram import createFinalRF, tagChildrenValueWithRegressionForest,\
+    tagIsraeliWithSwedish
 
 if __name__ == '__main__':
     # parsingStage() # First stage
@@ -15,12 +16,13 @@ if __name__ == '__main__':
 
     bestEpsilon = 0.016
     bestFormula = 3
-    # tagSecondStage(bestFormula, bestEpsilon) # Tagging stage by Epsilon and Formula
+    tagSecondStage(bestFormula, bestEpsilon) # Tagging stage by Epsilon and Formula
 
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest, Adaboost and SVM
+    # thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest, Adaboost and SVM
 
-    # createFinalRF(israeliChildrenList, swedishChildrenList)
-    # tagChildren(israeliChildrenList, swedishChildrenList)
+    createFinalRF(israeliChildrenList, swedishChildrenList)
+    # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList)
+    tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)

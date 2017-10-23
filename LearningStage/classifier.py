@@ -4,6 +4,7 @@ from sklearn.model_selection import KFold
 from Parser.auxiliary import NA, MONTHS
 from Parser.swedishChild import SwedishChild
 from Parser.israeliChild import IsraeliChild
+from Parser.child import Child
 from sklearn.feature_selection import RFE, SelectKBest
 import numpy as np
 
@@ -55,6 +56,29 @@ class RegressionForestAlgorithm:
 
         r_forest.fit(new_X, c)
         return r_forest, new_f
+
+    def classifyIsrBySwe(self, ch):
+        if len(ch.goodSamples) == 0:
+            return NA
+
+        if ch.__class__ == SwedishChild:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0]
+        else:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8]
+
+        ch.__class__ = Child
+        f, X, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
+        X_class = []
+        X_regress = []
+        i = 0
+        if ch.__class__ == Child:
+            for feature in f:
+                if feature in self.swe_classi_f:
+                    X_class.append(X[i])
+                if feature in self.swe_regress_f:
+                    X_regress.append(X[i])
+                i += 1
+            return self._predict_swedish(self.fit(X_class), self.fit(X_regress))
 
     def classifyChild(self, ch):
         if len(ch.goodSamples) == 0:

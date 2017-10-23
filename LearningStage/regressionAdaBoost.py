@@ -3,7 +3,7 @@ from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestRegressor
-from LearningStage.boolAdaBoost import determineRanges
+from LearningStage.classificationAdaBoost import determineRanges
 from LearningStage.regressionRandomForest import parametersTuning
 import numpy as np
 from LearningStage.featureSelection import *
