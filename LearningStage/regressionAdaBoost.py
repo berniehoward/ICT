@@ -42,11 +42,11 @@ def regressionAdaLocalSearch(vectors, ranges):
     is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c = vectors
     isr_ranges, swe_ranges, mixed_ranges, hops = ranges
     is_params, is_score = parametersTuning(is_f, is_X, is_c, regressionAdaBoostCreator, isr_ranges, hops, "AB")
-    print("Israeli: ", " params: ", is_params, " score: ", is_score * (-1))
+    print("Israeli: ", " params: ", is_params, " score: ", is_score)
     sw_params, sw_score = parametersTuning(sw_f, sw_X, sw_c, regressionAdaBoostCreator, swe_ranges, hops, "AB")
-    print("Swedish: ", " params: ", sw_params, " score: ", sw_score * (-1))
+    print("Swedish: ", " params: ", sw_params, " score: ", sw_score)
     mix_params, mix_score = parametersTuning(mix_f, mix_X, mix_c, regressionAdaBoostCreator, mixed_ranges, hops, "AB")
-    print("Mix: ", " params: ", mix_params, " score: ", mix_score * (-1))
+    print("Mix: ", " params: ", mix_params, " score: ", mix_score)
 
 
 # Perform local search for regression AB

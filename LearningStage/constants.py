@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import AdaBoostRegressor
 
 RF_hops = [1, 0.05, 1, 5]
 
@@ -66,7 +67,9 @@ R_forests = isr_forest, swe_forest
 
 # Regression AdaBoost classifiers:
 # TODO - to complete
-isr_ada = 1
+r_forest = RandomForestRegressor(max_depth=10, max_features=0.75, random_state=1, min_samples_split=2,
+                                 min_samples_leaf=10, n_estimators=12)
+isr_ada = AdaBoostRegressor(base_estimator=r_forest, n_estimators=141, random_state=1)
 swe_ada = 1
 R_ada = isr_ada, swe_ada
 
