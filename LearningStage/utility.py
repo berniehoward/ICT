@@ -7,6 +7,7 @@ from pydotplus import graph_from_dot_data
 from sklearn import tree
 from enum import Enum
 import six, os, time, itertools
+import numpy as np
 
 randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
 PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
@@ -55,24 +56,24 @@ def splitByGender(children):
 
 # remove isr bad features
 def removeIsraeliBadFeatures(X, f):
-    badFeatures = ['season', 'Height at 0.8', 'Weight at 0.8', 'BMI at 0.8', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8', 'fatherHeight (M)', 'motherHeight (M)', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8']
-    for feature in badFeatures:
-        i = f.index(feature)
-        new_f = f[:i] + f[i + 1:]
-        new_X = []
-        for x in X:
-            new_X.append(x[:i] + x[i + 1:]) # nation is last
-    return new_X, new_f
-
-# remove swe bad features
-def removeSwedishBadFeatures(X, f):
     badFeatures = ['birthHeight (M)', 'birthYear']
     for feature in badFeatures:
         i = f.index(feature)
         new_f = f[:i] + f[i + 1:]
         new_X = []
         for x in X:
-            new_X.append(x[:i] + x[i + 1:]) # nation is last
+            new_X.append(np.append(x[:i],x[i + 1:])) # nation is last
+    return new_X, new_f
+
+# remove swe bad features
+def removeSwedishBadFeatures(X, f):
+    badFeatures = ['season', 'Height at 0.8', 'Weight at 0.8', 'BMI at 0.8', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8', 'fatherHeight (M)', 'motherHeight (M)', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8']
+    for feature in badFeatures:
+        i = f.index(feature)
+        new_f = f[:i] + f[i + 1:]
+        new_X = []
+        for x in X:
+            new_X.append(np.append(x[:i],x[i + 1:])) # nation is last
     return new_X, new_f
 
 # remove nation feature for less warnings

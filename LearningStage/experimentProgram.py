@@ -91,8 +91,18 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
     print(orig_ICT)
     print("Predicted tagging: ")
     print(predicted_ICT)
+    # print("Differences in days: ")
+    # diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
+    # print([diff.count(x) for x in range(-70, 70)])
+    # print("median: ", median(diff))
+    # print("avg: ", average(diff))
+    # print("stdev: ", stdev(diff))
+
+    manual_ICT = [c.ICT_Z * MONTHS if c.ICT_Z != NA else c.ICT_Z for c in (israeliChildrenList + swedishChildrenList)]
+    print("Manual tagging: ")
+    print(manual_ICT)
     print("Differences in days: ")
-    diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
+    diff = [int((x - y) * 30) for x, y in zip(manual_ICT, predicted_ICT) if x != NA and y != NA]
     print([diff.count(x) for x in range(-70, 70)])
     print("median: ", median(diff))
     print("avg: ", average(diff))
