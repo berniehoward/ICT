@@ -10,7 +10,7 @@ from LearningStage.utility import getTenMostCommonAges, splitByGender, printVect
 from Parser.auxiliary import NA
 import numpy as np
 from LearningStage.featureSelection import *
-from LearningStage.classifier import *
+from LearningStage.RFclassifier import *
 import numpy as np
 import os
 from Parser.auxiliary import Nationality, NA

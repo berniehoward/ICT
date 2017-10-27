@@ -6,7 +6,7 @@ RF_hops = [1, 0.05, 1, 5]
 
 # Boolean Random Forest:
 isr_ranges = [range(56, 77), np.arange(0.1, 0.20, 0.05), range(19, 30), range(5, 10, 5)]
-swe_ranges = [range(80, 101), np.arange(0.5, 1.05, 0.05), range(39, 60), range(15, 20, 5)]
+swe_ranges = [range(80, 101), np.arange(0.5, 1.05, 0.05), range(3, 9), range(15, 20, 5)]
 mixed_ranges = [range(40, 61), np.arange(0.6, 0.65, 0.05), range(4, 10), range(5, 10, 5)]
 isr_m_ranges = [range(47, 76), np.arange(0.15, 0.45, 0.05), range(1, 4), range(10, 45, 5)]
 swe_m_ranges = [range(9, 30), np.arange(0.15, 1.05, 0.05), range(8, 29), range(5, 30, 5)]

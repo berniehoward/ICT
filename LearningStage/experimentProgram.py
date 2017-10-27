@@ -9,7 +9,7 @@ from Parser.auxiliary import MONTHS, NA
 import pickle as pkl
 from LearningStage.RFclassifier import RandomForestAlgorithm
 from statistics import stdev
-from numpy import average, median
+from numpy import average, median, nan
 from LearningStage.classificationRandomForest import booleanTreesExp, booleanTreesTuning, \
     booleanTreesFeatureSelectionAndFinalClassifier
 from LearningStage.classificationAdaBoost import booleanAdaExp, booleanAdaTuning, booleanAdaFeatureSelectionAndFinalClassifier
@@ -52,8 +52,9 @@ def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
     printMode = True
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
+    createFeatureHistogram(swedishChildrenList, israeliChildrenList)
     # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
-    adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    # adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 
 # Create random forest learning algorithm by parameters found in the experiment
@@ -70,7 +71,7 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     isr_reg_args = 143, 0.8, 20, 10, 17
     swe_class_args = 84, 0.55, 42, 15, 12
     swe_reg_args = 45, 0.85, 16, 30, 13
-    rf_classifier = RegressionForestAlgorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
+    rf_classifier = RandomForestAlgorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
 
     with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "wb") as pklfile:
         pkl.dump(rf_classifier, pklfile)
@@ -104,7 +105,7 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
 
 
 
-# Tag children with found RF
+# Tag Israeli children with found Swedish RF
 def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
     with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
         rf_classifier = pkl.load(pklfile)
@@ -126,6 +127,11 @@ def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
     print("avg: ", average(diff))
     print("stdev: ", stdev(diff))
 
-    # children = (swedishChildrenList, israeliChildrenList)
-    # with open(picklepath(PICKLE_FILE), "wb") as pklfile:
-    #     pkl.dump(children, pklfile)
+def createFeatureHistogram(israeliChildrenList, swedishChildrenList):
+    print("Feature NaN histogram:")
+    # isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
+    # print(isr_classi_f)
+    # print([list(x).count(np.nan) for x in np.array(X_classi_isr).transpose()])
+    swe_classi_f, X_classi_swe, c_classi_swe = getDataForBooleanClassification(swedishChildrenList)
+    print(swe_classi_f)
+    print([list(x).count(np.nan) for x in np.array(X_classi_swe).transpose()])
