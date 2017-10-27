@@ -53,6 +53,27 @@ def splitByGender(children):
     females = [i for i in children if i.sex == Gender.FEMALE.value]
     return males, females
 
+# remove isr bad features
+def removeIsraeliBadFeatures(X, f):
+    badFeatures = ['season', 'Height at 0.8', 'Weight at 0.8', 'BMI at 0.8', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8', 'fatherHeight (M)', 'motherHeight (M)', 'WHO wfa z-score at 0.8', 'WHO wfl z-score at age 0.8', 'WHO lfa z-score at age 0.8']
+    for feature in badFeatures:
+        i = f.index(feature)
+        new_f = f[:i] + f[i + 1:]
+        new_X = []
+        for x in X:
+            new_X.append(x[:i] + x[i + 1:]) # nation is last
+    return new_X, new_f
+
+# remove swe bad features
+def removeSwedishBadFeatures(X, f):
+    badFeatures = ['birthHeight (M)', 'birthYear']
+    for feature in badFeatures:
+        i = f.index(feature)
+        new_f = f[:i] + f[i + 1:]
+        new_X = []
+        for x in X:
+            new_X.append(x[:i] + x[i + 1:]) # nation is last
+    return new_X, new_f
 
 # remove nation feature for less warnings
 def removeNationFeature(X, f):
@@ -60,7 +81,7 @@ def removeNationFeature(X, f):
     new_f = f[:i] + f[i + 1:]
     new_X = []
     for x in X:
-        new_X.append(x[:i] + x[i + 1:])
+        new_X.append(x[:i]) # nation is last
     return new_X, new_f
 
 

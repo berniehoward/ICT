@@ -1,4 +1,3 @@
-from LearningStage.utility import exportTreesFromForest, removeNationFeature
 from LearningStage.classificationExperiment import createBoolClassification,getDataForBooleanClassification
 from LearningStage.regressionExperiment import createRegressionClassification, getDataForClassification
 from LearningStage.utility import *
@@ -38,23 +37,23 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
 
 
 def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    print("Boolean AdaBoost: ")
-    isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
-        createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
-                                 booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
-    # print("Regression AdaBoost: ")
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
-    #                                    regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
+    # print("Boolean AdaBoost: ")
+    # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
+    #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
+    #                              booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    print("Regression AdaBoost: ")
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
+                                       regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
 
 
 # Perform experiment for the third stage
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
     printMode = True
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    createFeatureHistogram(swedishChildrenList, israeliChildrenList)
+    # createFeatureHistogram(swedishChildrenList, israeliChildrenList)
     # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
-    # adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 
 # Create random forest learning algorithm by parameters found in the experiment
@@ -85,7 +84,7 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
         ict_val = rf_classifier.classifyChild(c)
-        c.regICT = ict_val
+        # c.regICT = ict_val
         predicted_ICT.append(ict_val)
     orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList + swedishChildrenList)]
     print("Original tagging: ")
@@ -94,14 +93,14 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
     print(predicted_ICT)
     print("Differences in days: ")
     diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
-    print([diff.count(x) for x in range(-30, 30)])
+    print([diff.count(x) for x in range(-70, 70)])
     print("median: ", median(diff))
     print("avg: ", average(diff))
     print("stdev: ", stdev(diff))
 
-    children = (swedishChildrenList, israeliChildrenList)
-    with open(picklepath(PICKLE_FILE), "wb") as pklfile:
-        pkl.dump(children, pklfile)
+    # children = (swedishChildrenList, israeliChildrenList)
+    # with open(picklepath(PICKLE_FILE), "wb") as pklfile:
+    #     pkl.dump(children, pklfile)
 
 
 
