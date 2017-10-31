@@ -53,7 +53,7 @@ isr_m_ranges = [range(78, 85), range(90, 91), np.arange(0.55, 0.6, 0.05), range(
 swe_m_ranges = []
 mixed_m_ranges = []
 isr_f_ranges = [range(30, 31), range(188, 190), np.arange(0.5, 0.65, 0.05), range(18, 29), range(5, 10, 5)]
-swe_f_ranges = []
+swe_f_ranges = [range(27, 38), range(2, 13), np.arange(0.3, 0.8, 0.05), range(16, 27), range(5, 15, 5)]
 mixed_f_ranges = []
 RAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
            swe_f_ranges, mixed_f_ranges, AB_hops
