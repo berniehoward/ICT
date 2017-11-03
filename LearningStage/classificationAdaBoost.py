@@ -3,6 +3,8 @@ from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
+from simpleai.search.local import hill_climbing
+from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
 import numpy as np
 
 
@@ -51,9 +53,11 @@ def booleanAdaExp(f, X, c, experiment):
     determineRanges(f, X, c, booleanAdaBoostCreator)
 
 
-def booleanAdaTuning():
-    # TODO - complete
-    pass
+def booleanAdaTuning(f, X, c, function ,ranges):
+    boolClass = False  # Boolean classification
+    AB_hops = [1, 1, 0.05, 1, 5]
+    problem = ParametersTuningLocalSearch(ranges, f, X, c, AB_hops, function, "AB", boolClass)
+    return hill_climbing(problem, 1000).state
 
 
 def booleanAdaFeatureSelectionAndFinalClassifier():

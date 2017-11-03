@@ -30,18 +30,17 @@ mixed_f_ranges = [range(79, 99), np.arange(0.25, 1, 0.05), range(5, 25), range(5
 RRF_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
            swe_f_ranges, mixed_f_ranges, RF_hops
 
-# TODO - fill the rest of the parameters for AdaBoost
 AB_hops = [1, 1, 0.05, 1, 5]
 # Boolean AdaBoost:
-isr_ranges = []
-sw_ranges = []
-mix_ranges = []
-isr_m_ranges = []
-swe_m_ranges = []
-mixed_m_ranges = []
-isr_f_ranges = []
-swe_f_ranges = []
-mixed_f_ranges = []
+isr_ranges = [range(109, 115) ,range(31, 40), np.arange(0.3, 0.35, 0.05), range(2, 3), range(10, 20, 5)]
+swe_ranges = [range(70, 75) ,range(10, 15), np.arange(0.65, 0.8, 0.05), range(2, 3), range(20, 40, 5)]
+mixed_ranges = [range(2, 9) ,range(79, 89), np.arange(0.8, 1.05, 0.05), range(10, 20), range(5, 15, 5)]
+isr_m_ranges = [range(92, 104) ,range(3, 4), np.arange(0.45, 0.55, 0.05), range(1,2), range(20, 45, 5)]
+swe_m_ranges = [range(85, 91) ,range(5,10), np.arange(0.3, 0.55, 0.05), range(21, 26), range(5, 10, 5)]
+mixed_m_ranges = [range(78, 81) ,range(75,85), np.arange(0.15, 0.20, 0.05), range(1, 2), range(20, 35, 5)]
+isr_f_ranges = [range(99, 100) ,range(2, 9), np.arange(0.65, 0.7, 0.05), range(2, 3), range(15, 25, 5)]
+swe_f_ranges = [range(41, 56) ,range(38, 42), np.arange(1, 1.05, 0.05), range(38, 48), range(5, 30, 5)]
+mixed_f_ranges = [range(87, 94) ,range(111,120), np.arange(0.7, 0.8, 0.05), range(2, 5), range(25, 30, 5)]
 BAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mixed_m_ranges, isr_f_ranges, \
            swe_f_ranges, mixed_f_ranges, AB_hops
 
