@@ -35,9 +35,11 @@ getGender = lambda g: Gender.MALE.value if g == 'M' else Gender.FEMALE.value
 getpath = lambda file: os.path.join(os.getcwd(), "ICTData", file)
 picklepath = lambda file: os.path.join(os.getcwd(), "Parser", file)
 
+
 class Nationality(Enum):
     ISR = 0
     SWE = 1
+    MIX = 2
 
 class Gender(Enum):
     MALE = 1
