@@ -37,10 +37,10 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
 
 
 def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    print("Boolean AdaBoost: ")
-    isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
-        createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
-                                 booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    # print("Boolean AdaBoost: ")
+    # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
+    #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
+    #                              booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
     print("Regression AdaBoost: ")
     isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
         createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
@@ -51,8 +51,8 @@ def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
     printMode = True
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # TODO- Do we need this line?
-    createFeatureHistogram(swedishChildrenList, israeliChildrenList)
-    randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    # createFeatureHistogram(swedishChildrenList, israeliChildrenList)
+    # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
     adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 

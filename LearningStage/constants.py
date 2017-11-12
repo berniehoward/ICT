@@ -60,6 +60,9 @@ RAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mix
 
 
 ################################################ Final classifiers #####################################################
+# Classification forest:
+# TODO - complete
+
 # Regression forests:
 isr_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
                                    min_samples_leaf=10, n_estimators=143)
@@ -91,14 +94,16 @@ swe_ada2 = AdaBoostRegressor(base_estimator=None, n_estimators=22, random_state=
 
 R_ada = isr_ada1, swe_ada1, mix_ada1, isr_ada2, swe_ada2
 ################################################# Final k ##############################################################
+
 # Regression RF k's :
 is_RF_k = 17
 sw_RF_k = 13
 
 # Regression AB k's
-# TODO - to complete
-is_AB_k = 17
+is_AB_k = 24
 sw_AB_k = 13
 
 RF_k = is_RF_k, sw_RF_k
 AB_k = is_AB_k, sw_AB_k
+
+# TODO - complete boolean k's

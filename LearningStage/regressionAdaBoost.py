@@ -72,13 +72,34 @@ def regressionAdaTuning(params, vectors):
     regressionAdaLocalSearch(F_vectors, F_ranges)
 
 
-def regressionAdaFinalClassifier(is_X, is_c, is_f, is_k, sw_X, sw_c, sw_f, sw_k, classifiers):
-    isr_RF, swe_RF, isr_AB, swe_AB = classifiers
-    is_f, is_final_AB = createFinalRegressionAda(is_X, is_c, is_f, is_k, isr_RF, True)
-    sw_f, sw_final_AB = createFinalRegressionAda(sw_X, sw_c, sw_f, sw_k, swe_RF, True)
+def regressionAdaFinalClassifier(is_X, is_c, is_f, is_k, sw_X, sw_c, sw_f, sw_k, regressors):
+    isr_AB, swe_AB = regressors
+    is_f, is_final_AB = createFinalRegressionAda(is_X, is_c, is_f, is_k, isr_AB, Nationality.ISR, True)
+    sw_f, sw_final_AB = createFinalRegressionAda(sw_X, sw_c, sw_f, sw_k, swe_AB, Nationality.SWE, True)
     return is_f, is_final_AB, sw_f, sw_final_AB
 
 
-def createFinalRegressionAda(is_X, is_c, is_f, is_k, isr_RF, printMode):
-    # TODO - to complete  - look at "createFinalRegressionForest"
-    pass
+# Return the recommended regressor
+def createFinalRegressionAda(X, c, f, k, ab, nationality, printMode=False):
+        if nationality == Nationality.ISR:
+            selector = RFE(ab, k, step=1)
+        else:
+            def scoringFunction(X, c):
+                ab.fit(X, c)
+                return ab.feature_importances_
+            selector = SelectKBest(scoringFunction, k=k)
+
+        new_X = selector.fit_transform(X, c)
+        selector = selector.fit(X, c)
+        new_f = []
+        i = 0
+        for b in selector.get_support():
+            if b:
+                new_f.append(f[i])
+            i += 1
+
+        if printMode:
+            print(k, " best features are: ", new_f)
+
+        ab.fit(new_X, c)
+        return new_f, ab
