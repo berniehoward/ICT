@@ -120,7 +120,7 @@ def seperateGenders(children):
     return m_f, m_X, m_c, f_f, f_X, f_c
 
 
-# Return the recommended regressor
+# Return the recommended regression classifier
 def createFinalRegressionForest(X, c, f, k, forest, printMode=False):
     selector = RFE(forest, k, step=1)
     new_X = selector.fit_transform(X, c)

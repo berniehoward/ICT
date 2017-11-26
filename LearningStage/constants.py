@@ -100,7 +100,8 @@ is_RF_k = 17
 sw_RF_k = 13
 
 # Regression AB k's
-is_AB_k = 24
+# TODO - to complete
+is_AB_k = 17
 sw_AB_k = 13
 
 RF_k = is_RF_k, sw_RF_k

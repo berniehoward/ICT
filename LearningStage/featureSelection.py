@@ -77,7 +77,7 @@ def performRFE(X, c, forest, origin):
 
     print("%s: " % origin)
     best_k, min_score = rfe(X, c, forest, forest)
-    print("RF/AB - k: ", best_k, "mse: ", min_score)
+    print("RF - k: ", best_k, "mse: ", min_score)
     if set(c) == {0, 1}:  # SVM
         print("SVC: ")
         estimator = SVC(kernel="linear")
