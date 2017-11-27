@@ -1,6 +1,6 @@
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import AdaBoostRegressor
+from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 
 ################################################ Ranges #############################################################
 RF_hops = [1, 0.05, 1, 5]
@@ -71,7 +71,14 @@ swe_forest = RandomForestRegressor(max_depth=16, max_features=0.85, random_state
 R_forests = isr_forest, swe_forest
 
 # AdaBoost classifiers:
-# TODO - to complete
+adaboost_isr_forest = RandomForestClassifier(max_depth=2, max_features=0.3, random_state=1,
+                                    min_samples_leaf=10, n_estimators=35)
+adaboost_isr_classifier = AdaBoostClassifier(base_estimator=adaboost_isr_forest, n_estimators=113, random_state=1)
+
+adaboost_swe_forest = RandomForestClassifier(max_depth=2, max_features=0.7, random_state=1,
+                                    min_samples_leaf=20, n_estimators=12)
+adaboost_swe_classifier = AdaBoostClassifier(base_estimator=adaboost_swe_forest, n_estimators=72, random_state=1)
+C_ada = adaboost_isr_classifier, adaboost_swe_classifier
 
 # AdaBoost Regressors:
 # First format:
@@ -94,14 +101,12 @@ swe_ada2 = AdaBoostRegressor(base_estimator=None, n_estimators=22, random_state=
 
 R_ada = isr_ada1, swe_ada1, mix_ada1, isr_ada2, swe_ada2
 ################################################# Final k ##############################################################
-
 # Regression RF k's :
 is_RF_k = 17
 sw_RF_k = 13
 
 # Regression AB k's
-# TODO - to complete
-is_AB_k = 17
+is_AB_k = 24
 sw_AB_k = 13
 
 RF_k = is_RF_k, sw_RF_k

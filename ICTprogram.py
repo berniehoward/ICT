@@ -11,18 +11,18 @@ from LearningStage.experimentProgram import createFinalRF, tagChildrenValueWithR
 
 if __name__ == '__main__':
     # parsingStage() # First stage
-    # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
     # secondStage(swedishChildrenList, israeliChildrenList, True) # Second stage
 
     bestEpsilon = 0.016
     bestFormula = 3
-    tagSecondStage(bestFormula, bestEpsilon) # Tagging stage by Epsilon and Formula
+    # tagSecondStage(bestFormula, bestEpsilon) # Tagging stage by Epsilon and Formula
 
     with open(picklepath(PICKLE_FILE), "rb") as pklfile:
         swedishChildrenList, israeliChildrenList = pkl.load(pklfile)
 
-    # thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest, Adaboost and SVM
+    # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
+    thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest, Adaboost and SVM
 
-    createFinalRF(israeliChildrenList, swedishChildrenList)
+    # createFinalRF(israeliChildrenList, swedishChildrenList)
     # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList)
-    tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)
+    # tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)

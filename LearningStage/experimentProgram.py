@@ -1,4 +1,4 @@
-from LearningStage.classificationExperiment import createBoolClassification,getDataForBooleanClassification
+from LearningStage.classificationExperiment import createBoolClassification, getDataForBooleanClassification
 from LearningStage.regressionExperiment import createRegressionClassification, getDataForClassification
 from LearningStage.utility import *
 from Parser.auxiliary import *
@@ -8,7 +8,7 @@ from Parser.auxiliary import MONTHS, NA
 import pickle as pkl
 from LearningStage.RFclassifier import RandomForestAlgorithm
 from statistics import stdev
-from numpy import average, median, nan
+from numpy import average, median
 from LearningStage.classificationRandomForest import booleanTreesExp, booleanTreesTuning, \
     booleanTreesFeatureSelectionAndFinalClassifier
 from LearningStage.classificationAdaBoost import booleanAdaExp, booleanAdaTuning, booleanAdaFeatureSelectionAndFinalClassifier
@@ -84,19 +84,19 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
         ict_val = rf_classifier.classifyChild(c)
-        # c.regICT = ict_val
+        c.regICT = ict_val
         predicted_ICT.append(ict_val)
     orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList + swedishChildrenList)]
     print("Original tagging: ")
     print(orig_ICT)
     print("Predicted tagging: ")
     print(predicted_ICT)
-    # print("Differences in days: ")
-    # diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
-    # print([diff.count(x) for x in range(-70, 70)])
-    # print("median: ", median(diff))
-    # print("avg: ", average(diff))
-    # print("stdev: ", stdev(diff))
+    print("Differences in days: ")
+    diff = [int((x-y)*30) for x, y in zip(orig_ICT, predicted_ICT) if x != NA and y != NA]
+    print([diff.count(x) for x in range(-70, 70)])
+    print("median: ", median(diff))
+    print("avg: ", average(diff))
+    print("stdev: ", stdev(diff))
 
     manual_ICT = [c.ICT_Z * MONTHS if c.ICT_Z != NA else c.ICT_Z for c in (israeliChildrenList + swedishChildrenList)]
     print("Manual tagging: ")
@@ -113,7 +113,6 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
         pkl.dump(children, pklfile)
 
 
-
 # Tag Israeli children with found Swedish RF
 def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
     with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
@@ -122,7 +121,7 @@ def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
     predicted_ICT = []
     for c in israeliChildrenList:
         ict_val = rf_classifier.classifyIsrBySwe(c)
-        # c.regICT = ict_val
+        c.regICT = ict_val
         predicted_ICT.append(ict_val)
     orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList)]
     print("Original tagging: ")
@@ -136,11 +135,12 @@ def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
     print("avg: ", average(diff))
     print("stdev: ", stdev(diff))
 
+
 def createFeatureHistogram(israeliChildrenList, swedishChildrenList):
     print("Feature NaN histogram:")
-    # isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
-    # print(isr_classi_f)
-    # print([list(x).count(np.nan) for x in np.array(X_classi_isr).transpose()])
+    isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
+    print(isr_classi_f)
+    print([list(x).count(np.nan) for x in np.array(X_classi_isr).transpose()])
     swe_classi_f, X_classi_swe, c_classi_swe = getDataForBooleanClassification(swedishChildrenList)
     print(swe_classi_f)
     print([list(x).count(np.nan) for x in np.array(X_classi_swe).transpose()])

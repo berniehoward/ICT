@@ -10,8 +10,6 @@ from sklearn.svm import SVR, SVC
 # Perform feature selection and remain with k best features
 # Return the best k features, the best k and the best mse
 def selectKBestFeatures(X, c, forest, classifier_type, scoringFunction=f_regression):
-    # TODO - try to run without the lines of warnings.
-    warnings.simplefilter("error")
     warnings.filterwarnings("ignore", category=UserWarning)
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     imputer = Imputer(strategy='median', axis=0)
