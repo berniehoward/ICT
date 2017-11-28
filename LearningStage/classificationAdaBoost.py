@@ -1,10 +1,12 @@
-from sklearn.ensemble import AdaBoostClassifier
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import Imputer
 from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from simpleai.search.local import hill_climbing
 from LearningStage.parametersTuningLocalSearch import ParametersTuningLocalSearch
+from Parser.auxiliary import Nationality, NA
+from LearningStage.utility import removeNationFeature
+from LearningStage.featureSelection import *
 import numpy as np
 
 
@@ -60,7 +62,51 @@ def booleanAdaTuning(f, X, c, function ,ranges):
     return hill_climbing(problem, 1000).state
 
 
-def booleanAdaFeatureSelectionAndFinalClassifier():
-    # TODO - complete
-    pass
+
+def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, sw_c):
+    isr_forest = RandomForestClassifier(max_depth=2, max_features=0.3, random_state=1,
+                                      min_samples_leaf=10, n_estimators=35)
+    isr_classifier = AdaBoostClassifier(base_estimator=isr_forest, n_estimators=113, random_state=1)
+
+    swe_forest = RandomForestClassifier(max_depth=2, max_features=0.7, random_state=1,
+                                   min_samples_leaf=20, n_estimators=12)
+    swe_classifier = AdaBoostClassifier(base_estimator=swe_forest, n_estimators=72, random_state=1)
+
+
+    # altrenative
+    isr_forest_alt = RandomForestClassifier(max_depth=2, random_state=1)
+    isr_classifier_alt = AdaBoostClassifier(base_estimator=isr_forest_alt, random_state=1)
+
+    swe_forest_alt = RandomForestClassifier(max_depth=None, max_features=0.7, random_state=1,
+                                   min_samples_leaf=1, n_estimators=10)
+    swe_classifier_alt = AdaBoostClassifier(base_estimator=swe_forest_alt, n_estimators=50, random_state=1)
+
+
+    # Feature selection:
+    print("Feature selection: ")
+    imputer = Imputer(strategy='median', axis=0)
+#
+    is_X, f = removeNationFeature(is_X, is_f)
+    is_X = imputer.fit_transform(is_X)
+    # performSelectKBestFeatures(is_X, is_c, isr_classifier, Nationality.ISR.name)
+#
+    sw_X, f = removeNationFeature(sw_X, sw_f)
+    sw_X = imputer.fit_transform(sw_X)
+    # performSelectKBestFeatures(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
+
+    # performRFE(is_X, is_c, isr_classifier, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
+
+    # performRFE(is_X, is_c, isr_classifier_alt, Nationality.ISR.name)
+    # performRFE(sw_X, sw_c, swe_classifier_alt, Nationality.SWE.name)
+#
+    # # create final classification forest :
+    # is_k = 22
+    # sw_k = 12
+#
+    # isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
+    # swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
+    # return isr_f, isr_final_RF, swe_f, swe_final_RF
+
+
 

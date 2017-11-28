@@ -11,18 +11,18 @@ from Parser.auxiliary import Nationality, NA
 def createBoolClassification(swedishChildrenList, israeliChildrenList, expFunc, tuningFunc,
                              featureSelectionAndFinalClassifierFunc, PARM):
     # Get feature vectors and classification
-    # is_f, is_X, is_c = getDataForBooleanClassification(israeliChildrenList)
-    # is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
+    is_f, is_X, is_c = getDataForBooleanClassification(israeliChildrenList)
+    is_m_f, is_m_X, is_m_c, is_f_f, is_f_X, is_f_c = seperateGenders(israeliChildrenList)
 #
     sw_f, sw_X, sw_c = getDataForBooleanClassification(swedishChildrenList)
-    sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
+    # sw_m_f, sw_m_X, sw_m_c, sw_f_f, sw_f_X, sw_f_c = seperateGenders(swedishChildrenList)
 
     # allChildren = mergeChildren(israeliChildrenList, swedishChildrenList)
     # mix_f, mix_X, mix_c = getDataForBooleanClassification(allChildren)
     # mix_m_f, mix_m_X, mix_m_c, mix_f_f, mix_f_X, mix_f_c = seperateGenders(allChildren)
 
     # expFunc(is_f, is_X, is_c, "Israeli")
-    expFunc(sw_f, sw_X, sw_c, "Swedish")
+    # expFunc(sw_f, sw_X, sw_c, "Swedish")
     # expFunc(mix_f, mix_X, mix_c, "Mixed")
 
     # print("Males: ")
