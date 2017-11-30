@@ -16,9 +16,6 @@ from LearningStage.regressionAdaBoost import regressionAdaExp, regressionAdaTuni
 from LearningStage.regressionRandomForest import regressionForestExp, regressionForestTuning, regressionRFFinalClassifier
 import numpy as np
 
-# TODO - Does all the functions really belong to this file? or we need to move some? maybe file for RF general
-# function and file to AdaBoost?
-
 
 def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
     print("Boolean trees: ")
@@ -37,14 +34,14 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
 
 
 def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    print("Boolean AdaBoost: ")
-    isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
-        createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
-                                 booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
-    # print("Regression AdaBoost: ")
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
-    #                                    regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
+    # print("Boolean AdaBoost: ")
+    # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
+    #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
+    #                              booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    print("Regression AdaBoost: ")
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
+                                       regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
 
 
 # Perform experiment for the third stage

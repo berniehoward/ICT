@@ -36,11 +36,7 @@ class RecommendedAlgorithm(AbstractClassifier):
         AB = abType(base_estimator=r_forest, n_estimators=N_ES, random_state=1)
 
         if len(set(c)) == 2:  # Classifier
-            # TODO - change according to your results
-            def scoringFunction(X, c):
-                AB.fit(X, c)
-                return AB.feature_importances_
-            selector = SelectKBest(scoringFunction, k=K)
+            selector = RFE(AB, K, step=1)
         else:  # Regressor
             if nationaliity == Nationality.ISR:
                 classifier = AB
