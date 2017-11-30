@@ -62,6 +62,23 @@ def booleanAdaTuning(f, X, c, function ,ranges):
     return hill_climbing(problem, 1000).state
 
 
+def createFinalAdaboostClassifier(X, c, f, k, forest, printMode=False):
+    selector = RFE(forest, k, step=1)
+    new_X = selector.fit_transform(X, c)
+    selector = selector.fit(X, c)
+    new_f = []
+    i = 0
+    for b in selector.get_support():
+        if b:
+            new_f.append(f[i])
+        i += 1
+
+    if printMode:
+        print(k, " best features are: ", new_f)
+
+    forest.fit(new_X, c)
+    return new_f, forest
+
 
 def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, sw_c):
     isr_forest = RandomForestClassifier(max_depth=2, max_features=0.3, random_state=1,
@@ -73,13 +90,13 @@ def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, s
     swe_classifier = AdaBoostClassifier(base_estimator=swe_forest, n_estimators=72, random_state=1)
 
 
-    # altrenative
-    isr_forest_alt = RandomForestClassifier(max_depth=2, random_state=1)
-    isr_classifier_alt = AdaBoostClassifier(base_estimator=isr_forest_alt, random_state=1)
+    # altrenative as expalined the summary work
+    # isr_forest_alt = RandomForestClassifier(max_depth=2, random_state=1)
+    # isr_classifier_alt = AdaBoostClassifier(base_estimator=isr_forest_alt, random_state=1)
 
-    swe_forest_alt = RandomForestClassifier(max_depth=None, max_features=0.7, random_state=1,
-                                   min_samples_leaf=1, n_estimators=10)
-    swe_classifier_alt = AdaBoostClassifier(base_estimator=swe_forest_alt, n_estimators=50, random_state=1)
+    # swe_forest_alt = RandomForestClassifier(max_depth=None, max_features=0.7, random_state=1,
+    #                                min_samples_leaf=1, n_estimators=10)
+    # swe_classifier_alt = AdaBoostClassifier(base_estimator=swe_forest_alt, n_estimators=50, random_state=1)
 
 
     # Feature selection:
@@ -95,17 +112,17 @@ def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, s
     # performSelectKBestFeatures(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
 
     # performRFE(is_X, is_c, isr_classifier, Nationality.ISR.name)
-    performRFE(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
+    # performRFE(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
 
     # performRFE(is_X, is_c, isr_classifier_alt, Nationality.ISR.name)
     # performRFE(sw_X, sw_c, swe_classifier_alt, Nationality.SWE.name)
 #
     # # create final classification forest :
-    # is_k = 22
-    # sw_k = 12
+    is_k = 22
+    sw_k = 12
 #
-    # isr_f, isr_final_RF = createFinalClassificationForest(is_X, is_c, is_f, is_k, isr_forest, True)
-    # swe_f, swe_final_RF = createFinalClassificationForest(sw_X, sw_c, sw_f, sw_k, swe_forest, True)
+    # isr_f, isr_final_RF = createFinalAdaboostClassifier(is_X, is_c, is_f, is_k, isr_classifier, True)
+    swe_f, swe_final_RF = createFinalAdaboostClassifier(sw_X, sw_c, sw_f, sw_k, swe_classifier, True)
     # return isr_f, isr_final_RF, swe_f, swe_final_RF
 
 

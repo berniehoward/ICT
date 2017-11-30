@@ -61,7 +61,10 @@ RAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mix
 
 ################################################ Final classifiers #####################################################
 # Classification forest:
-# TODO - complete
+isr_class_forest = RandomForestClassifier(max_depth=20, max_features=0.1, random_state=1,
+                                        min_samples_leaf=5, n_estimators=57)
+swe_class_forest = RandomForestClassifier(max_depth=42, max_features=0.55, random_state=1,
+                                        min_samples_leaf=15, n_estimators=84)
 
 # Regression forests:
 isr_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
@@ -112,4 +115,13 @@ sw_AB_k = 13
 RF_k = is_RF_k, sw_RF_k
 AB_k = is_AB_k, sw_AB_k
 
-# TODO - complete boolean k's
+# Classification RF k's :
+is_cl_RF_k = 14
+sw_cl_RF_k = 12
+
+# Classification AB k's
+is_cl_AB_k = 22
+sw_cl_AB_k = 12
+
+RF_cl_k = is_cl_AB_k, sw_cl_AB_k
+AB_cl_k = is_cl_AB_k, sw_cl_AB_k

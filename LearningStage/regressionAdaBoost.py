@@ -58,7 +58,7 @@ def regressionAdaTuning(params, vectors):
     is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c, is_m_f, is_m_X, is_m_c, sw_m_f, sw_m_X, sw_m_c, mix_m_f, \
     mix_m_X, mix_m_c, is_f_f, is_f_X, is_f_c, sw_f_f, sw_f_X, sw_f_c, mix_f_f, mix_f_X, mix_f_c = vectors
 
-    print("Bout Genders: ")
+    print("Both Genders: ")
     BG_ranges = isr_ranges, swe_ranges, mixed_ranges, hops
     BG_vectors = is_f, is_X, is_c, sw_f, sw_X, sw_c, mix_f, mix_X, mix_c
     regressionAdaLocalSearch(BG_vectors, BG_ranges)
