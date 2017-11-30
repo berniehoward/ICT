@@ -106,7 +106,7 @@ def findEarlyFeatureGroup(features_groups, c, final_classifier, featureSelection
         index += 1
 
 
-# Perform the forth stage experiment
+# Perform the fourth stage experiment
 def experimentProgram(vectors, final_classifiers, classFeatureSelectionData, regFeatureSelectionData):
     is_classi, is_regrassor, sw_classi, sw_regrassor = final_classifiers
     is_X, is_c, sw_X, sw_c = vectors

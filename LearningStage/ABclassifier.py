@@ -41,7 +41,7 @@ class AdaBoostAlgorithm(AbstractClassifier):
             return AB.feature_importances_
 
         if len(set(c)) == 2:  # Classifier
-            selector = SelectKBest(scoringFunction, k=K)  # TODO - change according to your results
+            selector = RFE(AB, K, step=1)
         else:  # Regressor
             if nationaliity == Nationality.ISR:
                 selector = RFE(AB, K, step=1)
