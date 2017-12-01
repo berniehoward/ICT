@@ -53,8 +53,8 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
     adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 
-# Create random forest learning algorithm by parameters found in the experiment
-def createFinalRF(israeliChildrenList, swedishChildrenList):
+# Create learning algorithm by parameters found in the experiment
+def createFinal(israeliChildrenList, swedishChildrenList, params, algorithm, fileName):
     isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
     swe_classi_f, X_classi_swe, c_classi_swe = getDataForBooleanClassification(swedishChildrenList)
     isr_regress_f, X_regress_isr, c_regress_isr = getDataForClassification(israeliChildrenList)
@@ -63,25 +63,27 @@ def createFinalRF(israeliChildrenList, swedishChildrenList):
     X_classi_swe, swe_classi_f = removeNationFeature(X_classi_swe, swe_classi_f)
     data = X_classi_isr, c_classi_isr, isr_classi_f, X_regress_isr, c_regress_isr, isr_regress_f, X_classi_swe, \
         c_classi_swe, swe_classi_f, X_regress_swe, c_regress_swe, swe_regress_f
-    isr_class_args = 57, 0.1, 20, 5, 14
-    isr_reg_args = 143, 0.8, 20, 10, 17
-    swe_class_args = 84, 0.55, 42, 15, 12
-    swe_reg_args = 45, 0.85, 16, 30, 13
-    rf_classifier = RandomForestAlgorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
+    isr_class_args, isr_reg_args, swe_class_args, swe_reg_args = params
+    classifier = algorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
 
-    with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "wb") as pklfile:
-        pkl.dump(rf_classifier, pklfile)
+    with open(randomforestpath(fileName), "wb") as pklfile:
+        pkl.dump(classifier, pklfile)
 
 
-# Tag children with found RF
-def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList):
-    with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
-        rf_classifier = pkl.load(pklfile)
+# Tag children with final classifiers
+def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, fileName):
+    with open(randomforestpath(fileName), "rb") as pklfile:
+        classifier = pkl.load(pklfile)
 
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
-        ict_val = rf_classifier.classifyChild(c)
-        c.regICT = ict_val
+        ict_val = classifier.classifyChild(c)
+        if fileName == PICKLE_RANDOM_FOREST_FILE:
+            c.forestICT = ict_val
+        elif fileName == PICKLE_ADABOOST_FILE:
+            c.adaICT = ict_val
+        else:
+            c.recICT = ict_val
         predicted_ICT.append(ict_val)
     orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList + swedishChildrenList)]
     print("Original tagging: ")

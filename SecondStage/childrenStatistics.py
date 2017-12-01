@@ -1,5 +1,5 @@
 # print statistics of different lists of samples
-def printSampleListStatistics(isr_children, swe_children):
+def printSampleListStatistics(swe_children, isr_children):
     goodSamples = []
     goodSamplesWithHC = []
     badSamples = []

@@ -11,7 +11,9 @@ import numpy as np
 
 randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
 PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
-PICKLE_RANDOM_ADABOOST_FILE = 'AdaboostAlgorithm.pkl'
+PICKLE_ADABOOST_FILE = 'AdaBoostAlgorithm.pkl'
+PICKLE_RECOMMENDED_FILE = 'RecommendedAlgorithm.pkl'
+
 
 class DecisionAlgorithmType(Enum):
     CLASSIFICATION = 0

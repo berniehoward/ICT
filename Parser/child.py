@@ -22,9 +22,9 @@ class Child:
         self.preterm = NA
 
         self.autoICT = NA  # value is set at end of second stage
-        self.regICT = NA   # value is set at end of RF stage
-        self.adaboostICT = NA # value is set at end of AdaBoost stage
-        self.svmICT = NA      # value is set at end of SVM stage
+        self.forestICT = NA   # value is set at end of RF stage
+        self.adaICT = NA   # value is set at end of AB stage
+        self.recICT = NA   # value is set at end of final stage - recommended classifier
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0
