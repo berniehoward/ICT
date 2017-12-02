@@ -29,6 +29,7 @@ if __name__ == '__main__':
         final_classifier = pkl.load(pklfile)
 
     print("Welcome to the ICT Classifier!\nPlease follow the instructions below\n\n")
+    print("NOTICE!!! this version is not comaptible with vectors with missing elements. Use with caution.\n")
     isUniversal = input("Insert type:\n\t1 for the universal classifier\n\t2 for regular (origin-related classifier)\n")
     accuracyFlag = input("Insert accuracy:\n\t1 for accurate classifier\n\t2 for fast classifier\n")
     method = input("Insert insertion Method: \n\t1 in order to classify a csv file \n\t2 for a single classification\n")
