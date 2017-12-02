@@ -179,8 +179,6 @@ class IsraeliChild(Child):
                  self.min_HCdivWeightSqLevel1, self.avg_HCdivWeightSqLevel2, self.max_HCdivWeightSqLevel2,
                  self.min_HCdivWeightSqLevel2]
 
-        features, data = self.generateWHOparameters(common_ages, features, data)
-
         features += ["nation"]
         data += [Nationality.ISR.value]
 
