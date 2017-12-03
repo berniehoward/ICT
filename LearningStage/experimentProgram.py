@@ -66,14 +66,15 @@ def createFinal(israeliChildrenList, swedishChildrenList, params, algorithm, fil
     isr_class_args, isr_reg_args, swe_class_args, swe_reg_args = params
     classifier = algorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
 
-    with open(randomforestpath(fileName), "wb") as pklfile:
+    with open(finalclassifierpath(fileName), "wb") as pklfile:
         pkl.dump(classifier, pklfile)
 
 
 # Tag children with final classifiers
 def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, fileName):
-    with open(randomforestpath(fileName), "rb") as pklfile:
+    with open(finalclassifierpath(fileName), "rb") as pklfile:
         classifier = pkl.load(pklfile)
+
 
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
@@ -114,7 +115,7 @@ def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenLis
 
 # Tag Israeli children with found Swedish RF
 def tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList):
-    with open(randomforestpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
+    with open(finalclassifierpath(PICKLE_RANDOM_FOREST_FILE), "rb") as pklfile:
         rf_classifier = pkl.load(pklfile)
 
     predicted_ICT = []

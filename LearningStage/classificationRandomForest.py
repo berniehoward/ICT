@@ -18,6 +18,9 @@ from LearningStage.utility import removeNationFeature
 
 
 # Return data and classification separated by gender:
+from Parser.swedishChild import SwedishChild
+
+
 def seperateGenders(children):
     males, females = splitByGender(children)
     m_f, m_X, m_c = getDataForBooleanClassification(males)
@@ -67,6 +70,10 @@ def getDataForBooleanClassification(children):
     for ch in children:
         if len(ch.goodSamples) == 0:
             continue
+        if ch.__class__ == SwedishChild:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0]
+        else:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8]
         f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
         features = [i for i in f]
         c = 1 if c != 0 else 0

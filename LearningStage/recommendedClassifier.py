@@ -19,7 +19,7 @@ class RecommendedAlgorithm(AbstractClassifier):
         self.isr_regressor, self.isr_regress_f = self.createClassifier(X_regress_isr, c_regress_isr, isr_reg_args,
             RandomForestRegressor, AdaBoostRegressor, Nationality.ISR, isr_regress_f)
         self.swe_regressor, self.swe_regress_f = self.createClassifier(X_regress_swe, c_regress_swe, swe_reg_args,
-            RandomForestRegressor, Nationality.SWE, swe_regress_f)
+            RandomForestRegressor, AdaBoostRegressor, Nationality.SWE, swe_regress_f)
 
     def createClassifier(self, X, c, args, forestType, abType, nationaliity, f):
         imputer = Imputer(strategy='median', axis=0)
@@ -33,10 +33,12 @@ class RecommendedAlgorithm(AbstractClassifier):
 
         r_forest = forestType(max_depth=D, max_features=P, random_state=1, min_samples_split=S,
                               min_samples_leaf=L, n_estimators=N)
-        AB = abType(base_estimator=r_forest, n_estimators=N_ES, random_state=1)
+        if N_ES != -1:
+            AB = abType(base_estimator=r_forest, n_estimators=N_ES, random_state=1)
 
         if len(set(c)) == 2:  # Classifier
             selector = RFE(AB, K, step=1)
+            classifier = AB
         else:  # Regressor
             if nationaliity == Nationality.ISR:
                 classifier = AB

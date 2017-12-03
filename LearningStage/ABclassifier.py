@@ -19,7 +19,7 @@ class AdaBoostAlgorithm(AbstractClassifier):
         self.isr_regressor, self.isr_regress_f = self.createAB(X_regress_isr, c_regress_isr, isr_reg_args,
             RandomForestRegressor, AdaBoostRegressor, Nationality.ISR, isr_regress_f)
         self.swe_regressor, self.swe_regress_f = self.createAB(X_regress_swe, c_regress_swe, swe_reg_args,
-            RandomForestRegressor, Nationality.SWE, swe_regress_f)
+            RandomForestRegressor, AdaBoostRegressor, Nationality.SWE, swe_regress_f)
 
     def createAB(self, X, c, args, forestType, abType, nationaliity, f):
         imputer = Imputer(strategy='median', axis=0)

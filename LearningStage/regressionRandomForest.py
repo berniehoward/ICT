@@ -12,6 +12,9 @@ from Parser.auxiliary import Nationality
 
 
 # Print information about all the parameters in order to determine the wanted ranges
+from Parser.swedishChild import SwedishChild
+
+
 def determineRanges(f, X, c, function):
 
     # Parameters: n_est, max_features, max_depth, min_samples_leaf, min_samples_split
@@ -103,6 +106,10 @@ def getDataForClassification(children):
     for ch in children:
         if len(ch.goodSamples) == 0:
             continue
+        if ch.__class__ == SwedishChild:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0]
+        else:
+            common_ages = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8]
         f, d, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
         features = [i for i in f]
         if not c:

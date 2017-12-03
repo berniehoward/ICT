@@ -49,23 +49,33 @@ class AbstractClassifier(ABC):
 
         f, X, c = ch.generateParametersForRegressionDecisionTree(common_ages, False)
         X_class = []
+        f_class= []
         X_regress = []
+        f_regress = []
         i = 0
         if ch.__class__ == SwedishChild:
             for feature in f:
-                if feature in self.swe_classi_f:
+                if feature in self.swe_classi_f and feature not in f_class:
                     X_class.append(X[i])
-                if feature in self.swe_regress_f:
+                    f_class.append(feature)
+                if feature in self.swe_regress_f and feature not in f_regress:
                     X_regress.append(X[i])
+                    f_regress.append(feature)
                 i += 1
+            if X_class.__contains__(np.NaN) or X_regress.__contains__(np.NaN):
+                return NA
             return self._predict_swedish(self.fit(X_class), self.fit(X_regress))
         elif ch.__class__ == IsraeliChild:
             for feature in f:
-                if feature in self.isr_classi_f:
+                if feature in self.isr_classi_f and feature not in f_class:
                     X_class.append(X[i])
-                if feature in self.isr_regress_f:
+                    f_class.append(feature)
+                if feature in self.isr_regress_f and feature not in f_regress:
                     X_regress.append(X[i])
+                    f_regress.append(feature)
                 i += 1
+            if X_class.__contains__(np.NaN) or X_regress.__contains__(np.NaN):
+                return NA
             return self._predict_israeli(self.fit(X_class), self.fit(X_regress))
 
     def _predict_swedish(self, X_class, X_regress):

@@ -9,7 +9,7 @@ from enum import Enum
 import six, os, time, itertools
 import numpy as np
 
-randomforestpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
+finalclassifierpath = lambda file: os.path.join(os.getcwd(), "LearningStage", file)
 PICKLE_RANDOM_FOREST_FILE = 'RandomForestAlgorithm.pkl'
 PICKLE_ADABOOST_FILE = 'AdaBoostAlgorithm.pkl'
 PICKLE_RECOMMENDED_FILE = 'RecommendedAlgorithm.pkl'
