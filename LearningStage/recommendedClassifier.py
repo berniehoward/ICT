@@ -1,7 +1,7 @@
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.preprocessing import Imputer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, AdaBoostRegressor
-from sklearn.feature_selection import RFE, SelectKBest
+from sklearn.feature_selection import RFE
 from Parser.auxiliary import Nationality
 from LearningStage.abstractClassifier import AbstractClassifier
 
@@ -56,3 +56,16 @@ class RecommendedAlgorithm(AbstractClassifier):
 
         classifier.fit(new_X, c)
         return classifier, new_f
+
+    def getIsClassi(self):
+        return self.isr_classificator
+
+    def getIsRegrassor(self):
+        return self.isr_regressor
+
+    def getSwClassi(self):
+        return self.swe_classificator
+
+    def getSwRegrassor(self):
+        return self.swe_regressor
+

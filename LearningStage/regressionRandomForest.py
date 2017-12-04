@@ -102,7 +102,6 @@ def getDataForClassification(children):
     data = []
     classifications = []
     features = []
-    common_ages = sorted(getTenMostCommonAges(children, 8))
     for ch in children:
         if len(ch.goodSamples) == 0:
             continue

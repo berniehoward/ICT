@@ -1,8 +1,15 @@
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
+
 from Parser.auxiliary import Nationality
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 import numpy as np
 from LearningStage.utility import removeIsraeliBadFeatures, removeSwedishBadFeatures
+from sklearn.feature_selection import RFE
+from LearningStage.utility import *
+import pickle as pkl
+from LearningStage.regressionRandomForest import getDataForClassification
 
 
 # Return list of features lists organized by the age we get each feature
@@ -93,37 +100,64 @@ def divideToFeaturesGroups(nationality, X, f):
     return features_groups
 
 
-def findEarlyFeatureGroup(features_groups, c, final_classifier, featureSelectionFunc, scoringFunction, k):
+def findEarlyFeatureGroup(features_groups, c, final_classifier, scoring_class, k):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     index = 0
     for X in features_groups:
         if k < len(X[0]):
-            new_X = featureSelectionFunc(scoringFunction, k=k).fit_transform(X, c)
+            new_X = RFE(scoring_class, k=k, step=1).fit_transform(X, c)
         final_classifier.fit(new_X, c)
         score = abs(np.mean(cross_val_score(final_classifier, new_X, c, cv=crossvalidation,
                                             scoring='neg_mean_squared_error')))
-        print("Group number: ", index + 1, "MSE:", score)
+        print("Group number: ", index, "MSE:", score)
         index += 1
 
 
 # Perform the fourth stage experiment
-def experimentProgram(vectors, final_classifiers, classFeatureSelectionData, regFeatureSelectionData):
+def program(vectors, final_classifiers, classFeatureSelectionData, regFeatureSelectionData):
     is_classi, is_regrassor, sw_classi, sw_regrassor = final_classifiers
-    is_X, is_c, sw_X, sw_c = vectors
-    ISclassFeatureSelectionFunc, ISclassScoringFunction, ISclassK, SWclassFeatureSelectionFunc, SWclassScoringFunction,\
-    SWclassk = classFeatureSelectionData
-    ISregFeatureSelectionFunc, ISregScoringFunction, ISregK, SWregFeatureSelectionFunc, SWregScoringFunction, \
-    SWregk = regFeatureSelectionData
-    is_features_groups = divideToFeaturesGroups(Nationality.ISR, is_X)
-    sw_features_groups = divideToFeaturesGroups(Nationality.SWE, sw_X)
-    print("Israeli classifier: ")
-    findEarlyFeatureGroup(is_features_groups, is_c, is_classi, ISclassFeatureSelectionFunc, ISclassScoringFunction, ISclassK)
-    print("Israeli regressor: ")
-    findEarlyFeatureGroup(is_features_groups, is_c, is_regrassor, ISregFeatureSelectionFunc, ISregScoringFunction, ISregK)
+    is_X, is_c, is_f, sw_X, sw_c, sw_f = vectors
+    ISclassScoring, ISclassK, SWclassScoring, SWclassk = classFeatureSelectionData
+    ISregScoring, ISregK, SWregScoring, SWregk = regFeatureSelectionData
+    is_features_groups = divideToFeaturesGroups(Nationality.ISR, is_X, is_f)
+    sw_features_groups = divideToFeaturesGroups(Nationality.SWE, sw_X, sw_f)
+    # print("Israeli classifier: ")
+    # findEarlyFeatureGroup(is_features_groups, is_c, is_classi, ISclassScoring, ISclassK)
+    # print("Israeli regressor: ")
+    # findEarlyFeatureGroup(is_features_groups, is_c, is_regrassor, ISregScoring, ISregK)
     print("Swedish classifier: ")
-    findEarlyFeatureGroup(sw_features_groups, sw_c, sw_classi, SWclassFeatureSelectionFunc, SWclassScoringFunction, SWclassk)
-    print("Swedish regressor: ")
-    findEarlyFeatureGroup(sw_features_groups, sw_c, sw_regrassor, SWregFeatureSelectionFunc, SWregScoringFunction, SWregk)
+    findEarlyFeatureGroup(sw_features_groups, sw_c, sw_classi, SWclassScoring, SWclassk)
+    # print("Swedish regressor: ")
+    # findEarlyFeatureGroup(sw_features_groups, sw_c, sw_regrassor, SWregScoring, SWregk)
+
+
+def experimentProgram(israeliChildrenList, swedishChildrenList):
+    is_f, is_X, is_c = getDataForClassification(israeliChildrenList)
+    sw_f, sw_X, sw_c = getDataForClassification(swedishChildrenList)
+    vectors = is_X, is_c, is_f, sw_X,  sw_c, sw_f
+
+    with open(finalclassifierpath(PICKLE_RECOMMENDED_FILE), "rb") as pklfile:
+        rec_classifier = pkl.load(pklfile)
+
+    is_classi = rec_classifier.getIsClassi()
+    is_regrassor = rec_classifier.getIsRegrassor()
+    sw_classi = rec_classifier.getSwClassi()
+    sw_regrassor = rec_classifier.getSwRegrassor()
+    final_classifiers = is_classi, is_regrassor, sw_classi, sw_regrassor
+    is_r_forest = RandomForestClassifier(max_depth=10, max_features=0.3, random_state=1, min_samples_split=2,
+                                         min_samples_leaf=2, n_estimators=35)
+    is_AB = AdaBoostClassifier(base_estimator=is_r_forest, n_estimators=113, random_state=1)
+    sw_r_forest = RandomForestClassifier(max_depth=10, max_features=0.7, random_state=1, min_samples_split=2,
+                                         min_samples_leaf=2, n_estimators=12)
+    sw_AB = AdaBoostClassifier(base_estimator=sw_r_forest, n_estimators=72, random_state=1)
+    classFeatureSelectionData = is_AB, 22, sw_AB, 12
+    is_r_forest = RandomForestClassifier(max_depth=10, max_features=0.75, random_state=1, min_samples_split=2,
+                                         min_samples_leaf=10, n_estimators=12)
+    is_AB = AdaBoostClassifier(base_estimator=is_r_forest, n_estimators=141, random_state=1)
+    sw_r_forest = RandomForestClassifier(max_depth=30, max_features=0.85, random_state=1, min_samples_split=2,
+                                         min_samples_leaf=16, n_estimators=45)
+    regFeatureSelectionData = is_AB, 24, sw_r_forest, 13
+    program(vectors, final_classifiers, classFeatureSelectionData, regFeatureSelectionData)
 
 
 
