@@ -12,10 +12,12 @@ def classify_single_child(classifier):
         while True:
             print("Please insert child's age (M), length (CM), weight (KG) and Head Circumference (CM) \
             seprated by spaces\n")
-            print("If one of the element is unknown, insert \"-100\"\n")
             sample_input = input()
             sample = [float(x) for x in sample_input.split()]
-            samples.append(sample)
+            if all(sample):
+                samples.append(sample)
+            else:
+                print("bad sample\n")
     except KeyboardInterrupt:
         c = None #TODO: create child instance
         final_classifier.classifyChild(c)

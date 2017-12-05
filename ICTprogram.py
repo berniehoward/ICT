@@ -24,10 +24,8 @@ if __name__ == '__main__':
     bestFormula = 3
     # tagSecondStage(bestFormula, bestEpsilon)  # Tagging stage by Epsilon and Formula
 
-    # print(len([x for x in swedishChildrenList if x.autoICT != -100]))
-
     # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
-    # thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest and Adaboost
+    thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest and Adaboost
     # tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)
 
     # isr_class_args = 57, 0.1, 20, 5, 14
@@ -38,17 +36,20 @@ if __name__ == '__main__':
     # createFinal(israeliChildrenList, swedishChildrenList, params, RandomForestAlgorithm, PICKLE_RANDOM_FOREST_FILE)
     # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_RANDOM_FOREST_FILE)
 
-    isr_class_args = 22, 113, 35, 0.3, 2, 10
-    isr_reg_args = 24, 141, 12, 0.75, 10, 10
-    swe_class_args = 12, 72, 12, 0.7, 2, 20
-    swe_reg_args = 13, 11, 4, 0.8, 12, 15
-    params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
-    createFinal(israeliChildrenList, swedishChildrenList, params, AdaBoostAlgorithm, PICKLE_ADABOOST_FILE)
-    tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_ADABOOST_FILE)
-
-    swe_reg_args = 13, -1, 45, 0.85, 16, 30
-    params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
-    createFinal(israeliChildrenList, swedishChildrenList, params, RecommendedAlgorithm, PICKLE_RECOMMENDED_FILE)
-    tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_RECOMMENDED_FILE)
+    # isr_class_args = 22, 113, 35, 0.3, 2, 10
+    # isr_reg_args = 24, 141, 12, 0.75, 10, 10
+    # swe_class_args = 12, 72, 12, 0.7, 2, 20
+    # swe_reg_args = 13, 11, 4, 0.8, 12, 15
+    # params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
+    # createFinal(israeliChildrenList, swedishChildrenList, params, AdaBoostAlgorithm, PICKLE_ADABOOST_FILE)
+    # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_ADABOOST_FILE)
+    #
+    # isr_class_args = 57, 0.1, 20, 5, 14
+    # isr_reg_args = 24, 141, 12, 0.75, 10, 10
+    # swe_class_args = 12, 72, 12, 0.7, 2, 30
+    # swe_reg_args = 13, 45, 0.85, 16, 30
+    # params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
+    # createFinal(israeliChildrenList, swedishChildrenList, params, RecommendedAlgorithm, PICKLE_RECOMMENDED_FILE)
+    # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_RECOMMENDED_FILE)
 
     # tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)
