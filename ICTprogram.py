@@ -25,10 +25,8 @@ if __name__ == '__main__':
     bestFormula = 3
     # tagSecondStage(bestFormula, bestEpsilon)  # Tagging stage by Epsilon and Formula
 
-    # print(len([x for x in swedishChildrenList if x.autoICT != -100]))
-
     # printSampleListStatistics(swedishChildrenList, israeliChildrenList)
-    # thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest and Adaboost
+    thirdStageProg(swedishChildrenList, israeliChildrenList)  # Learning Stage - Random Forest and Adaboost
     # tagIsraeliWithSwedish(israeliChildrenList, swedishChildrenList)
 
     # isr_class_args = 57, 0.1, 20, 5, 14
@@ -46,7 +44,6 @@ if __name__ == '__main__':
     # params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
     # createFinal(israeliChildrenList, swedishChildrenList, params, AdaBoostAlgorithm, PICKLE_ADABOOST_FILE)
     # tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, PICKLE_ADABOOST_FILE)
-    #
     # swe_reg_args = 13, -1, 45, 0.85, 16, 30
     # params = isr_class_args, isr_reg_args, swe_class_args, swe_reg_args
     # createFinal(israeliChildrenList, swedishChildrenList, params, RecommendedAlgorithm, PICKLE_RECOMMENDED_FILE)
@@ -56,4 +53,5 @@ if __name__ == '__main__':
 
     # Forth Stage:
     fourthStage(israeliChildrenList, swedishChildrenList)
+
 
