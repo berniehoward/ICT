@@ -21,10 +21,11 @@ class Child:
         self.ICT_Z = NA if ICT_Z == NA else ICT_Z / MONTHS
         self.preterm = NA
 
-        self.autoICT = NA  # value is set at end of second stage
-        self.forestICT = NA   # value is set at end of RF stage
-        self.adaICT = NA   # value is set at end of AB stage
-        self.recICT = NA   # value is set at end of final stage - recommended classifier
+        self.autoICT = NA      # value is set at end of second stage
+        self.forestICT = NA    # value is set at end of RF stage
+        self.adaICT = NA       # value is set at end of AB stage
+        self.recICT = NA       # value is set at end of final stage - recommended classifier
+        self.recFastICT = NA   # value is set at end of final stage - fast recommended classifier
 
         self.birthDate = birthDate
         self.birthMonth = birthMonth if birthMonth > 0 else 0

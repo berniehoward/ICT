@@ -54,7 +54,7 @@ def program(swedishChildrenList, israeliChildrenList, printMode=False):
 
 
 # Create learning algorithm by parameters found in the experiment
-def createFinal(israeliChildrenList, swedishChildrenList, params, algorithm, fileName):
+def createFinal(israeliChildrenList, swedishChildrenList, params, algorithm, fileName, fastFlag=False):
     isr_classi_f, X_classi_isr, c_classi_isr = getDataForBooleanClassification(israeliChildrenList)
     swe_classi_f, X_classi_swe, c_classi_swe = getDataForBooleanClassification(swedishChildrenList)
     isr_regress_f, X_regress_isr, c_regress_isr = getDataForClassification(israeliChildrenList)
@@ -66,25 +66,54 @@ def createFinal(israeliChildrenList, swedishChildrenList, params, algorithm, fil
     isr_class_args, isr_reg_args, swe_class_args, swe_reg_args = params
     classifier = algorithm(data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args)
 
+    if fastFlag:
+        fast_isr_classi_f = ['birthWeight (KG)', 'birthMonth', 'Weight at 0.0', 'BMI at 0.0', 'Weight at 0.1',
+                             'BMI at 0.1', 'WHO wfa z-score at 0.1', 'WHO wfl z-score at age 0.1',
+                             'WHO lfa z-score at age 0.1', 'WHO hcfa z-score at 0.1', 'Weight at 0.2', 'BMI at 0.2',
+                             'WHO wfa z-score at 0.2', 'WHO wfl z-score at age 0.2', 'WHO lfa z-score at age 0.2',
+                             'WHO hcfa z-score at 0.2', 'Weight at 0.3', 'BMI at 0.3', 'WHO wfa z-score at 0.3',
+                             'WHO wfl z-score at age 0.3', 'WHO lfa z-score at age 0.3', 'WHO hcfa z-score at 0.3']
+        fast_isr_regress_f = ['birthWeight (KG)', 'birthMonth', 'Weight at 0.0', 'BMI at 0.0', 'Weight at 0.1',
+                              'BMI at 0.1', 'WHO wfa z-score at 0.1', 'WHO wfl z-score at age 0.1',
+                              'WHO lfa z-score at age 0.1', 'WHO hcfa z-score at 0.1', 'HC at 0.1', 'Height at 0.2',
+                              'Weight at 0.2', 'BMI at 0.2', 'WHO wfa z-score at 0.2', 'WHO wfl z-score at age 0.2',
+                              'WHO lfa z-score at age 0.2', 'WHO hcfa z-score at 0.2', 'HC at 0.2', 'Height at 0.3',
+                              'Weight at 0.3', 'WHO wfl z-score at age 0.3', 'WHO hcfa z-score at 0.3', 'HC at 0.3']
+        fast_swe_classi_f = ['Weight at 0.0', 'BMI at 0.0', 'Weight at 0.1', 'BMI at 0.1', 'WHO wfl z-score at age 0.1',
+                             'WHO lfa z-score at age 0.1', 'Weight at 0.2', 'WHO wfa z-score at 0.2',
+                             'WHO wfl z-score at age 0.2', 'WHO lfa z-score at age 0.2', 'WHO wfl z-score at age 0.3',
+                             'WHO lfa z-score at age 0.3']
+        fast_swe_regress_f = ['Weight at 0.0', 'BMI at 0.0', 'Height at 0.1', 'BMI at 0.1', 'WHO wfa z-score at 0.1',
+                              'WHO lfa z-score at age 0.1', 'Weight at 0.2', 'BMI at 0.2', 'WHO wfa z-score at 0.2',
+                              'WHO wfl z-score at age 0.2', 'WHO wfa z-score at 0.3', 'WHO wfl z-score at age 0.3',
+                              'WHO lfa z-score at age 0.3']
+        fast_f = fast_isr_classi_f, fast_swe_classi_f, fast_isr_regress_f, fast_swe_regress_f
+        classifier.addFastOption(fast_f)
+
     with open(finalclassifierpath(fileName), "wb") as pklfile:
         pkl.dump(classifier, pklfile)
 
 
 # Tag children with final classifiers
-def tagChildrenValueWithRegressionForest(israeliChildrenList, swedishChildrenList, fileName):
+def tagChildrenValue(israeliChildrenList, swedishChildrenList, fileName, fastFlag=False):
     with open(finalclassifierpath(fileName), "rb") as pklfile:
         classifier = pkl.load(pklfile)
 
 
     predicted_ICT = []
     for c in israeliChildrenList + swedishChildrenList:
-        ict_val = classifier.classifyChild(c)
         if fileName == PICKLE_RANDOM_FOREST_FILE:
+            ict_val = classifier.classifyChild(c)
             c.forestICT = ict_val
         elif fileName == PICKLE_ADABOOST_FILE:
+            ict_val = classifier.classifyChild(c)
             c.adaICT = ict_val
         else:
+            ict_val = classifier.classifyChild(c, 1)
             c.recICT = ict_val
+            if fastFlag:
+                ict_fast_val = classifier.classifyChild(c, 2)
+                c.recFastICT = ict_fast_val
         predicted_ICT.append(ict_val)
     orig_ICT = [c.autoICT * MONTHS if c.autoICT != NA else c.autoICT for c in (israeliChildrenList + swedishChildrenList)]
     print("Original tagging: ")

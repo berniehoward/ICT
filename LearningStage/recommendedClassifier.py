@@ -12,14 +12,38 @@ class RecommendedAlgorithm(AbstractClassifier):
     def __init__(self, data, isr_class_args, isr_reg_args, swe_class_args, swe_reg_args):
         X_classi_isr, c_classi_isr, isr_classi_f, X_regress_isr, c_regress_isr, isr_regress_f, X_classi_swe, \
         c_classi_swe, swe_classi_f, X_regress_swe, c_regress_swe, swe_regress_f = data
-        self.isr_classificator,  self.isr_classi_f = self.createClassifier(X_classi_isr, c_classi_isr, isr_class_args,
-            RandomForestClassifier, AdaBoostClassifier, Nationality.ISR, isr_classi_f)
-        self.swe_classificator, self.swe_classi_f = self.createClassifier(X_classi_swe, c_classi_swe, swe_class_args,
-            RandomForestClassifier, AdaBoostClassifier, Nationality.SWE, swe_classi_f)
-        self.isr_regressor, self.isr_regress_f = self.createClassifier(X_regress_isr, c_regress_isr, isr_reg_args,
-            RandomForestRegressor, AdaBoostRegressor, Nationality.ISR, isr_regress_f)
-        self.swe_regressor, self.swe_regress_f = self.createClassifier(X_regress_swe, c_regress_swe, swe_reg_args,
-            RandomForestRegressor, AdaBoostRegressor, Nationality.SWE, swe_regress_f)
+
+        self.isr_classificator, self.acc_isr_classi_f = \
+            self.createClassifier(X_classi_isr, c_classi_isr, isr_class_args, RandomForestClassifier,
+                                  AdaBoostClassifier, Nationality.ISR, isr_classi_f)
+        self.swe_classificator, self.acc_swe_classi_f = \
+            self.createClassifier(X_classi_swe, c_classi_swe, swe_class_args, RandomForestClassifier,
+                                  AdaBoostClassifier, Nationality.SWE, swe_classi_f)
+        self.isr_regressor, self.acc_isr_regress_f = \
+            self.createClassifier(X_regress_isr, c_regress_isr, isr_reg_args, RandomForestRegressor,
+                                  AdaBoostRegressor, Nationality.ISR, isr_regress_f)
+        self.swe_regressor, self.acc_swe_regress_f = \
+            self.createClassifier(X_regress_swe, c_regress_swe, swe_reg_args, RandomForestRegressor,
+                                  AdaBoostRegressor, Nationality.SWE, swe_regress_f)
+
+        # Will be completed by different function
+        self.fast_isr_classi_f = None
+        self.fast_swe_classi_f = None
+        self.fast_isr_regress_f = None
+        self.fast_swe_regress_f = None
+
+        # Will be completed by the relevant flag while classifying child
+        self.isr_classi_f = None
+        self.swe_classi_f = None
+        self.isr_regress_f = None
+        self.swe_regress_f = None
+
+    def addFastOption(self, fast_f):
+        fast_isr_classi_f, fast_swe_classi_f, fast_isr_regress_f, fast_swe_regress_f = fast_f
+        self.fast_isr_classi_f = fast_isr_classi_f
+        self.fast_swe_classi_f = fast_swe_classi_f
+        self.fast_isr_regress_f = fast_isr_regress_f
+        self.fast_swe_regress_f = fast_swe_regress_f
 
     def createClassifier(self, X, c, args, forestType, abType, nationaliity, f):
         imputer = Imputer(strategy='median', axis=0)
@@ -68,4 +92,32 @@ class RecommendedAlgorithm(AbstractClassifier):
 
     def getSwRegrassor(self):
         return self.swe_regressor
+
+    def getFastIsClassiF(self):
+        return self.fast_isr_classi_f
+
+    def getFastISRegF(self):
+        return self.fast_isr_regress_f
+
+    def getFastSwClassiF(self):
+        return self.fast_swe_classi_f
+
+    def getFastSwRegF(self):
+        return self.fast_swe_regress_f
+
+    def classifyChild(self, ch, flag):
+        if flag == 1:  # Accuracy
+            self.isr_classi_f = self.acc_isr_classi_f
+            self.swe_classi_f = self.acc_swe_classi_f
+            self.isr_regress_f = self.acc_isr_regress_f
+            self.swe_regress_f = self.acc_swe_regress_f
+
+        else:  # Fast
+            self.isr_classi_f = self.fast_isr_classi_f
+            self.swe_classi_f = self.fast_swe_classi_f
+            self.isr_regress_f = self.fast_isr_regress_f
+            self.swe_regress_f = self.fast_swe_regress_f
+
+        return AbstractClassifier.classifyChild(self, ch)
+
 
