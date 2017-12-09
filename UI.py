@@ -66,6 +66,8 @@ def classify_csv_file(samples, final_classifier, isUniversal,):
     for ch in children:
         ch_s = [s[1:] for s in samples if s[0] == ch]
         x = classify(ch, ch_s , final_classifier, isUniversal, ACCURATE)
+        if x == -100:
+            x = "NA"
         print("Prdiected ICT of child", int(ch), "is", x)
 
 if __name__ == '__main__':
