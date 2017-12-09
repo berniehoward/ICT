@@ -91,12 +91,12 @@ def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, s
 
 
     # altrenative as expalined the summary work
-    # isr_forest_alt = RandomForestClassifier(max_depth=2, random_state=1)
-    # isr_classifier_alt = AdaBoostClassifier(base_estimator=isr_forest_alt, random_state=1)
+    isr_forest_alt = RandomForestClassifier(max_depth=2, random_state=1)
+    isr_classifier_alt = AdaBoostClassifier(base_estimator=isr_forest_alt, random_state=1)
 
-    # swe_forest_alt = RandomForestClassifier(max_depth=None, max_features=0.7, random_state=1,
-    #                                min_samples_leaf=1, n_estimators=10)
-    # swe_classifier_alt = AdaBoostClassifier(base_estimator=swe_forest_alt, n_estimators=50, random_state=1)
+    swe_forest_alt = RandomForestClassifier(max_depth=None, max_features=0.7, random_state=1,
+                                   min_samples_leaf=1, n_estimators=10)
+    swe_classifier_alt = AdaBoostClassifier(base_estimator=swe_forest_alt, n_estimators=50, random_state=1)
 
 
     # Feature selection:
@@ -109,21 +109,21 @@ def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, s
 #
     sw_X, f = removeNationFeature(sw_X, sw_f)
     sw_X = imputer.fit_transform(sw_X)
-    # performSelectKBestFeatures(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
+    performSelectKBestFeatures(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
 
-    # performRFE(is_X, is_c, isr_classifier, Nationality.ISR.name)
-    # performRFE(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
+    performRFE(is_X, is_c, isr_classifier, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_classifier, Nationality.SWE.name)
 
-    # performRFE(is_X, is_c, isr_classifier_alt, Nationality.ISR.name)
-    # performRFE(sw_X, sw_c, swe_classifier_alt, Nationality.SWE.name)
+    performRFE(is_X, is_c, isr_classifier_alt, Nationality.ISR.name)
+    performRFE(sw_X, sw_c, swe_classifier_alt, Nationality.SWE.name)
 #
     # # create final classification forest :
     is_k = 22
     sw_k = 12
 #
-    # isr_f, isr_final_RF = createFinalAdaboostClassifier(is_X, is_c, is_f, is_k, isr_classifier, True)
+    isr_f, isr_final_RF = createFinalAdaboostClassifier(is_X, is_c, is_f, is_k, isr_classifier, True)
     swe_f, swe_final_RF = createFinalAdaboostClassifier(sw_X, sw_c, sw_f, sw_k, swe_classifier, True)
-    # return isr_f, isr_final_RF, swe_f, swe_final_RF
+    return isr_f, isr_final_RF, swe_f, swe_final_RF
 
 
 
