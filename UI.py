@@ -12,9 +12,7 @@ ACCURATE = 1
 def classify(ch, samples, final_classifier, isUniversal, accuracyFlag):
     origin = samples[0][0]
     birth = samples[0]
-    bm = NA
-    if accuracyFlag != 1:
-        bm = input("Please enter child birth month\n")
+    bm = input("Please enter child birth month\n")
     if int(origin) == Nationality.SWE.value or isUniversal == 2:
         if birth[1] == 0:
             c = SwedishChild(int(ch), NA, birth[1], NA, NA, NA, NA, NA, int(bm))
@@ -50,6 +48,8 @@ def classify_single_child(final_classifier, isUniversal, accuracyFlag):
         sample_input = input()
         if sample_input == '':
             x = classify(0, samples, final_classifier, isUniversal, accuracyFlag)
+            if x == -100:
+                x = "NA"
             print("Prdiected ICT is", x)
             return
         if len(sample_input.split()) != 5:
@@ -75,7 +75,6 @@ def classify_csv_file(samples, final_classifier, isUniversal,):
 if __name__ == '__main__':
     with open(sys.argv[1], "rb") as pklfile:
         final_classifier = pkl.load(pklfile)
-
     print("Welcome to the ICT Classifier!\nPlease follow the instructions below\n\n")
     print("NOTICE!!! this version is not compatible with vectors with missing elements. Use with caution.\n")
     isUniversal = input("Insert type:\n\t1 for the universal classifier\n\t2 for regular (origin-related classifier)\n")
