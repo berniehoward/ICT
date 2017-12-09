@@ -12,7 +12,9 @@ ACCURATE = 1
 def classify(ch, samples, final_classifier, isUniversal, accuracyFlag):
     origin = samples[0][0]
     birth = samples[0]
-    bm = input("Please enter child birth month\n")
+    bm = NA
+    if accuracyFlag != 1:
+        bm = input("Please enter child birth month\n")
     if int(origin) == Nationality.SWE.value or isUniversal == 2:
         if birth[1] == 0:
             c = SwedishChild(int(ch), NA, birth[1], NA, NA, NA, NA, NA, int(bm))
