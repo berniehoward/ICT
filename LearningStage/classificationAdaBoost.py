@@ -55,7 +55,7 @@ def booleanAdaExp(f, X, c, experiment):
     determineRanges(f, X, c, booleanAdaBoostCreator)
 
 
-def booleanAdaTuning(f, X, c, function ,ranges):
+def booleanAdaTuning(f, X, c, function, ranges):
     boolClass = False  # Boolean classification
     AB_hops = [1, 1, 0.05, 1, 5]
     problem = ParametersTuningLocalSearch(ranges, f, X, c, AB_hops, function, "AB", boolClass)
@@ -82,11 +82,11 @@ def createFinalAdaboostClassifier(X, c, f, k, forest, printMode=False):
 
 def booleanAdaFeatureSelectionAndFinalClassifier(is_X, is_f, is_c, sw_X, sw_f, sw_c):
     isr_forest = RandomForestClassifier(max_depth=2, max_features=0.3, random_state=1,
-                                      min_samples_leaf=10, n_estimators=35)
+                                        min_samples_leaf=10, n_estimators=35)
     isr_classifier = AdaBoostClassifier(base_estimator=isr_forest, n_estimators=113, random_state=1)
 
     swe_forest = RandomForestClassifier(max_depth=2, max_features=0.7, random_state=1,
-                                   min_samples_leaf=20, n_estimators=12)
+                                        min_samples_leaf=20, n_estimators=12)
     swe_classifier = AdaBoostClassifier(base_estimator=swe_forest, n_estimators=72, random_state=1)
 
 

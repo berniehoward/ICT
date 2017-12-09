@@ -62,9 +62,9 @@ RAB_PARM = isr_ranges, swe_ranges, mixed_ranges, isr_m_ranges, swe_m_ranges, mix
 ################################################ Final classifiers #####################################################
 # Classification forest:
 isr_class_forest = RandomForestClassifier(max_depth=20, max_features=0.1, random_state=1,
-                                        min_samples_leaf=5, n_estimators=57)
+                                          min_samples_leaf=5, n_estimators=57)
 swe_class_forest = RandomForestClassifier(max_depth=42, max_features=0.55, random_state=1,
-                                        min_samples_leaf=15, n_estimators=84)
+                                          min_samples_leaf=15, n_estimators=84)
 
 # Regression forests:
 isr_forest = RandomForestRegressor(max_depth=20, max_features=0.8, random_state=1, min_samples_split=2,
@@ -75,11 +75,11 @@ R_forests = isr_forest, swe_forest
 
 # AdaBoost classifiers:
 adaboost_isr_forest = RandomForestClassifier(max_depth=2, max_features=0.3, random_state=1,
-                                    min_samples_leaf=10, n_estimators=35)
+                                             min_samples_leaf=10, n_estimators=35)
 adaboost_isr_classifier = AdaBoostClassifier(base_estimator=adaboost_isr_forest, n_estimators=113, random_state=1)
 
 adaboost_swe_forest = RandomForestClassifier(max_depth=2, max_features=0.7, random_state=1,
-                                    min_samples_leaf=20, n_estimators=12)
+                                             min_samples_leaf=20, n_estimators=12)
 adaboost_swe_classifier = AdaBoostClassifier(base_estimator=adaboost_swe_forest, n_estimators=72, random_state=1)
 C_ada = adaboost_isr_classifier, adaboost_swe_classifier
 
@@ -103,6 +103,7 @@ isr_ada2 = AdaBoostRegressor(base_estimator=None, n_estimators=150, random_state
 swe_ada2 = AdaBoostRegressor(base_estimator=None, n_estimators=22, random_state=1)
 
 R_ada = isr_ada1, swe_ada1, mix_ada1, isr_ada2, swe_ada2
+
 ################################################# Final k ##############################################################
 # Regression RF k's :
 is_RF_k = 17

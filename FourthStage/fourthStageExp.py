@@ -65,6 +65,7 @@ def divideToFeaturesGroups(nationality, X, f):
     return features_groups
 
 
+# Print the accuracy or MSE of the classifiers build by the features at any of the features groups
 def findEarlyFeatureGroup(features_groups, c, final_classifier, scoring_class, k):
     crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
     index = 0
@@ -82,7 +83,6 @@ def findEarlyFeatureGroup(features_groups, c, final_classifier, scoring_class, k
             score = 1 - score
         print("Group number: ", index, "ACC/MSE:", score)
         index += 1
-
 
 
 # Perform the fourth stage experiment
@@ -106,6 +106,7 @@ def program(vectors, final_classifiers, classFeatureSelectionData, regFeatureSel
     findEarlyFeatureGroup(reg_sw_features_groups, reg_sw_c, sw_regrassor, SWregScoring, SWregk)
 
 
+# Prepare data for the function "program" which perform the fourth stage experiment
 def experimentProgram(israeliChildrenList, swedishChildrenList):
     class_is_f, class_is_X, class_is_c = getDataForBooleanClassification(israeliChildrenList)
     class_sw_f, class_sw_X, class_sw_c = getDataForBooleanClassification(swedishChildrenList)

@@ -41,6 +41,7 @@ class Nationality(Enum):
     SWE = 1
     MIX = 2
 
+
 class Gender(Enum):
     MALE = 1
     FEMALE = 2

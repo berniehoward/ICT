@@ -37,7 +37,7 @@ def randomForestCreator(f, X, c, args):
     else:
         N, P, D, L = args
         S = 2  # default value
-    X = imputer.fit_transform(X)  # instead of fit
+    X = imputer.fit_transform(X)
     r_forest = RandomForestClassifier(max_depth=D, max_features=P, random_state=1, min_samples_split=S,
                                       min_samples_leaf=L, n_estimators=N)
     r_forest.fit(X, c)

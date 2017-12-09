@@ -22,15 +22,15 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
     isr_f, isr_classification_RF, swe_f, swe_classification_RF = \
     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanTreesExp, booleanTreesTuning,
                              booleanTreesFeatureSelectionAndFinalClassifier, BRF_PARM)
-    # print("Regression trees: ")
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionForestExp,
-    #                                    regressionForestTuning, regressionRFFinalClassifier, RRF_PARM, R_forests, RF_k)
-    # if printMode:
-    #     exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
-    #     exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
-    #     exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
-    #     exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
+    print("Regression trees: ")
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionForestExp,
+                                       regressionForestTuning, regressionRFFinalClassifier, RRF_PARM, R_forests, RF_k)
+    if printMode:
+        exportTreesFromForest(isr_f, isr_regression_RF, Nationality.ISR.name, DecisionAlgorithmType.REGRESSION.name)
+        exportTreesFromForest(swe_f, swe_regression_RF, Nationality.SWE.name, DecisionAlgorithmType.REGRESSION.name)
+        exportTreesFromForest(isr_f, isr_classification_RF, Nationality.ISR.name, DecisionAlgorithmType.CLASSIFICATION.value)
+        exportTreesFromForest(swe_f, swe_classification_RF, Nationality.SWE.name, DecisionAlgorithmType.CLASSIFICATION.value)
 
 
 def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
@@ -38,18 +38,18 @@ def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False
     isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
         createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
                                  booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
-    # print("Regression AdaBoost: ")
-    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-    #     createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
-    #                                    regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
+    print("Regression AdaBoost: ")
+    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
+                                       regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
 
 
 # Perform experiment for the third stage
 def program(swedishChildrenList, israeliChildrenList, printMode=False):
     printMode = True
     os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'  # for plotting trees
-    # createFeatureHistogram(swedishChildrenList, israeliChildrenList)
-    # randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
+    createFeatureHistogram(swedishChildrenList, israeliChildrenList)
+    randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode)
     adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode)
 
 

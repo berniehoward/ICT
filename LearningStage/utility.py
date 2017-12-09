@@ -103,5 +103,5 @@ def exportTreesFromForest(f, r_forest, nationality, type):
             dotfile = six.StringIO()
             tree.export_graphviz(regression_tree, feature_names=f, out_file=dotfile)
             graph_from_dot_data(dotfile.getvalue()).write_png('tree_' + str(r_forest.estimators_.index(regression_tree))
-                                                              +'.png')
+                                                              + '.png')
     os.chdir(cwd)
