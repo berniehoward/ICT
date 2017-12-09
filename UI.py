@@ -47,7 +47,6 @@ def classify_single_child(final_classifier, isUniversal, accuracyFlag):
         print("If you want a fast prediction, insert samples at birth, 1.2, 2.4 and 3.6 months. break with Enter")
         sample_input = input()
         if sample_input == '':
-            print("AAA")
             x = classify(0, samples, final_classifier, isUniversal, accuracyFlag)
             print("Prdiected ICT is", x)
             return
