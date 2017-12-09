@@ -44,7 +44,7 @@ def classify_single_child(final_classifier, isUniversal, accuracyFlag):
     samples = []
     while True:
         print("Please insert Origin (0 for ISR, 1 for SWE), child's age (M), length (CM), weight (KG) and Head Circumference (CM) (if child is israeli). seprated by spaces.")
-        print("If you want a fast prediction, insert samples at birth, 1, 2.5 and 4 months. break with CTRL+C")
+        print("If you want a fast prediction, insert samples at birth, 1, 2.5 and 4 months. break with Enter")
         sample_input = input()
         if sample_input == '':
             print("AAA")
