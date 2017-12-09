@@ -44,7 +44,7 @@ def classify_single_child(final_classifier, isUniversal, accuracyFlag):
     samples = []
     while True:
         print("Please insert Origin (0 for ISR, 1 for SWE), child's age (M), length (CM), weight (KG) and Head Circumference (CM) (if child is israeli). seprated by spaces.")
-        print("If you want a fast prediction, insert samples at birth, 1, 2.5 and 4 months. break with Enter")
+        print("If you want a fast prediction, insert samples at birth, 1.2, 2.4 and 3.6 months. break with Enter")
         sample_input = input()
         if sample_input == '':
             print("AAA")
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         final_classifier = pkl.load(pklfile)
 
     print("Welcome to the ICT Classifier!\nPlease follow the instructions below\n\n")
-    print("NOTICE!!! this version is not comaptible with vectors with missing elements. Use with caution.\n")
+    print("NOTICE!!! this version is not compatible with vectors with missing elements. Use with caution.\n")
     isUniversal = input("Insert type:\n\t1 for the universal classifier\n\t2 for regular (origin-related classifier)\n")
     accuracyFlag = input("Insert accuracy:\n\t1 for accurate classifier\n\t2 for fast classifier\n")
     accuracyFlag = int(accuracyFlag)
