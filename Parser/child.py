@@ -243,7 +243,7 @@ class Child:
             smi = find_nearest([a.age for a in self.goodSamples], 0.5)
             data += [(self.goodSamples[smi]).height,
                      (self.goodSamples[smi]).weight]
-            if smi > 0:
+            if smi > 0 and self.goodSamples[-1] != self.goodSamples[smi]:
                 data += [((self.goodSamples[smi-1]).height+(self.goodSamples[smi]).height+(self.goodSamples[smi+1]).height) / 3,
                      ((self.goodSamples[smi - 1]).weight + (self.goodSamples[smi]).weight + (self.goodSamples[smi + 1]).weight) / 3]
             else:

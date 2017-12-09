@@ -34,14 +34,14 @@ def randomForestExperiment(swedishChildrenList, israeliChildrenList, printMode=F
 
 
 def adaBoostExperiment(swedishChildrenList, israeliChildrenList, printMode=False):
-    # print("Boolean AdaBoost: ")
-    # isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
-    #     createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
-    #                              booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
-    print("Regression AdaBoost: ")
-    isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
-        createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
-                                       regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
+    print("Boolean AdaBoost: ")
+    isr_f, isr_classification_AB, swe_f, swe_classification_AB = \
+        createBoolClassification(swedishChildrenList, israeliChildrenList, booleanAdaExp, booleanAdaTuning,
+                                 booleanAdaFeatureSelectionAndFinalClassifier, BAB_PARM)
+    # print("Regression AdaBoost: ")
+    # isr_f, isr_regression_RF, swe_f, swe_regression_RF = \
+    #     createRegressionClassification(swedishChildrenList, israeliChildrenList, regressionAdaExp, regressionAdaTuning,
+    #                                    regressionAdaFinalClassifier, RAB_PARM, R_ada, AB_k)
 
 
 # Perform experiment for the third stage
